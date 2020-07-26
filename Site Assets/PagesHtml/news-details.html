@@ -1,0 +1,66 @@
+<script src="../SiteAssets/js/NewsDetails.js" type="text/javascript"></script>
+<div class='page-entry'>
+    <div class='page-header'>
+        <div class='container'>
+            <nav aria-label='breadcrumb'>
+                <ol class='breadcrumb'>
+                    <li class='breadcrumb-item'><a href='/'>Home</a></li>
+                    <li class='breadcrumb-item'><a href='News.aspx'>News</a></li>
+                    <li id='newsTitle' class='breadcrumb-item active' aria-current='page'></li>
+                </ol>
+            </nav>
+            <div class='row d-block d-lg-none'>
+                <div class='col-lg-9'>
+                    <h1 id='contentNewsTitle' class='page-title'></h1>
+                    <p id='newsDate' class='post-date'></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-8'>
+                <div class='d-none d-lg-block'>
+                    <h1 id='carouselNewsTitle' class='page-title'></h1>
+                    <p id='carouselNewsDate' class='post-date'></p>
+                </div>
+                <div id='post-slider' class='carousel slide' data-ride='carousel'>
+                    <ol id="carouselIndicator" class='carousel-indicators'>
+                    </ol>
+                    <div id="carouselInner" class='carousel-inner'>
+                    </div>
+                    <a id="carouselPrev" class='carousel-control-prev' href='#post-slider' role='button' data-slide='prev'>
+                        <i class='fal fa-chevron-left'></i>
+                        <span class='sr-only'>Previous</span>
+                    </a>
+                    <a id="carouselNext" class='carousel-control-next' href='#post-slider' role='button' data-slide='next'>
+                        <i class='fal fa-chevron-right'></i>
+                        <span class='sr-only'>Next</span>
+                    </a>
+                </div>
+                <div class='post-content'>
+                    <p id='currentNewsContent'></p>                    
+                </div>
+                <div id="newsNextRead" class='read-next'>
+                    <span>READ NEXT</span>
+                    <a id="nextNewsAnchor" href='/' class='go-link'></a>
+                </div>
+            </div>
+            <div class='offset-lg-1 col-lg-3'>
+                <div id='sidebar'>
+                    <div class='widget'>
+                        <h3 class='widget-title'>Latest news</h3>
+                        <div id="relatedNews" class='related-list'>
+                        </div>
+                    </div>
+
+                    <div class='widget'>
+                        <h3 class='widget-title'>Popular from Blogs</h3>
+                        <div id="relatedBlogs" class='related-list'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
