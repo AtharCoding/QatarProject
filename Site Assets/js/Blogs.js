@@ -10,6 +10,7 @@ var articleActiveIndex = 3;
 var _blogDetails = [];
 var _articleDetails = [];
 var _interviewDetails = [];
+
 $(document).ready(function () {
 	document.title = "Blogs";
 	_siteUrl = _spPageContextInfo.webAbsoluteUrl;
