@@ -41,7 +41,7 @@ function bindNewsData(whereQuery){
 	newsCollections.EndIndex=0;
 
 	ctx = SP.ClientContext.get_current();
-	newsList = ctx.get_web().get_lists().getByTitle(_listTitleNews);
+	newsList = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleNews);
 	newsCamlQuery = new SP.CamlQuery();
 	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False' /><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
 	if(whereQuery)
@@ -100,7 +100,7 @@ function fillNewsHtml(resultSet,startIndex,endIndex){
 	for (let i = startIndex; i < endIndex; i++) {
 		let eachNews = resultSet[i];
 
-		let newsDetailUrl = isArabic?_siteUrl + "/Pages/ar/NewsDetails.aspx?ItemID=" + eachNews.ID:_siteUrl + "/Pages/NewsDetails.aspx?ItemID=" + eachNews.ID;;
+		let newsDetailUrl = isArabic?_siteUrl + "/ar/pages/NewsDetails.aspx?ItemID=" + eachNews.ID:_siteUrl + "/Pages/NewsDetails.aspx?ItemID=" + eachNews.ID;;
 		let newsDetails = eachNews.NewsDetails;
 		let newsTitle = eachNews.Title;
 		let newsImageUrl = eachNews.ImageUrl;

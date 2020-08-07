@@ -6,31 +6,27 @@ $(document).ready(function () {
 	let browserUrl = window.location.href.toLowerCase();
 	let isArabic = browserUrl.indexOf("/ar/") > -1;
 	if(isArabic){
-		$("#languageAnchor").text("English");
-		let englishUrl=browserUrl.replace("/pages/ar/","/pages/");
-		$("#languageAnchor").attr("href",englishUrl);
+		$("#languageAnchor,#languageAnchor2").text("English");
+		let englishUrl=browserUrl.replace("/ar/pages/","/pages/");
+		$("#languageAnchor,#languageAnchor2").attr("href",englishUrl);
 
 		$("#txtHeaderFooter").text("مركز دراسات الصراع والانسانية");
 		$("#txtRelatedWebsite").text("مواقع ذات صلة");
 		$("#txtArabCenter").text("المركز العربي في:"); 
 		$("#txtSubscribeUpdate").text("اشترك للحصول على التحديثات");
 		$("#txtfooter").text("© مركز الدراسات الإنسانية والصراعات");
-		
-		$("html").attr("dir","rtl");
 		$("html").attr("lang","ar");
 	}
 	else{
-		$("#languageAnchor").text("عربي");
-		let arabicUrl = browserUrl.replace("/pages/","/pages/ar/");
-		$("#languageAnchor").attr("href",arabicUrl);
+		$("#languageAnchor,#languageAnchor2").text("عربي");
+		let arabicUrl = browserUrl.replace("/pages/","/ar/pages/");
+		$("#languageAnchor,#languageAnchor2").attr("href",arabicUrl);
 
 		$("#txtHeaderFooter").text("Center for Conflict and Humanitarian Studies");
 		$("#txtRelatedWebsite").text("Related Websites");
 		$("#txtArabCenter").text("Arab Center in:");
 		$("#txtSubscribeUpdate").text("Subscribe for updates");
 		$("#txtfooter").text("© Center for Conflict and Humanitarian Studies");
-		
-		$("html").attr("dir","ltr");
 		$("html").attr("lang","en-US");
 	}	
 	CreateNavbars();
@@ -101,7 +97,7 @@ function CreateNavbars(){
 		
 	SPRestCommon.GetItemAjaxCall(urlForNavigations)
 	.then(function(respNavs){
-		let page_url = _siteUrl + "/Pages/" + (isArabic ? "ar/" : "");
+		let page_url = _siteUrl + (isArabic ? "/ar/pages/" : "/pages/");
 		$(".navbar-brand").attr("href", (page_url + "Home.aspx"));
 		$(".lnkContactUs").attr("href", (page_url + "ContactUs.aspx"));
 		$("#lnkTermsOfUse").attr("href", (page_url + "TermOfUse.aspx"));

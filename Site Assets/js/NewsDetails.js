@@ -9,7 +9,7 @@ var _nextNewsCollection = [];
 $(document).ready(function () {
 	document.title = "News Details";
 	_siteUrl = _spPageContextInfo.siteAbsoluteUrl;
-	commonUrl=isArabic?"/Pages/Ar/":"/Pages/";
+	commonUrl=isArabic?"/ar/pages/":"/Pages/";
 	setInterval(function () {
 		UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
 	}, 20 * 60000);

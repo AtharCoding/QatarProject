@@ -63,7 +63,7 @@ function researchDetailStart() {
 
 function bindResearchData() {
     ctx = new SP.ClientContext();
-    let listCollection = ctx.get_web().get_lists();
+    let listCollection = ctx.get_site().get_rootWeb().get_lists();
 	let researchList = listCollection.getByTitle(_listTitleResearch);
 	publicationList = listCollection.getByTitle(_listTitlePublication);
 	let pubTopicList = listCollection.getByTitle(_listTitlePublicationTopics);
@@ -143,7 +143,7 @@ function fillResearchItem() {
 
 		eachResearch.ID = eachItem.get_item('ID');
 		eachResearch.Title = isArabic ? eachItem.get_item('ResearchArabicTitle') : eachItem.get_item('Title');
-		eachResearch.ResearchDetailPageURL = _siteUrl + (isArabic ? "/Pages/Ar/" : "/Pages/") + "ResearchDetails.aspx?ItemID=" + eachItem.get_item('ID');
+		eachResearch.ResearchDetailPageURL = _siteUrl + (isArabic ? "/ar/pages/" : "/Pages/") + "ResearchDetails.aspx?ItemID=" + eachItem.get_item('ID');
 		eachResearch.ImageUrl = getImageSrcValue(eachItem.get_fieldValues()['ImageUrl']);
 		eachResearch.researchContent = isArabic ? eachItem.get_item('ResearchArabicContent') : eachItem.get_item('ResearchContent');
 		latestResearchCollections.push(eachResearch);
@@ -283,7 +283,7 @@ function fillPublicationHtml(resultSet,startIndex,endIndex){
             let eachPublication = resultSet[i];
     
             let pubTitle = eachPublication.Title;
-            let publicationDetailUrl = _siteUrl +(isArabic?"/Pages/Ar/":"/Pages/")+"PublicationDetails.aspx?ItemID=" + eachPublication.ID;
+            let publicationDetailUrl = _siteUrl +(isArabic?"/ar/pages/":"/Pages/")+"PublicationDetails.aspx?ItemID=" + eachPublication.ID;
             let pubCategory = eachPublication.PublicationTopicIDs.Title;
 			let pubDetails = eachPublication.PublicationDetails;
 			let pubAuthorTitle=eachPublication.PubAuthorTitle;
@@ -395,7 +395,7 @@ function fillEventHtml(resultSet,startIndex,endIndex){
             let eachEvent = resultSet[i];
     
             let eventTitle = eachEvent.Title;
-            let eventlicationDetailUrl = _siteUrl +(isArabic?"/Pages/Ar/":"/Pages/")+"EventDetails.aspx?ItemID=" + eachEvent.ID;
+            let eventlicationDetailUrl = _siteUrl +(isArabic?"/ar/pages/":"/Pages/")+"EventDetails.aspx?ItemID=" + eachEvent.ID;
             let EventTypeTitle = eachEvent.EventTypeTitle;
 			let imageUrl = eachEvent.ImageUrl;
 			let eventStartStr=eachEvent.EventStartDate?eachEvent.EventStartDate.split(" ")[0]+" "+eachEvent.EventStartDate.split(" ")[1]:"";
@@ -436,7 +436,7 @@ function loadMoreEventHideShow(){
 /////////////////////////////////////////////////////////////////////////////
 
 function setLanguageData(){
-	let finalSubUrl=_siteUrl+(isArabic?"/Pages/Ar/":"/Pages/");
+	let finalSubUrl=_siteUrl+(isArabic?"/ar/pages/":"/Pages/");
 
 	$("#publicaationTitle").text(isArabic?"منشورات مختارة":"Selected Publications");
 	$("#allPublicationAnchor").text(isArabic?"جميع المنشورات":"All Publications");

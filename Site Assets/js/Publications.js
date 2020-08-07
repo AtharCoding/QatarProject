@@ -12,6 +12,7 @@ var pubCamlQuery;
 var listItems;
 var pubTopicListItems;
 var itemLimit=4;
+var featuredAuthorCollection=[];
 var pubCollections={
 	RetrieveResultsets:[],
 	MainResultSet:[],
@@ -23,6 +24,7 @@ var isRefreshData=false;
 var smallContentLimit=250;
 var MediumContentLimit=330;
 var largeContentLimit=480;
+var featureContentLimit=180;
 
 $(document).ready(function () {
 	document.title = "Publications";
@@ -53,7 +55,7 @@ function bindPublicationData(whereQuery){
 	pubCollections.EndIndex=0;
 
 	ctx = SP.ClientContext.get_current();
-	pubList = ctx.get_web().get_lists().getByTitle(_listTitlePublication);
+	pubList = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublication);
 
 	pubCamlQuery = new SP.CamlQuery();
 	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False' /><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
@@ -63,7 +65,7 @@ function bindPublicationData(whereQuery){
 	pubCamlQuery.set_viewXml(query);
 	listItems = pubList.getItems(pubCamlQuery);
 
-	let pubTopicList = ctx.get_web().get_lists().getByTitle(_listTitlePublicationTopics);
+	let pubTopicList = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublicationTopics);
 	pubTopicListItems=pubTopicList.getItems(SP.CamlQuery.createAllItemsQuery());
 
 	ctx.load(listItems);
@@ -102,6 +104,7 @@ function fillPublicationItems(){
 			tempObj.Index=i;
 			tempObj.ID=eachPublication.get_item('ID');
 			tempObj.Title=isArabic?eachPublication.get_item("PublicationArabicTitle"):eachPublication.get_item('Title');
+			tempObj.IsFeatured1=eachPublication.get_item('IsFeatured1');
 
 			let pubDateStr=eachPublication.get_item('PublicationDate');
 			if(pubDateStr)
@@ -197,6 +200,28 @@ function fillPublicationHtml(resultSet,startIndex,endIndex){
 				defaultHtmlSet +=htmlDesign.smallFour;
 				break;
 		}
+
+		let isFeaturePub=eachPublication.IsFeatured1;
+		if(isFeaturePub)
+		{
+			let featuredPubStaff=eachPublication.staffCollection;
+			for(let i=0;i<featuredPubStaff.length;i++)
+			{
+				let staffDetail=featuredPubStaff[i];
+				let ID=staffDetail.ID;
+				let existingStaff=featuredAuthorCollection.find(x=>x.ID==ID);
+				if(!existingStaff)
+				{
+					featuredAuthorCollection.push({
+						ID:staffDetail.ID,
+						Title:staffDetail.Title,
+						ImageUrl:staffDetail.ImageUrl,
+						ProfileDetailPageURL:staffDetail.ProfileDetailPageURL,
+						StaffPosition:staffDetail.StaffPositionLookup.Title
+					});
+				}
+			}
+		}
 	}
 	if(defaultHtmlSet)
 		containerDesign=containerDesign.replace("##Others##",defaultHtmlSet);
@@ -210,6 +235,45 @@ function fillPublicationHtml(resultSet,startIndex,endIndex){
 	containerDesign=containerDesign.replace("##Seventh##", "");
 	containerDesign=containerDesign.replace("##Others##", "");
 	$("#publicationContent").html(containerDesign);
+
+	bindFeaturedAuthor();
+}
+
+function bindFeaturedAuthor()
+{
+	$("#featuredAuthorDiv").html("");
+	$("#featuredAuthorCarousel").html("");
+
+	if(featuredAuthorCollection.length==0)
+		$("#key-researchers").hide();
+	else{
+		for(let i=0;i<featuredAuthorCollection.length;i++)
+		{
+			let staffDetail=featuredAuthorCollection[i];
+			let staffHtml="<div class='author-item'>"+
+							"<img src='"+staffDetail.ImageUrl+"'/>"+
+							"<div>"+
+								"<a href='"+staffDetail.ProfileDetailPageURL+"'>"+
+									"<h4>"+staffDetail.Title+"</h4>"+
+								"</a>"+
+								"<p>"+staffDetail.StaffPosition+"</p>"+
+							"</div>"+
+						"</div>";
+			$("#featuredAuthorDiv").append(staffHtml);
+	
+			let carouselStaffHtml="<div class='item'>"+
+										"<a href='"+staffDetail.ProfileDetailPageURL+"'>"+
+											"<div class='key-researcher'>"+
+												"<img src='"+staffDetail.ImageUrl+"' />"+
+												"<h4>"+staffDetail.Title+"</h4>"+
+												"<p>"+staffDetail.StaffPosition+"</p>"+
+											"</div>"+
+										"</a>"+
+									"</div>";
+			$("#featuredAuthorCarousel").append(carouselStaffHtml);
+		}
+		createOwlSlider();
+	}
 }
 
 function bindLoadMoreEvent(){
@@ -253,17 +317,17 @@ function setDefaultFilterValues(){
 function fillPublicationsFilterValues(){
 	let newCtx = SP.ClientContext.get_current();
 
-	let newPubList = newCtx.get_web().get_lists().getByTitle(_listTitlePublication);
+	let newPubList = newCtx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublication);
 	let newPubCamlQuery = new SP.CamlQuery();
 	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False' /><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
 	query += "</Query><RowLimit>1000</RowLimit></View>";
 	newPubCamlQuery.set_viewXml(query);
 	let newListItems = newPubList.getItems(newPubCamlQuery);
 
-	let newPubTopicList = newCtx.get_web().get_lists().getByTitle(_listTitlePublicationTopics);
+	let newPubTopicList = newCtx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublicationTopics);
 	let newPubTopicListItems=newPubTopicList.getItems(SP.CamlQuery.createAllItemsQuery());
 
-	let newPubAuthorList = newCtx.get_web().get_lists().getByTitle(_listTitleCommunity);
+	let newPubAuthorList = newCtx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleCommunity);
 	let newPubAuthorListItems=newPubAuthorList.getItems(SP.CamlQuery.createAllItemsQuery());
 	
 	newCtx.load(newListItems);
@@ -440,7 +504,7 @@ function setupLanguage(){
 
 function htmlDesignResult(eachPublication){
 	let htmlDesign={};
-	let publicationDetailUrl =  _siteUrl +(isArabic?"/Pages/Ar/":"/Pages/") + "PublicationDetails.aspx?ItemID=" + eachPublication.ID;
+	let publicationDetailUrl =  _siteUrl +(isArabic?"/ar/pages/":"/Pages/") + "PublicationDetails.aspx?ItemID=" + eachPublication.ID;
 	let pubDetails = eachPublication.PublicationDetails;
 	let pubTitle = eachPublication.Title;
 	let pubCategory = eachPublication.PublicationTopicIDs.Title;
@@ -461,7 +525,7 @@ function htmlDesignResult(eachPublication){
 												"<div class='publication-content'>"+
 													"<p class='publication-category'>"+pubCategory+"</p>"+
 													"<h3 class='publication-title'>"+pubTitle+"</h3>"+
-													"<p class='publication-text'>"+pubDetails.slice(0, smallContentLimit)+"</p>"+
+													"<p class='publication-text'>"+pubDetails.slice(0, featureContentLimit)+"</p>"+
 													"<div class='publication-author'>"+
 														"<img src='"+authImgUrl+"' alt='...'>"+
 														"<span>"+authorName+"</span>"+

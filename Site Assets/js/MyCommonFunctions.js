@@ -184,6 +184,10 @@ function SlicingDesc(srcStr) {
 		return "";
 }
 
+function failure(sender, args){
+	console.log('Request Failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+}
+
 function SlicingProfileDesc(srcStr) {
 	return srcStr.slice(0, charLimitProfile)
 }
@@ -202,6 +206,10 @@ function pagingFunctionalityIncomplete(itemsCount, pageLimit) {
 }
 
 function createOwlSlider() {
+	let owlCarouselData=$('.owl-carousel').data('owl.carousel');
+	if(owlCarouselData)
+		owlCarouselData.destroy();
+		
 	$(".owl-carousel").owlCarousel({
 		loop: false,
 		margin: 30,
@@ -354,7 +362,7 @@ function getStaffDetailsByQuery(camlQueryText, otherObject, onComplete, onFailur
 
 				let eachStaff = {};
 				eachStaff.ID = eachItem.get_item('ID');
-				eachStaff.ProfileDetailPageURL = _siteUrl + (isArabic?"/Pages/Ar/":"/Pages/")+"CHSCommunityDetails.aspx?ItemID=" + eachItem.get_item('ID');
+				eachStaff.ProfileDetailPageURL = _siteUrl + (isArabic?"/ar/pages/":"/Pages/")+"CHSCommunityDetails.aspx?ItemID=" + eachItem.get_item('ID');
 				eachStaff.ImageUrl = getImageSrcValue(eachItem.get_fieldValues()['ImageUrl']);
 				eachStaff.PersonalWebsiteUrl = eachItem.get_item('PersonalWebsiteUrl');
 				eachStaff.LinkedInUrl = eachItem.get_item('LinkedInUrl');

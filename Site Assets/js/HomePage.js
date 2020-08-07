@@ -30,7 +30,7 @@ var commonUrl="";
 $(document).ready(function () {
 	document.title = "Home";
 	_siteUrl = _spPageContextInfo.siteAbsoluteUrl;
-	commonUrl=_siteUrl+(isArabic?"/Pages/Ar/":"/Pages/");
+	commonUrl=_siteUrl+(isArabic?"/ar/pages/":"/Pages/");
 	setInterval(function () {
 		UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
 	}, 20 * 60000);
@@ -855,8 +855,4 @@ function bindHeadertext()
 		
 		
 	}	
-}
-
-function failure(sender, args){
-	console.log('Request Failed. ' + args.get_message() + '\n' + args.get_stackTrace());
 }

@@ -101,7 +101,7 @@ function SetBorderColor(elemendId, isErrored) {
 
 function bindContactData(){
 	var context = new SP.ClientContext.get_current();
-	var web = context.get_web();
+	var web = context.get_site().get_rootWeb();
 	var WebsiteConnectList = web.get_lists().getByTitle(_listWebsite);
 			
 	var camlQuery = new SP.CamlQuery();

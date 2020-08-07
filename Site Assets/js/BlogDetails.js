@@ -117,7 +117,7 @@ function blogStart() {
 }
 
 function setupLanguage(){
-	let commonStartUrl=_siteUrl +(isArabic?"/Pages/Ar/":"/Pages/");
+	let commonStartUrl=_siteUrl +(isArabic?"/ar/pages/":"/Pages/");
 	$("#allBlogAnchor").attr("href", commonStartUrl + "Blogs.aspx");
 
 	$("#readNextSectionTitle").text(isArabic?"اقرأ التالي":"Read Next");

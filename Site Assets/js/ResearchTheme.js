@@ -40,7 +40,7 @@ function bindResearchData(whereQuery){
 	researchCollections.EndIndex=0;
 
 	ctx = SP.ClientContext.get_current();
-	researchList = ctx.get_web().get_lists().getByTitle(_listTitleResearch);
+	researchList = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleResearch);
 	researchCamlQuery = new SP.CamlQuery();
 	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False' /><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
 	if(whereQuery)

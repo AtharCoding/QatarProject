@@ -29,7 +29,7 @@ function partnerStart() {
 
 function bindPartnerData(){
 	var context = new SP.ClientContext.get_current();
-	var web = context.get_web();
+	var web = context.get_site().get_rootWeb();
 	var PartnerList = web.get_lists().getByTitle("BusinessPartner");
 			
 	var camlQuery = new SP.CamlQuery();

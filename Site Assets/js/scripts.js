@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("#search-button").click(function () {
+    $("#search-button,#search-button2").click(function () {
         $(this).toggleClass("opend");
 
         $("#search-form").slideToggle();
@@ -33,10 +33,6 @@ $(document).ready(function () {
         style: "btn-primary",
         width: "100%",
     });
-    // $(".select-event-status").selectpicker({
-    //     style: "btn-light",
-    //     width: "100%",
-    // });
     $(".select-publucations-year").selectpicker({
         style: "btn-light",
         width: "100%",
@@ -79,28 +75,6 @@ $(document).mouseup(function (e) {
         $("#search-button").removeClass("opend");
     }
 });
-// $(".owl-carousel").owlCarousel({
-//     loop: true,
-//     margin: 30,
-//     nav: true,
-//     rtl: true,
-//     navText: [
-//         '<span class="nav-prev"><i class="fal fa-chevron-left"></i></span>',
-//         '<span class="nav-next"><i class="fal fa-chevron-right"></i></span>',
-//     ],
-//     responsive: {
-//         0: {
-//             items: 1,
-//             nav: false,
-//         },
-//         600: {
-//             items: 3,
-//         },
-//         1000: {
-//             items: 6,
-//         },
-//     },
-// });
 $(function () {
     $('[data-toggle="popover"]').popover({
         trigger: "focus",

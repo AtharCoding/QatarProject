@@ -56,7 +56,7 @@ function pubDetailStart() {
 				_nextPubCollection = respNextPub[0].d.results;
 				if (_nextPubCollection.length > 0) {
 					let nextPub = _nextPubCollection[0];
-					let commonStartUrl=_siteUrl +(isArabic?"/Pages/Ar/":"/Pages/");
+					let commonStartUrl=_siteUrl +(isArabic?"/ar/pages/":"/Pages/");
 					$("#nextPubAnchor").attr("href", commonStartUrl+"PublicationDetails.aspx?ItemID=" + nextPub.ID);
 					$("#nextPubAnchor").text(isArabic?nextPub.PublicationArabicTitle:nextPub.Title);
 				}
@@ -71,7 +71,7 @@ function pubDetailStart() {
 function bindPublication(itemID) {
 	
 	let ctx = SP.ClientContext.get_current();
-	let list = ctx.get_web().get_lists().getByTitle(_listTitlePublication);
+	let list = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublication);
 	let publicationItem = list.getItemById(itemID);
 	ctx.load(publicationItem);
 	ctx.executeQueryAsync(function () {
@@ -136,7 +136,7 @@ function fillPublicationDetails(tempObj) {
 function bindAuthorPublications() {
 
 	let ctx = SP.ClientContext.get_current();
-	let list = ctx.get_web().get_lists().getByTitle(_listTitlePublication);
+	let list = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublication);
 	let camlQuery = new SP.CamlQuery();
 	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False'/><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
 	query += "<Where><In><FieldRef Name='PublicationAuthorIDs' LookupId='True' /><Values>";
@@ -166,7 +166,7 @@ function bindAuthorPublications() {
 function fillAuthorPubDetails(tempObj) {
 
 	let eachPublication = tempObj.eachPublication;
-	let commonStartUrl=_siteUrl +(isArabic?"/Pages/Ar/":"/Pages/");
+	let commonStartUrl=_siteUrl +(isArabic?"/ar/pages/":"/Pages/");
 
 	let pubDetailUrl =commonStartUrl+"PublicationDetails.aspx?ItemID=" + eachPublication.get_item('ID');
 	let pubTitle = SlicingTitle(isArabic?eachPublication.get_item('PublicationArabicTitle'):eachPublication.get_item('Title'));
@@ -199,7 +199,7 @@ function bindAuthorPubHtml() {
 }
 
 function setupLanguage(){
-	let commonStartUrl=_siteUrl +(isArabic?"/Pages/Ar/":"/Pages/");
+	let commonStartUrl=_siteUrl +(isArabic?"/ar/pages/":"/Pages/");
 	$("#allPublicationAnchor").attr("href", commonStartUrl + "Publication.aspx");
 
 	$("#downloadPubTitle").text(isArabic?"تنزيل المنشور:":"Download Publication:");

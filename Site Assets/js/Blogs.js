@@ -187,7 +187,7 @@ var _totalBlogCount=0;
 var _blogCollections=[];
 function bindBlogs(){
 	let ctx = SP.ClientContext.get_current();
-	let list = ctx.get_web().get_lists().getByTitle(_listTitleBlogs);
+	let list = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleBlogs);
 	let camlQuery = new SP.CamlQuery();
 	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False'/><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
 	query += "<Where><Eq><FieldRef Name='BlogTypeLookup' />";

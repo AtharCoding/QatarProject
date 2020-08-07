@@ -12,7 +12,7 @@ $(document).ready(function () {
 });
 
 function communityDetailStart() {
-    let finalUrl=isArabic?"/Pages/Ar/":"/Pages/";
+    let finalUrl=isArabic?"/ar/pages/":"/Pages/";
     $("#AllCommunityUrl").attr("href",_siteUrl+finalUrl+"CHSCommunity.aspx");
     const urlParams = new URLSearchParams(window.location.search);
     ItemID = urlParams.get('ItemID')?urlParams.get('ItemID'):urlParams.get('itemid');
@@ -29,7 +29,7 @@ var staffPositionListItems;
 var currentItemDetails = {};
 function bindCommunityData() {
     let ctx = SP.ClientContext.get_current();
-    let listCollection = ctx.get_web().get_lists();
+    let listCollection = ctx.get_site().get_rootWeb().get_lists();
     let staffPositionList = listCollection.getByTitle(_listTitleStaffPosition);
     let communityTypeList = listCollection.getByTitle(_listTitleCommunityTypes);
     var allItemsQuery = SP.CamlQuery.createAllItemsQuery();
@@ -37,7 +37,7 @@ function bindCommunityData() {
     communityTypeListItems = communityTypeList.getItems(allItemsQuery);
     staffPositionListItems = staffPositionList.getItems(allItemsQuery);
 
-    listItem = ctx.get_web().get_lists().getByTitle(_listTitleCommunity).getItemById(ItemID);
+    listItem = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleCommunity).getItemById(ItemID);
     ctx.load(listItem);
     ctx.load(communityTypeListItems);
     ctx.load(staffPositionListItems);
@@ -145,8 +145,8 @@ function bindAuthorPublications(whereQuery) {
     pubCollections.EndIndex=0;
     
     ctx = SP.ClientContext.get_current();
-    pubList = ctx.get_web().get_lists().getByTitle(_listTitlePublication);
-    let pubTopicList = ctx.get_web().get_lists().getByTitle(_listTitlePublicationTopics);
+    pubList = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublication);
+    let pubTopicList = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublicationTopics);
 	pubCamlQuery = new SP.CamlQuery();
 	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False'/><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
     query += "<Where><Eq><FieldRef Name='PublicationAuthorIDs' LookupId='True' />";
@@ -219,7 +219,7 @@ function fillPublicationHtml(resultSet,startIndex,endIndex){
             let eachPublication = resultSet[i];
     
             let pubTitle = eachPublication.Title;
-            let publicationDetailUrl = _siteUrl +(isArabic?"/Pages/Ar/":"/Pages/")+"PublicationDetails.aspx?ItemID=" + eachPublication.ID;
+            let publicationDetailUrl = _siteUrl +(isArabic?"/ar/pages/":"/Pages/")+"PublicationDetails.aspx?ItemID=" + eachPublication.ID;
             let pubCategory = eachPublication.PublicationTopicIDs.Title;
             let pubDetails = eachPublication.PublicationDetails;
             let contentHtml = "<div class='col-lg-4'>"+
