@@ -1,0 +1,80 @@
+﻿<script src="/sites/Motife/SiteAssets/js/ContactUs.js?v=1" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js?v=1"></script>
+<div class='page-entry'>
+    <div class='page-header mb-4' id="pageDetails"> 
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="Home.aspx">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+                </ol>
+            </nav>
+            <div class="row">
+                <div class="col-lg-9">
+                    <h1 id="contentListTitle" class="page-title"></h1>
+                    <p id="contentListDesc" class="page-desc"></p>
+                </div>
+            </div>
+        </div>           
+    </div>
+    <div class="container">
+        <div class="contact-info">
+            <div class="row">
+                <div class="order-lg-2 col-lg-7" id="contactmap">
+                
+                </div>
+                <div class="order-lg-1 col-lg-5">
+                    <div class="contact-info-content">
+                        <h2 id="ContactHeading"></h2>
+                    <ul>
+                    <li><i class="fas fa-map-marker-alt"></i><span id="ContactAddress"></span></li>
+                    <li><i class="fas fa-phone-alt"></i><span id="ContactNo"></span></li>
+                    <li><i class="fas fa-envelope"></i><span id="ContactEmail"></span></li>
+                    </ul>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#contactForm"> CONTACT US</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="contactForm" data-backdrop="modal" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="contactFormLabel">Send us your message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                <div class="form-group col-md-6">
+                <label for="firstname">First Name <span>*</span></label>
+                <input type="text" class="form-control" id="firstname">
+                </div>
+                <div class="form-group col-md-6">
+                <label for="lastname">Last Name</label>
+                <input type="text" class="form-control" id="lastname">
+                </div>
+                </div>
+                <div class="form-group">
+                <label for="email">Email Address <span>*</span></label>
+                <input type="email" class="form-control" id="email" >
+                </div>
+                <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" class="form-control" id="subject" >
+                </div>
+                <div class="form-group">
+                <label for="message">Message</label>
+                <textarea class="form-control" id="message" placeholder="Write Something....."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="SaveContact" class="btn btn-primary" onclick="submitform()" value="Submit" type="button">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

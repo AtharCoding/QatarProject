@@ -1,0 +1,41 @@
+<h1>
+    Hello World 2
+</h1>
+<script>
+    $(document).ready(function () {
+	document.title = "Research Details";
+	_siteUrl = _spPageContextInfo.webAbsoluteUrl;
+	setInterval(function () {
+		UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
+	}, 20 * 60000);
+	SP.SOD.executeFunc('sp.js', 'SP.ClientContext', testStart);
+});
+
+function testStart(){
+    getListItems('Publications',printPageItemsDetails,logError);
+}
+
+function getListItems(listTitle,success,error)
+{
+   var ctx = SP.ClientContext.get_current();
+   var list = ctx.get_web().get_lists().getByTitle(listTitle);
+   var items = list.getItems(SP.CamlQuery.createAllItemsQuery());
+   ctx.load(items);
+   ctx.executeQueryAsync(function() {
+       success(items);
+   },error);
+}
+
+function printPageItemsDetails(pageItems)
+{
+    for(var i = 0; i < pageItems.get_count();i++) {
+        var pageItem = pageItems.getItemAtIndex(i);
+        console.log(pageItem.get_fieldValues()['ImageUrl']);
+    }
+}
+
+function logError(){
+    console.log("err");
+}
+
+</script>

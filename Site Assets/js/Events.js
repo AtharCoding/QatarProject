@@ -15,7 +15,7 @@ var _eventStatusValues = {
 
 $(document).ready(function () {
 	document.title = _listTitleEvents;
-	_siteUrl = _spPageContextInfo.webAbsoluteUrl;
+	_siteUrl = _spPageContextInfo.siteAbsoluteUrl;
 	setInterval(function () {
 		UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
 	}, 20 * 60000);
@@ -23,24 +23,23 @@ $(document).ready(function () {
 });
 
 function eventStart() {
-	var urlForEventList = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleEvents + "')";
-	var get_EventList = SPRestCommon.GetItemAjaxCall(urlForEventList);
-
+	
 	var urlForEvent = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleEvents + "')/items?$top=1000";
 	var get_Event = SPRestCommon.GetItemAjaxCall(urlForEvent);
 
-	$.when(get_EventList, get_Event)
-		.then(function (respEventList, respEvent) {
+	$.when(get_Event)
+		.then(function (respEvent) {
 
 			try {
-				_eventListDetails = respEventList[0].d;
-				$("#contentListTitle").text(_eventListDetails.Title);
-				$("#contentListDesc").text(_eventListDetails.Description);
+				getListDetails(_listTitleEvents,function(resultTitle,resultDesc){
+					$("#contentListTitle").text(resultTitle);
+					$("#contentListDesc").text(resultDesc);
+				});
 			} catch (error) {
 				console.error(error);
 			}
 
-			let fullEventCollection = respEvent[0].d.results;
+			let fullEventCollection = respEvent.d.results;
 			for (var i = 0; i < fullEventCollection.length; i++) {
 				let eventEndDate = new Date(fullEventCollection[i].EventEndDate);
 				let today = new Date();

@@ -1,4 +1,5 @@
-<script src='../SiteAssets/js/Publications.js' type='text/javascript'></script>
+<script src='../SiteAssets/js/Publications.js?V=1' type='text/javascript'></script>
+<script src='../../SiteAssets/js/Publications.js?V=1' type='text/javascript'></script>
 <div class='page-entry'>
     <div class='page-header'>
         <div class='container'>
@@ -17,8 +18,7 @@
         </div>
     </div>
     <div class='container'>
-        <a href='javascript:void(0)' class='mobile-filter-button'><i class='fal fa-sliders-h'></i><span>APPLY
-                filters</span></a>
+        <a href='javascript:void(0)' class='mobile-filter-button'><i class='fal fa-sliders-h'></i><span id="applyFilter2"></span></a>
     </div>
     <section id='filter'>
         <div class='filter-header'>
@@ -26,10 +26,10 @@
                 <div class='row'>
                     <div class='col-6 d-lg-none'>
                         <a href='javascript:void(0)' class='mobile-filter-back'><i
-                                class='far fa-arrow-left'></i><span>Back</span></a>
+                                class='far fa-arrow-left'></i><span id="backText"></span></a>
                     </div>
                     <div class='col-6 col-lg-12 text-right'>
-                        <a href='javascript:void(0)' class='filter-reset'>RESET FILTERS</a>
+                        <a id="resetFilter" href='javascript:void(0)' class='filter-reset'></a>
                     </div>
                 </div>
             </div>
@@ -38,18 +38,18 @@
             <div class='filter-options Publications'>
                 <div class='row'>
                     <div class='order-lg-2 col-5 col-lg-2'>
-                        <h6>Filter by year</h6>
+                        <h6 id="titleYearFilter"></h6>
                         <select id='ddlPublicationYear' class='select-Publications-year'>
                         </select>
                     </div>
                     <div class='order-lg-3 col-7 pl-xs-0 col-lg-2'>
-                        <h6>Filter by author </h6>
+                        <h6 id="titleAuthorFilter"></h6>
                         <select id='ddlPublicationAuthors' class='select-Publications-author'>
                         </select>
                     </div>
                     <div class='order-lg-1 col-lg-8'>
-                        <h6>Filter by topic</h6>
-                        <div id="publicationTopics" class='filter-types'>
+                        <h6 id="titleTopicFilter"></h6>
+                        <div id="publicationTypeFilter" class='filter-types'>
                         </div>
                     </div>
                 </div>
@@ -57,221 +57,33 @@
         </div>
         <div class='filter-footer d-lg-none'>
             <div class='container'>
-                <button class='btn btn-primary'>APPLY FILTERS</button>
+                <button id="btnApplyFilter" class='btn btn-primary'></button>
             </div>
         </div>
     </section>
     <section class='prject-selected-publications'>
-        <div id="publicationContent" class='container'>
-            <div class='row'>
-                <div class='col-lg-8'>
-                    <div class='row'>
-                        <div class='col-lg-12'>
-                            <a href='./publications-details.html'>
-                                <div class='publication publication-big'>
-                                    <div class='publication-content'>
-                                        <p class='publication-category'>Category</p>
-                                        <h3 class='publication-title'>Title</h3>
-                                        <p class='publication-text'>Short Desc</p>
-                                        <div class='publication-author'>
-                                            <img src='./assets/img/Devon-Cooper.jpg' alt='...'>
-                                            <span>by Devon Cooper</span>
-                                        </div>
-                                    </div>
-                                    <div class='publication-img'>
-                                        <img src='./assets/img/photo-publications-1@2x.jpg' alt='...'>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class='col-lg-6'>
-                            <a href='./publications-details.html'>
-                                <div class='publication'>
-                                    <div class='publication-content'>
-                                        <p class='publication-category'>Category</p>
-                                        <h3 class='publication-title'>Title</h3>
-                                        <p class='publication-text'>Short Desc</p>
-                                        <div class='publication-author'>
-                                            <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                            <span>by Bessie Edwards</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='col-lg-6'>
-                            <a href='./publications-details.html'>
-                                <div class='publication'>
-                                    <div class='publication-content'>
-                                        <p class='publication-category'>Category</p>
-                                        <h3 class='publication-title'>Title</h3>
-                                        <p class='publication-text'>Short Desc</p>
-                                        <div class='publication-author'>
-                                            <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                            <span>by Bessie Edwards</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-4'>
-                    <a href='./publications-details.html'>
-                        <div class='publication' style='height: 96%;'>
-                            <div class='publication-content'>
-                                <div class='publication-card-img'><img src='./assets/img/photo-publications-2@2x.jpg'
-                                        alt='...'></div>
-                                <p class='publication-category'>Policy Reports</p>
-                                <h3 class='publication-title'>Minim aliqua irure est elit minim aute do ea enim</h3>
-                                <p class='publication-text'>Sunt eiusmod occaecat consectetur labore mollit deserunt
-                                    ea est exercitation nulla cillum ea laboris in. Dolor sit ex magna nulla
-                                    reprehenderit dolor dolor exercitation.</p>
-                                <div class='publication-author'>
-                                    <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                    <span>by Bessie Edwards</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+        <div class="container">
+            <div id="publicationContent">
             </div>
-            <div class='row'>
-                <div class='col-lg-8'>
-                    <a href='./publications-details.html'>
-                        <div class='publication'>
-                            <div class='publication-content'>
-                                <p class='publication-category'>Situation Assessments</p>
-                                <h3 class='publication-title'>Lorem ipsum dolor sit amet, consectetur adipiscing
-                                    elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                </h3>
-                                <p class='publication-text'>Sunt eiusmod occaecat consectetur labore mollit deserunt
-                                    ea est exercitation nulla cillum ea laboris in. Dolor sit ex magna nulla
-                                    reprehenderit dolor dolor exercitation.</p>
-                                <div class='publication-author'>
-                                    <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                    <span>by Bessie Edwards</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <a href='./publications-details.html'>
-                        <div class='publication'>
-                            <div class='publication-content'>
-                                <p class='publication-category'>Policy Reports</p>
-                                <h3 class='publication-title'>Lorem ipsum dolor sit amet, consectetur adipiscing
-                                    elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                </h3>
-                                <p class='publication-text'>Sunt eiusmod occaecat consectetur labore mollit deserunt
-                                    ea est exercitation nulla cillum ea laboris in. Dolor sit ex magna nulla
-                                    reprehenderit dolor dolor exercitation.</p>
-                                <div class='publication-author'>
-                                    <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                    <span>by Bessie Edwards</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class='col-lg-4'>
-                    <a href='./publications-details.html'>
-                        <div class='publication' style='height: 95%;'>
-                            <div class='publication-content'>
-                                <div class='publication-card-img'><img src='./assets/img/photo-publications-3@2x.jpg'
-                                        alt='...'></div>
-                                <p class='publication-category'>Policy Reports</p>
-                                <h3 class='publication-title'>Minim aliqua irure est elit minim aute do ea enim</h3>
-                                <p class='publication-text'>Sunt eiusmod occaecat consectetur labore mollit deserunt
-                                    ea est exercitation nulla cillum ea laboris in. Dolor sit ex magna nulla
-                                    reprehenderit dolor dolor exercitation.</p>
-                                <div class='publication-author'>
-                                    <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                    <span>by Bessie Edwards</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class='col-lg-4'>
-                    <a href='./publications-details.html'>
-                        <div class='publication' style='height: 95%;'>
-                            <div class='publication-content'>
-                                <p class='publication-category'>Policy Reports</p>
-                                <h3 class='publication-title'>Minim aliqua irure est elit minim aute do ea enim</h3>
-                                <p class='publication-text'>Sunt eiusmod occaecat consectetur labore mollit deserunt
-                                    ea est exercitation nulla cillum ea laboris in. Dolor sit ex magna nulla
-                                    reprehenderit dolor dolor exercitation.</p>
-                                <div class='publication-author'>
-                                    <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                    <span>by Bessie Edwards</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class='col-lg-4'>
-                    <a href='./publications-details.html'>
-                        <div class='publication' style='height: 95%;'>
-                            <div class='publication-content'>
-                                <p class='publication-category'>Policy Reports</p>
-                                <h3 class='publication-title'>Lorem ipsum dolor sit amet consectetur ea est nulla
-                                </h3>
-                                <p class='publication-text'>Sunt eiusmod occaecat consectetur labore mollit deserunt
-                                    ea est exercitation nulla cillum ea laboris in. Dolor sit ex magna nulla
-                                    reprehenderit dolor dolor exercitation.</p>
-                                <div class='publication-author'>
-                                    <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                    <span>by Bessie Edwards</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class='col-lg-4'>
-                    <a href='./publications-details.html'>
-                        <div class='publication' style='height: 95%;'>
-                            <div class='publication-content'>
-                                <p class='publication-category'>Policy Reports</p>
-                                <h3 class='publication-title'>Lorem ipsum dolor sit amet consectetur ea est nulla
-                                </h3>
-                                <p class='publication-text'>Sunt eiusmod occaecat consectetur labore mollit deserunt
-                                    ea est exercitation nulla cillum ea laboris in. Dolor sit ex magna nulla
-                                    reprehenderit dolor dolor exercitation.</p>
-                                <div class='publication-author'>
-                                    <img src='./assets/img/Bessie-Edwards.jpg' alt='...'>
-                                    <span>by Bessie Edwards</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class='mt-3 text-center'>
-                <nav aria-label='navigation' class='d-inline-block'>
-                    <ul class='pagination'>
-                        <li class='page-item'><a class='page-link' href='#'><i class='far fa-arrow-left'></i>Prev</a>
-                        </li>
-                        <li class='page-item'><a class='page-link' href='#'>1</a></li>
-                        <li class='page-item active'><a class='page-link' href='#'>2</a></li>
-                        <li class='page-item'><a class='page-link' href='#'>3</a></li>
-                        <li class='page-item disabled'><a class='page-link' href='#'>...</a></li>
-                        <li class='page-item'><a class='page-link' href='#'>6</a></li>
-                        <li class='page-item'><a class='page-link' href='#'>Next<i class='far fa-arrow-right'></i></a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <a id="publicationLoadMore" href="javascript:void(0)" class='load-more light'>LOAD MORE</a>
         </div>
     </section>
     <section id='key-researchers'>
         <div class='container'>
-            <h2 class='section-title'>Featured Authors</h2>
+            <h2 id="sectionTitleAuthor" class='section-title'></h2>
             <div id="featuredAuthorDiv" class='d-lg-none'>
             </div>
             <div id="featuredAuthorCarousel" class='owl-carousel owl-theme key-researchers-carousel d-none d-lg-block'>
             </div>
         </div>
     </section>
-</div>
+</div><html><head><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8"><meta name="Robots" content="NOINDEX " /></head><body></body>
+                <script type="text/javascript">
+                 var gearPage = document.getElementById('GearPage');
+                 if(null != gearPage)
+                 {
+                     gearPage.parentNode.removeChild(gearPage);
+                     document.title = "Error";
+                 }
+                 </script>
+                 </html>

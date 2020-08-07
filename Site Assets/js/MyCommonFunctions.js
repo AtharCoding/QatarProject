@@ -3,17 +3,101 @@ var _listTitleEvents = "Events";
 var _listTitlePublication = "Publications";
 var _listTitleResearch = "ResearchThemes";
 var _listTitleCommunity = "CHS Community";
+var _listTitleCommunityTypes = "CommunityType";
+var _listTitleStaffPosition="StaffPositions";
 var _listTitleNews = "News";
 var _listTitleBusinessPartner = "BusinessPartner";
+var _listTitleAboutUs = "AboutUs";
+var _listTitleCHSCommunity = "CHS Community";
+var _listTitleGuidingPrinciple = "GuideLinePrinciple";
+var _listTitleAboutExplore = "AboutExplore";
+var _listContact="ContactUs";
+var _listWebsite="WebsiteConnect";
+var _listEmailSubscribers="EmailSubscribers";
+var _listTermsOfUse="TermsOfUse";
+var _listTitlePagesDetails="PagesDetails";
+var _listTitlePublicationTopics="PublicationTopics";
+var _listTitleEventTypes="EventTypes";
+var _listTitleHomeSmallBanner="HomeSmallBaner";
+var _listTitleHomeExtraContent="HomeExtraContent";
+
+var isArabic=false;
+if (window.location.href.toLowerCase().indexOf("/ar/") > -1)
+	isArabic=true;
 
 let charLimitTitle = 50;
-let charLimitDesc = 350;
+let charLimitDesc = 200;
 let charLimitProfile = 100;
+
+function commonForAllPages(){
+	let breadItems=$(".breadcrumb .breadcrumb-item:not(.active) a");
+	if(isArabic){
+		$(".readMore").text("قراءة المزيد");
+		$(".load-more").text("تحميل المزيد");
+		breadItems.each(function(index,item){
+			let itemText=$(item).text();
+			if(itemText=="Home")
+				$(item).text("بيت");
+			if(itemText=="CHS Community")
+				$(item).text("CHS الجماعة");
+			if(itemText=="Research Themes")
+				$(item).text("مواضيع البحث");
+			if(itemText=="Publications")
+				$(item).text("المنشورات");
+			if(itemText=="Blogs")
+				$(item).text("المدونات");
+			if(itemText=="News")
+				$(item).text("أخبار");
+			if(itemText=="Events")
+				$(item).text("الأحداث");
+		});
+	}
+	else{
+		$(".load-more").text("LOAD MORE");
+		$(".readMore").text("Read more");
+	}
+}
+
 function getFormattedDate(supplyDateTime) {
 	const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 	let current_datetime = new Date(supplyDateTime);
 	var formatted_date = ('0' + current_datetime.getDate()).slice(-2) + " " + months[current_datetime.getMonth()] + " " + current_datetime.getFullYear();
 	return formatted_date;
+}
+
+function getListDetails(listTitle){
+	var ctx = SP.ClientContext.get_current();
+	var list = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePagesDetails);
+	var camlQuery = new SP.CamlQuery();
+	let query = "<View><Query>";
+	query += "<Where><Eq><FieldRef Name='Title' />";
+	query += "<Value Type='Text'>"+listTitle+"</Value>";
+	query += "</Eq></Where>";
+	query += "</Query><RowLimit>"+1+"</RowLimit></View>";
+	camlQuery.set_viewXml(query);
+	let listItems = list.getItems(camlQuery);
+	ctx.load(listItems);
+	ctx.executeQueryAsync(function(){
+		let itemsCount=listItems.get_count();
+		let resultTitle="";
+		let resultDesc="";
+		if(itemsCount>0){
+			let eachItem = listItems.getItemAtIndex(0);
+			if (window.location.href.toLowerCase().indexOf("/ar/") > -1) {
+
+				resultTitle = eachItem.get_item('ListArabicTitle');
+				resultDesc = eachItem.get_item('ListArabicDesc');
+			}
+			else{
+				resultTitle = eachItem.get_item('ListEnglishTitle');
+				resultDesc = eachItem.get_item('ListEnglishDesc');
+			}
+			$("#contentListTitle,.breadcrumb .breadcrumb-item.active").text(resultTitle);
+			$("#contentListDesc").text(resultDesc);
+		}
+	},function(err){
+		console.error(err);
+	});
 }
 
 function getFormattedTime(dateStr) {
@@ -37,9 +121,14 @@ function getSizeStr(byteValue) {
 		result = (byteValue / (1e+6)) + "MB";
 	else if (byteValue > 1e+4)
 		result = (byteValue / (1e+3)) + "KB";
+	return result;
 }
 function formatRichTextValue(richValue) {
-	return $(richValue).html().replace(/font-size:[^;]+/g, '').replace(/font-family:[^;]+/g, '').replace("<p></p>", "");
+	let result="";
+	if(richValue)
+		result =$(richValue).html().replace(/font-size:[^;]+/g, '').replace(/font-family:[^;]+/g, '').replace(/<p><\/p>/g, "").replace(/<p><br><\/p>/g, "");
+		result=result.replace(/<div>/g,"<p>").replace(/<\/div>/g,"</p>");
+	return result;
 }
 
 var CalenderDetailObj = {
@@ -82,11 +171,17 @@ function getImageUrl(item, index, success, fail) {
 }
 
 function SlicingTitle(srcStr) {
-	return srcStr.slice(0, charLimitTitle)
+	if(srcStr)
+		return srcStr.slice(0, charLimitTitle);
+	else
+		return "";
 }
 
 function SlicingDesc(srcStr) {
-	return srcStr.slice(0, charLimitDesc)
+	if(srcStr)
+		return srcStr.slice(0, charLimitDesc);
+	else
+		return "";
 }
 
 function SlicingProfileDesc(srcStr) {
@@ -167,7 +262,7 @@ function getStaffByCommaSaperateIDs(commaSaperateIDs, otherObject, onComplete) {
 					for (let i = 0; i < tempStaffCollection.length; i++) {
 						getImageUrl(tempStaffCollection[i], i, function (resultImgUrl, eachStaff, otherObject) {
 							staffCounter++;
-							eachStaff.ProfileDetailPageURL = _siteUrl + "/Pages/CHSCommunityDetails.aspx?ID=" + eachStaff.ID;
+							eachStaff.ProfileDetailPageURL = _siteUrl + "/Pages/CHSCommunityDetails.aspx?ItemID=" + eachStaff.ID;
 							eachStaff.ProfileImageUrl = resultImgUrl;
 							staffCollectionResult.push(eachStaff);
 							if (staffCounter == tempStaffCollection.length)
@@ -183,46 +278,113 @@ function getStaffByCommaSaperateIDs(commaSaperateIDs, otherObject, onComplete) {
 		onComplete(staffCollectionResult, otherObject);
 }
 
-let staffCollection=[];
-function getStaffByIDArray(ctx,staffIDArr, otherObject, onComplete, onFailure) {
-	if (staffIDArr.length > 0) {
-		let list = ctx.get_web().get_lists().getByTitle(_listTitleCommunity);
-		let camlQuery = new SP.CamlQuery();
-		let query = "<View><Query><OrderBy><FieldRef Name='Modified'/></OrderBy>";
+function generateCamlQuery(condition,type){
+	if(condition.length==0) return "";
+	let typeStart=type.toLowerCase()=="and"?"<And>":"<Or>";
+	let typeEnd=type.toLowerCase()=="and"?"</And>":"</Or>";
+
+	while(condition.length>=2){
+		let complexCondition=[];
+
+		for(let i=0;i<condition.length;i+=2){
+			if(condition.length==i+1)
+				complexCondition.push(condition[i]);
+			else
+				complexCondition.push(typeStart+condition[i]+condition[i+1]+typeEnd);
+		}
+		condition =complexCondition;
+	}
+	return condition[0];
+}
+function createCamlQueryByIDArr(staffIDArr){
+	let query=SP.CamlQuery.createAllItemsQuery();
+	if(staffIDArr.length>0){
+		query = "<View><Query><OrderBy><FieldRef Name='Modified'/></OrderBy>";
 		query += "<Where><In><FieldRef Name='ID' /><Values>";
 		staffIDArr.forEach(function (id) {
 			query += '<Value Type="Number">' + id + '</Value>';
 		});
 		query += '</Values></In></Where></Query></View>';
-		camlQuery.set_viewXml(query);
-		
-		let items = list.getItems(camlQuery);
-		ctx.load(items);
-		ctx.executeQueryAsync(function(){			
-			if (items.get_count() > 0) {
-				for (let i = 0; i <items.get_count(); i++) {
-					let eachStaff={};
-					let eachItem = items.getItemAtIndex(i);
-
-					let resultImgUrlTag=eachItem.get_fieldValues()['ImageUrl'];
-					if(resultImgUrlTag){
-						let resultImgUrl=getImageSrcValue(resultImgUrlTag);
-						eachStaff.ProfileDetailPageURL = _siteUrl + "/Pages/CHSCommunityDetails.aspx?ID=" + eachItem.get_item('ID');
-						eachStaff.ProfileImageUrl = resultImgUrl;
-						eachStaff.Title = eachItem.get_item('Title');
-						eachStaff.StaffPostion = eachItem.get_item('StaffPostion');
-						eachStaff.ID = eachItem.get_item('ID');
-						staffCollection.push(eachStaff);
-					}
-				}
-				onComplete(staffCollection, otherObject);
-			}
-			else
-				onComplete(staffCollection, otherObject);
-		},onFailure);
 	}
-	else
-		onComplete(staffCollection, otherObject);
+	return query;
+}
+
+let staffCollection = [];
+function getStaffDetailsByQuery(camlQueryText, otherObject, onComplete, onFailure) {
+	let ctx = SP.ClientContext.get_current();
+	let listCollection = ctx.get_site().get_rootWeb().get_lists();
+
+	let communityList = listCollection.getByTitle(_listTitleCommunity);
+	let staffPositionList = listCollection.getByTitle(_listTitleStaffPosition);
+	let communityTypeList = listCollection.getByTitle(_listTitleCommunityTypes);
+	var allItemsQuery = SP.CamlQuery.createAllItemsQuery();
+
+	let camlQuery = new SP.CamlQuery();
+	camlQuery.set_viewXml(camlQueryText);
+
+	let communityTypeListItems = communityTypeList.getItems(allItemsQuery);
+	let staffPositionListItems = staffPositionList.getItems(allItemsQuery);
+	let communityListItems = communityList.getItems(camlQuery);
+	ctx.load(communityTypeListItems);
+	ctx.load(staffPositionListItems);
+	ctx.load(communityListItems);
+	ctx.executeQueryAsync(function () {
+		if (communityListItems.get_count() > 0) {
+			let communityType = [];
+			for (let i = 0; i < communityTypeListItems.get_count(); i++) {
+				let eachItem = communityTypeListItems.getItemAtIndex(i);
+				let temp = {};
+				temp.ID = eachItem.get_item('ID');
+				temp.Title = eachItem.get_item('Title');
+				temp.CommunityTypeArabic = eachItem.get_item('CommunityTypeArabic');
+				communityType.push(temp);
+			}
+
+			let staffPositions = [];
+			for (let i = 0; i < staffPositionListItems.get_count(); i++) {
+				let eachItem = staffPositionListItems.getItemAtIndex(i);
+				let temp = {};
+				temp.ID = eachItem.get_item('ID');
+				temp.Title = eachItem.get_item('Title');
+				temp.StaffPositionArabic = eachItem.get_item('StaffPositionArabic');
+				staffPositions.push(temp);
+			}
+			for (let i = 0; i < communityListItems.get_count(); i++) {
+				let eachItem = communityListItems.getItemAtIndex(i);
+
+				let eachStaff = {};
+				eachStaff.ID = eachItem.get_item('ID');
+				eachStaff.ProfileDetailPageURL = _siteUrl + (isArabic?"/Pages/Ar/":"/Pages/")+"CHSCommunityDetails.aspx?ItemID=" + eachItem.get_item('ID');
+				eachStaff.ImageUrl = getImageSrcValue(eachItem.get_fieldValues()['ImageUrl']);
+				eachStaff.PersonalWebsiteUrl = eachItem.get_item('PersonalWebsiteUrl');
+				eachStaff.LinkedInUrl = eachItem.get_item('LinkedInUrl');
+				eachStaff.FacebookUrl = eachItem.get_item('FacebookUrl');
+				eachStaff.TwitterLink = eachItem.get_item('TwitterLink');
+				eachStaff.UserEmail = eachItem.get_item('UserEmail');
+				eachStaff.Title = isArabic ? eachItem.get_item('StaffArabicTitle') : eachItem.get_item('Title');
+				eachStaff.StaffBiography = isArabic ? eachItem.get_item('StaffArabicBioGraphy') : eachItem.get_item('StaffBiography');
+
+				let staffPositionObj = eachItem.get_item('StaffPositionLookup');
+				if (staffPositionObj) {
+					let staffLookupID = staffPositionObj.get_lookupId();
+					let staffResults = $.grep(staffPositions, function (e) { return e.ID == staffLookupID; });
+					if (staffResults.length > 0)
+						eachStaff.StaffPositionLookup = { ID: staffResults[0].ID, "Title": isArabic ? staffResults[0].StaffPositionArabic:staffResults[0].Title};
+				}
+				let staffCommunityTypeObj = eachItem.get_item('CommunityTypeID');
+				if (staffCommunityTypeObj) {
+					let staffCommunityTypeID = staffCommunityTypeObj.get_lookupId();
+					let communityTypeResults = $.grep(communityType, function (e) { return e.ID == staffCommunityTypeID; });
+					if (communityTypeResults.length > 0)
+						eachStaff.CommunityType = { ID: communityTypeResults[0].ID, "Title": isArabic ?communityTypeResults[0].CommunityTypeArabic:communityTypeResults[0].Title };
+				}
+				staffCollection.push(eachStaff);
+			}
+			onComplete(staffCollection, otherObject);
+		}
+		else
+			onComplete(staffCollection, otherObject);
+	}, onFailure);
 }
 
 var partnerCollectionResult = [];

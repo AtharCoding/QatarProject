@@ -4,9 +4,10 @@ var _currentEvent = [];
 var _latestEventcollection = [];
 var _currentAttCollection = [];
 var _nextEventCollection = [];
+
 $(document).ready(function () {
 	document.title = "Event Details";
-	_siteUrl = _spPageContextInfo.webAbsoluteUrl;
+	_siteUrl =_spPageContextInfo.siteAbsoluteUrl;
 	setInterval(function () {
 		UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
 	}, 20 * 60000);
@@ -14,11 +15,12 @@ $(document).ready(function () {
 });
 
 function eventDetailStart() {
+	setupLanguage();
 	const urlParams = new URLSearchParams(window.location.search);
-	const itemID = urlParams.get('ItemID');
+	const itemID = urlParams.get('ItemID')?urlParams.get('ItemID'):urlParams.get('itemid');
 	if (itemID != null) {
 		var urlForCurrentEvent = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleEvents + "')/items(" + itemID + ")?"+
-									"$select=ID,Title,EventType1,EventStartDate,EventEndDate,EventDesc,EventVenue,EventSpeakerIDs0/Title,EventSpeakerIDs0/ID,EventPartnersIDs0/Title,EventPartnersIDs0/ID,FieldValuesAsHtml,EventVenueMapHtml" +
+									"$select=ID,Title,EventArabicTitle,EventStartDate,EventEndDate,EventDesc,EventArabicDesc,EventVenue,EventArabicVenue,EventSpeakerIDs0/Title,EventSpeakerIDs0/ID,EventPartnersIDs0/Title,EventPartnersIDs0/ID,FieldValuesAsHtml,EventVenueMapHtml" +
 									"&$expand=EventSpeakerIDs0,EventPartnersIDs0";
 		var get_Current_Event = SPRestCommon.GetItemAjaxCall(urlForCurrentEvent);
 
@@ -39,7 +41,7 @@ function eventDetailStart() {
 
 				if (_currentAttCollection.length > 0) {
 					for (let i = 0; i < _currentAttCollection.length; i++) {
-						var urlForAttDetails = _siteUrl + "_api/web/getfilebyserverrelativeurl('" + _currentAttCollection[i].ServerRelativeUrl +"')";
+						var urlForAttDetails = _siteUrl + "/_api/web/getfilebyserverrelativeurl('" + _currentAttCollection[i].ServerRelativeUrl +"')";
 						var get_AttDetails = SPRestCommon.GetItemAjaxCall(urlForAttDetails);
 						$.when(get_AttDetails)
 						.then(function (respAttDetails) {
@@ -58,9 +60,11 @@ function eventDetailStart() {
 				else
 					$("#eventAttachments").hide();
 
-				$("#eventTitle,#contentEventTitle,#otherEventTitle").text(_currentEvent.Title);
+					let eventTitle=isArabic?_currentEvent.EventArabicTitle:_currentEvent.Title;
+				$("#eventTitle,#contentEventTitle,#otherEventTitle").text(eventTitle);
 
-				let eventVenue=_currentEvent.EventVenue;
+				let eventVenue=isArabic?_currentEvent.EventArabicVenue:_currentEvent.EventVenue;
+				eventVenue=$("<div></div>").append(eventVenue).text();
 				if(eventVenue){
 					$("#eventVenue,#mapVenue,#mobileVenue").text(eventVenue);
 					let googleMapdirectionUrl="https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='"+eventVenue+"'";
@@ -93,7 +97,9 @@ function eventDetailStart() {
 						$("#eventRegAndCalender,#eventRegAndCalender2").hide();
 				}
 				
-				$("#eventContent").html(formatRichTextValue(_currentEvent.EventDesc));
+				let currentEventDesc=isArabic?_currentEvent.EventArabicDesc:_currentEvent.EventDesc;
+				currentEventDesc=formatRichTextValue(currentEventDesc);
+				$("#eventContent").html(formatRichTextValue(currentEventDesc));
 				bindSpeakerAndPartner(_currentEvent);
 				bindCalenderEvent(_currentEvent);
 				
@@ -106,21 +112,21 @@ function eventDetailStart() {
 
 function bindSpeakerAndPartner(eachEvent){
 	let eventSpeakerList=eachEvent.EventSpeakerIDs0.results;
-	let speakerIDs="";
+	let speakerIDs=[];
 	for(let i=0;i<eventSpeakerList.length;i++){
-		speakerIDs+=eventSpeakerList[i].ID+",";
+		speakerIDs.push(eventSpeakerList[i].ID);
 	}
 	if(speakerIDs){
-		getStaffByCommaSaperateIDs(speakerIDs,0,function(staffCollectionResult,otherObject){
+		getStaffDetailsByQuery(createCamlQueryByIDArr(speakerIDs),0,function(staffCollectionResult,otherObject){
 			for(let i=0;i<staffCollectionResult.length;i++){
 				let staffDetail=staffCollectionResult[i];
 				let speakerContent="<div class='col-lg-6'>"+
 										"<a href='"+staffDetail.ProfileDetailPageURL+"'>"+
 										"<div class='event-speaker'>"+
-											"<img src='"+staffDetail.ProfileImageUrl+"' />"+
+											"<img src='"+staffDetail.ImageUrl+"' />"+
 										"<div>"+
 										"<h4>"+staffDetail.Title+"</h4>"+
-										"<p>"+staffDetail.StaffPostion+"</p>"+
+										"<p>"+staffDetail.StaffPositionLookup.Title+"</p>"+
 										"</div>"+
 										"</div>"+
 										"</a>"+
@@ -155,4 +161,83 @@ function bindCalenderEvent(eachEvent){
 		CalenderDetailObj.EndDateTime=eachEvent.EventEndDate;
 		getCalenderICSFile(CalenderDetailObj);
 	});	
+}
+
+function submitRegisterEventform() {
+	if (!HasFormValidateErr()) {
+	
+		SaveEventregisterData();
+	}
+	else {
+		//Do Nothing
+	}
+}
+function SaveEventregisterData(){
+	const itemID = urlParams.get('ItemID');
+	var listItemData = "";
+	listItemData = {
+		__metadata: { "type": "SP.Data.EventRegisterListItem" },
+		"EventRegisterID":itemID,
+		"Title": $("#firstname").val(),
+		"EventRegisterFirstName": $("#lastname").val(),
+		"EventRegisterEmail": $("#email").val(),
+		"EventRegisterComment": $("#message").val()
+	};
+
+	var allItemsUrl=_spPageContextInfo.siteAbsoluteUrl + "/_api/Web/Lists/GetByTitle('EventRegister')/Items";
+	SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listContact, listItemData)
+	.then(function(iar){
+		alert("Event Register succefully");
+		$("#RegisterEventForm").modal("hide");
+		ClearAllFields();
+	})
+	.fail(CommonUtil.OnRESTError);
+}
+function ClearAllFields() {
+	$('#firstname').val("");
+	$('#firstname').css("border-color", '#ccc');
+
+	$('#lastname').val("");
+
+	$('#email').val("");
+	$('#email').css("border-color", '#ccc');
+
+
+	$('#message').val("");
+	
+	
+}
+function HasFormValidateErr() {
+	var has_error = false;
+	var is_errored = false;
+
+	var email = $("#email").val();
+	is_errored = (IsNullOrEmpty(email));
+	SetBorderColor("email", is_errored);
+	has_error = (is_errored || has_error);
+
+	var firstname = $("#firstname").val();
+	is_errored = (IsNullOrEmpty(firstname));
+	SetBorderColor("firstname", is_errored);
+	has_error = (is_errored || has_error);
+	return has_error;
+}
+function IsNullOrEmpty(obj) {
+	return (obj === undefined || obj === null || obj === "");
+}
+function SetBorderColor(elemendId, isErrored) {
+	var border_color = isErrored ? "red" : "#ccc";
+	$("#" + elemendId).css("border-color", border_color);
+}
+
+function setupLanguage(){
+	$("#eventVenue,#eventVenueTitle1,#eventVenueTitle2,#eventVenueTitle3").text(isArabic?"مكان":"Venue");
+	$("#registerEventTitle,#registerEventTitle2").text(isArabic?"سجل لهذا الحدث":"REGISTER FOR this EVENT");
+	$("#addCalenderTitle,#addCalenderEvent2").text(isArabic?"إضافة إلى التقويم":"ADD TO CALENDAR");
+	$("#titleAttachments").text(isArabic?"المرفقات:":"Attachments:");
+	$("#mapVenueGetDirection,#otherVenueGetDirection").text(isArabic?"اتجاه":"Get Directions");
+	$("#titleSpeaker").text(isArabic?"مكبرات الصوت":"Speakers");
+	$("#titlePartners").text(isArabic?"شركائنا لهذه الأحداث":"Our Partners for this Events");
+	$("#titleDateTime,#titleDateTime2").text(isArabic?"التاريخ والوقت":"Date & Time");
+	$("#titleEventAbout").text(isArabic?"عن الحدث":"About the Event");
 }

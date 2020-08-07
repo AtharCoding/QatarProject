@@ -1,6 +1,18 @@
-<script src='../SiteAssets/js/News.js?v=1' type='text/javascript'></script>
-<script src='../../SiteAssets/js/News.js?v=1' type='text/javascript'></script>
-    <div class='page-entry'>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.SPServices/2014.02/jquery.SPServices-2014.02.min.js"></script>
+<script type="text/javascript" src="https://soutya.sharepoint.com/sites/Motife/SiteAssets/Paging/News.js?v=1"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" /> -->
+<!-- <link rel="stylesheet" href="https://soutya.sharepoint.com/sites/Tutorial/SiteAsset/Paging/sp-bootstrap-list-viewer.css" /> -->
+<script type="text/javascript">
+var spBL233565656  = new spBootstrapList({
+		"instance" : "spBL233565656",
+		"filterBy":"",		
+		"Title" : "Title",
+		"listName" : "News"
+});
+</script>
+<div class="spBLWrapper" id="spBL233565656">
+	<div class="page-entry">
         <div class='page-header'>
             <div class='container'>
                 <nav aria-label='breadcrumb'>
@@ -16,9 +28,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class='container'>
-            <a id='firstNewsDetailLink' href='/'>
+		</div>
+		<div class='container'>
+            <a id="firstNewsDetailLink" href='/'>
                 <div class='first-post'>
                     <div class='row'>
                         <div class='col-lg-6'>
@@ -31,16 +43,18 @@
                                 <span id='firstNewsDate' class='date'></span>
                                 <h2 id='firstNewsTitle'></h2>
                                 <p id='firstNewsDesc'></p>
-                                <span class='go-link readMore'>Read more</span>
+                                <span class='go-link'>Read more</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </a>
-            <div id='newsContent' class='row news-cards'>
-            </div>
-            <div class='text-center'>
-                <a id='newsLoadMore' href='javascript:void(0)' class='load-more light'>LOAD MORE</a>
+			</a>
+			<div class="spBLContainer" class="row news-cards"></div>
+            <div class="text-center">
+                <div class="spBLPagerContainer"><i class="fa fa-refresh fa-spin"></i><small>Checking for pages...</small></div>
             </div>
         </div>
-    </div>
+	</div>
+  
+  <!-- <div class="spBLPagerContainer"><i class="fa fa-refresh fa-spin"></i><small>Checking for pages...</small></div> -->
+</div>

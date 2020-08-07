@@ -823,6 +823,18 @@ a:hover .go-link {
     color: #f9b115;
     font-size: 25px;
 }
+.open-video-right {
+    background: #ffffff;
+    border: none;
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    color: #f9b115;
+    font-size: 25px;
+}
 .open-video i {
     position: relative;
     top: -1px;
@@ -944,6 +956,7 @@ a:hover .go-link {
     display: flex;
     margin-bottom: 32px;
     position: relative;
+    height: 300px;
 }
 
 .publication-img {
@@ -1945,6 +1958,7 @@ transform: scale(1.1);
 }
 .team-content {
     padding: 10px 15px;
+    height: 180px;
 }
 .team-img img {
     width: 100%;
@@ -2271,7 +2285,7 @@ a:hover .video-card-img img {
 }
 .mision-content {
     background-color: #575756;
-    padding: 25px;
+    padding: 15px;
     margin-top: 30px;
     color: #fff;
     height: 200px;
@@ -2310,7 +2324,7 @@ a:hover .video-card-img img {
 
 .author-item {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     margin-bottom: 15px;
     border-bottom: 1px solid #ededed;
 }

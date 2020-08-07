@@ -28,7 +28,6 @@ $(document).ready(function () {
         $(".slider-navigation h3[data-slide-to='" + e.to + "']").addClass(
             "active"
         );
-        console.log(e.to);
     });
     $(".selectpicker").selectpicker({
         style: "btn-primary",

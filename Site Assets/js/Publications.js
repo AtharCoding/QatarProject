@@ -1,26 +1,32 @@
 "use strict";
 var _siteUrl = "";
-var _allPublications = [];
-var _publicationPastCollection = [];
-var _publicationListDetails = [];
-var publicationCounter = 0;
-var _pastPublicationCounter = 0;
-var _allTypeFilter = [];
 
-var _allYearFilterValue="All Years";
-var _allAuthorFilterValue="All Authors";
-var _allTopicFilterValue="All";
+var _allYearFilterValue=isArabic?"جميع السنوات":"All Years";
+var _allAuthorFilterValue=isArabic?"جميع المؤلفين": "All Authors";
+var _allTopicFilterValue=isArabic?"الكل":"All";
 
-var _publicationStatusValues = {
-	AllPublications: "All Publications",
-	Current: "Current",
-	Upcoming: "Upcoming",
-	Completed: "Completed"
+var tempCounter=0;
+var ctx;
+var pubList;
+var pubCamlQuery;
+var listItems;
+var pubTopicListItems;
+var itemLimit=4;
+var pubCollections={
+	RetrieveResultsets:[],
+	MainResultSet:[],
+	NextResultPosition:0,
+	StartIndex:0,
+	EndIndex:0	
 };
+var isRefreshData=false;
+var smallContentLimit=250;
+var MediumContentLimit=330;
+var largeContentLimit=480;
 
 $(document).ready(function () {
 	document.title = "Publications";
-	_siteUrl = _spPageContextInfo.webAbsoluteUrl;
+	_siteUrl = _spPageContextInfo.siteAbsoluteUrl;
 	setInterval(function () {
 		UpdateFormDigest(_spPageContextInfo.webServerRelativeUrl, _spFormDigestRefreshInterval);
 	}, 20 * 60000);
@@ -28,293 +34,305 @@ $(document).ready(function () {
 });
 
 function publicationStart() {
-	var urlForPublicationList = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitlePublication + "')";
-	var get_PublicationList = SPRestCommon.GetItemAjaxCall(urlForPublicationList);
+	getListDetails(_listTitlePublication);
+	bindPublicationData("");
+	bindLoadMoreEvent();
+	setDefaultFilterValues();
+	fillPublicationsFilterValues();
+	setupLanguage();
+}
 
-	var urlForPublication = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitlePublication + "')/items?$top=1000"+
-							"&$select=ID,Title,PublicationPreTitle,PublicationPostTitle,PublicationDate,PublicationDetails,IsFeatured1,NoOfViews"+
-							",PublicationTopicIDs/Title,PublicationTopicIDs/ID,PublicationAuthorIDs/Title,PublicationAuthorIDs/ID,FieldValuesAsHtml" +
-							"&$expand=PublicationTopicIDs,PublicationAuthorIDs";
-	var get_Publication = SPRestCommon.GetItemAjaxCall(urlForPublication);
+function bindPublicationData(whereQuery){
+	if(isRefreshData)
+		$("#publicationContent").html("");
 
-	$.when(get_PublicationList, get_Publication)
-		.then(function (respPublicationList, respPublication) {
+	pubCollections.RetrieveResultsets=[];
+	pubCollections.MainResultSet=[];
+	pubCollections.NextResultPosition="";
+	pubCollections.StartIndex=0;
+	pubCollections.EndIndex=0;
 
-			try {
-				_publicationListDetails = respPublicationList[0].d;
-				$("#contentListTitle").text(_publicationListDetails.Title);
-				$("#contentListDesc").text(_publicationListDetails.Description);
-			} catch (error) {
-				console.error(error);
+	ctx = SP.ClientContext.get_current();
+	pubList = ctx.get_web().get_lists().getByTitle(_listTitlePublication);
+
+	pubCamlQuery = new SP.CamlQuery();
+	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False' /><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
+	if(whereQuery)
+		query += whereQuery;
+	query += "</Query><RowLimit>"+itemLimit+"</RowLimit></View>";
+	pubCamlQuery.set_viewXml(query);
+	listItems = pubList.getItems(pubCamlQuery);
+
+	let pubTopicList = ctx.get_web().get_lists().getByTitle(_listTitlePublicationTopics);
+	pubTopicListItems=pubTopicList.getItems(SP.CamlQuery.createAllItemsQuery());
+
+	ctx.load(listItems);
+	ctx.load(pubTopicListItems);
+	ctx.executeQueryAsync(function(){
+		pubCollections.StartIndex=0;
+		pubCollections.EndIndex=listItems.get_count();
+		pubCollections.NextResultPosition=listItems.get_listItemCollectionPosition();
+		loadMoreHideShow();
+		fillPublicationItems();
+	},failure);
+}
+
+function fillPublicationItems(){
+	let pubTopics = [];
+    for (let i = 0; i < pubTopicListItems.get_count(); i++) {
+        let eachItem = pubTopicListItems.getItemAtIndex(i);
+        let temp = {};
+        temp.ID = eachItem.get_item('ID');
+        temp.Title = eachItem.get_item('Title');
+        temp.PublicationTopicArabic = eachItem.get_item('PublicationTopicArabic');
+        pubTopics.push(temp);
+	}
+	tempCounter=0;
+	for(let i=0;i<listItems.get_count();i++){
+		let tempObj={};
+		tempObj.totalItemsCount=listItems.get_count();
+		let eachPublication = listItems.getItemAtIndex(i);
+		let pubAuthIDsArr=[];
+		var pubAuthorIDs = eachPublication.get_item('PublicationAuthorIDs');
+		for(let j = 0;j < pubAuthorIDs.length;j++) {
+			pubAuthIDsArr.push(pubAuthorIDs[j].get_lookupId());
+		}
+
+		if(pubAuthIDsArr.length>0){
+			tempObj.Index=i;
+			tempObj.ID=eachPublication.get_item('ID');
+			tempObj.Title=isArabic?eachPublication.get_item("PublicationArabicTitle"):eachPublication.get_item('Title');
+
+			let pubDateStr=eachPublication.get_item('PublicationDate');
+			if(pubDateStr)
+				tempObj.PublicationDate=getFormattedDate(pubDateStr);
+
+			let pubDetails=isArabic?eachPublication.get_item("PublicationArabicDetails"):eachPublication.get_item("PublicationDetails");
+			if(pubDetails)
+				tempObj.PublicationDetails=$("<div></div>").append(pubDetails).text();
+
+
+			let pubTopic = eachPublication.get_item("PublicationTopicIDs");
+			if (pubTopic){
+				let pubTopicID=pubTopic.get_lookupId();
+				let itemPubTopics=pubTopics.find(x=>x.ID==pubTopicID);
+				if(itemPubTopics)
+					tempObj.PublicationTopicIDs ={Title:isArabic?itemPubTopics.PublicationTopicArabic:itemPubTopics.Title};
 			}
 			
-			_allPublications = respPublication[0].d.results;
-			$("#ddlPublicationYear").append("<option>"+_allYearFilterValue+"</option>");
-			$("#ddlPublicationAuthors").append("<option>"+_allAuthorFilterValue+"</option>");
-			$("#publicationTopics").append("<button class='btn btn-primary all'>"+_allTopicFilterValue+"</button>");
-			let featuredAuthorIDs=[];
-			for (var i = 0; i < _allPublications.length; i++) {
-				let eachPublication=_allPublications[i];
-
-				let publicationDateStr=eachPublication.PublicationDate;
-				if(publicationDateStr){
-					let date=new Date(publicationDateStr);
-					$("#ddlPublicationYear").append("<option>"+date.getFullYear()+"</option>")
-				}
-
-				let publicationAuthorsStr=eachPublication.PublicationAuthorIDs;
-				let AuthorIDArr=[];
-				if(publicationAuthorsStr){
-					let publicationAuthorsArr=eachPublication.PublicationAuthorIDs.results;
-					for(let i=0;i<publicationAuthorsArr.length;i++){
-						$("#ddlPublicationAuthors").append("<option>"+publicationAuthorsArr[i].Title+"</option>");
-						AuthorIDArr.push(publicationAuthorsArr[i].ID);
-						if(eachPublication.IsFeatured1)
-							featuredAuthorIDs.push(publicationAuthorsArr[i].ID);
+			let imgStr=eachPublication.get_fieldValues()['ImageUrl'];
+			if(imgStr)
+				tempObj.ImageUrl=getImageSrcValue(imgStr);
+			
+			let authorCamlQuery=createCamlQueryByIDArr(pubAuthIDsArr);
+			getStaffDetailsByQuery(authorCamlQuery,tempObj,function(staffCollection, tempObj){
+				tempCounter++;
+				tempObj.staffCollection=staffCollection;
+				pubCollections.RetrieveResultsets.push(tempObj);
+				if(tempCounter==tempObj.totalItemsCount){
+					pubCollections.RetrieveResultsets.sort(function(a,b) {return a.Index - b.Index;});
+					let mainLength=pubCollections.MainResultSet.length;
+					if(mainLength>0){
+						$.each(pubCollections.RetrieveResultsets, function() {
+							this.Index = mainLength+this.Index;
+						});
 					}
+					pubCollections.MainResultSet=pubCollections.MainResultSet.concat(pubCollections.RetrieveResultsets);
+					pubCollections.RetrieveResultsets=[];
+					fillPublicationHtml(pubCollections.MainResultSet,pubCollections.StartIndex,pubCollections.EndIndex);
+					loadMoreHideShow();	
 				}
-
-				let publicationTopics=eachPublication.PublicationTopicIDs;
-				if(publicationTopics){
-					$("#publicationTopics").append("<button class='btn btn-light'>"+publicationTopics.Title+"</button>");
-				}
-
-				prepareDesign(eachPublication,i,AuthorIDArr);
-			}
-			$("#ddlPublicationYear,#ddlPublicationAuthors").selectpicker({
-				style: "btn-light",
-				width: "100%",
-			});
-
-			if(featuredAuthorIDs.length>0){
-				let featureAuthorIDStr=featuredAuthorIDs.join(',');
-				getStaffByCommaSaperateIDs(featureAuthorIDStr,0,function(staffCollectionResult){
-					for(let i=0;i<staffCollectionResult.length;i++){
-						let authorContent="<div class='author-item '>"+
-												"<img src='"+staffCollectionResult[i].ProfileImageUrl+"' />"+
-												"<div>"+
-													"<a href='"+staffCollectionResult[i].ProfileDetailPageURL+"'>"+
-														"<h4>"+staffCollectionResult[i].Title+"</h4>"+
-													"</a>"+
-													"<p>"+staffCollectionResult[i].StaffPostion+"</p>"+
-												"</div>"+
-											"</div>";
-						$("#featuredAuthorDiv").append(authorContent);
-
-						let carouselAuthorContent="<div class='item'>"+
-														"<a href='"+staffCollectionResult[i].ProfileImageUrl+"'>"+
-															"<div class='key-researcher'>"+
-																"<img src='"+staffCollectionResult[i].ProfileImageUrl+"' />"+
-																"<h4>"+staffCollectionResult[i].Title+"</h4>"+
-																"<p>"+staffCollectionResult[i].StaffPostion+"</p>"+
-															"</div>"+
-														"</a>"+
-													"</div>";
-						$("#featuredAuthorCarousel").append(carouselAuthorContent);
-					}
-					createOwlSlider();
-				});
-			}
-
-			// $("#filterStatusContent").append("<option>" + _publicationStatusValues.AllPublications + "</option>");
-			// $("#filterStatusContent").append("<option>" + _publicationStatusValues.Current + "</option>");
-			// $("#filterStatusContent").append("<option>" + _publicationStatusValues.Upcoming + "</option>");
-			// $("#filterStatusContent").append("<option>" + _publicationStatusValues.Completed + "</option>");
-
-			// bindAllPublications(_allPublications, _publicationPastCollection, function () {
-			// 	$("#publicationTypeFilter").append("<button class='btn btn-primary all' type='button'>All</button>");
-			// 	for (let i = 0; i < _allTypeFilter.length; i++) {
-			// 		let publicationTypeContent = "<button class='btn btn-light' type='button'>" + _allTypeFilter[i] + "</button>";
-			// 		$("#publicationTypeFilter").append(publicationTypeContent);
-			// 	}
-			// 	bindPublicationTypeFilter();
-			// 	bindPublicationStatusFilter();
-			// 	bindTimeRangePublications();
-			// 	bindResetFilter();
-			// 	filterContent();
-			// });
-		}).fail(CommonUtil.OnRESTError);
+			},failure);
+		}
+	}
 }
 
-function bindAllPublications(upcomingCollection, pastCollection, onComplete) {
+function fillPublicationHtml(resultSet,startIndex,endIndex){
+	let containerDesign="<div class='row'>"+
+									"<div class='col-lg-8'>"+
+										"##First##"+
+										"<div class='row'>"+
+											"##Third##"+
+											"##Fourth##"+
+										"</div>"+
+									"</div>"+
+									"##Second##"+
+								"</div>"+
+								"<div class='row'>"+
+									"<div class='col-lg-8'>"+
+										"##Fifth##"+
+										"##Sixth##"+
+									"</div>"+
+									"##Seventh##"+
+									"##Others##"+
+								"</div>";
+	let defaultHtmlSet="";
+	for (let i = 0; i < endIndex; i++) {
+		let eachPublication = resultSet[i];
+		let htmlDesign=htmlDesignResult(eachPublication);
+		let actualItemIndex=eachPublication.Index;
+		switch(actualItemIndex){
+			case 0:
+				containerDesign=containerDesign.replace("##First##",htmlDesign.featuredElement);
+				break;
+			case 1:
+				containerDesign=containerDesign.replace("##Second##",htmlDesign.verticalElement);
+				break;
+			case 2:
+				containerDesign=containerDesign.replace("##Third##",htmlDesign.topSmallSix);
+				break;
+			case 3:
+				containerDesign=containerDesign.replace("##Fourth##",htmlDesign.topSmallSix);
+				break;
+			case 4:
+				containerDesign=containerDesign.replace("##Fifth##",htmlDesign.horizontalDiv);
+				break;
+			case 5:
+				containerDesign=containerDesign.replace("##Sixth##",htmlDesign.horizontalDiv);
+				break;
+			case 6:
+				containerDesign=containerDesign.replace("##Seventh##",htmlDesign.verticalElement);
+				break;
+			default:
+				defaultHtmlSet +=htmlDesign.smallFour;
+				break;
+		}
+	}
+	if(defaultHtmlSet)
+		containerDesign=containerDesign.replace("##Others##",defaultHtmlSet);
+	
+	containerDesign=containerDesign.replace("##First##", "");
+	containerDesign=containerDesign.replace("##Second##", "");
+	containerDesign=containerDesign.replace("##Third##", "");
+	containerDesign=containerDesign.replace("##Fourth##", "");
+	containerDesign=containerDesign.replace("##Fifth##", "");
+	containerDesign=containerDesign.replace("##Sixth##", "");
+	containerDesign=containerDesign.replace("##Seventh##", "");
+	containerDesign=containerDesign.replace("##Others##", "");
+	$("#publicationContent").html(containerDesign);
+}
+
+function bindLoadMoreEvent(){
+	$("#publicationLoadMore").on("click",function(){
+		isRefreshData=false;
+		if (pubCollections.NextResultPosition != null) {
+			pubCamlQuery.set_listItemCollectionPosition(pubCollections.NextResultPosition);
+			listItems = pubList.getItems(pubCamlQuery);
+			ctx.load(listItems);
+			//Call the same function recursively until all the items in the current criteria are fetched.
+			ctx.executeQueryAsync(function(){
+				pubCollections.NextResultPosition=listItems.get_listItemCollectionPosition();
+				pubCollections.StartIndex=pubCollections.EndIndex;
+				pubCollections.EndIndex=pubCollections.StartIndex+listItems.get_count();
+				fillPublicationItems();
+			}, failure);
+		}
+	});
+}
+function loadMoreHideShow(){
+	if(pubCollections.NextResultPosition==null || pubCollections.MainResultSet.length==0)
+		$("#publicationLoadMore").hide();
+	else
+		$("#publicationLoadMore").show();
+}
+
+function failure(err){
+console.log(err);
+}
+
+function setDefaultFilterValues(){
+	$("#ddlPublicationYear,#ddlPublicationAuthors").selectpicker("destroy");
+	$("#ddlPublicationYear option,#ddlPublicationAuthors option,#publicationTypeFilter button").remove();
+
+	$("#publicationTypeFilter").append("<button class='btn btn-primary all' type='button'>" + _allTopicFilterValue + "</button>");
+	$("#ddlPublicationYear").append("<option>" + _allYearFilterValue + "</option>");
+	$("#ddlPublicationAuthors").append("<option value='"+_allAuthorFilterValue+"'>" +_allAuthorFilterValue + "</option>");
+
 	$("#publicationContent").html("");
-	publicationCounter = 0;
-	if (upcomingCollection.length == 0)
-		FillPastCollection(pastCollection, onComplete);
-	else {
-		for (var i = 0; i < upcomingCollection.length; i++) {
-			getImageUrl(upcomingCollection[i], i, function (resultImgUrl, eachPublication) {
-				publicationCounter++;
-				let publicationStartDateArr = getFormattedDate(eachPublication.PublicationStartDate).split(" ");
-				let publicationEndDateArr = getFormattedDate(eachPublication.PublicationEndDate).split(" ");
-				let PublicationDesc = formatRichTextValue(eachPublication.PublicationDesc);
-				let publicationDetailLink=_siteUrl+"/Pages/PublicationDetails.aspx?ItemID="+eachPublication.ID;
-				var eachPublicationContent = "<div class='publication-list-item'>" +
-					"<div class='row'>" +
-					"<div class='col-lg-3'>" +
-					"<a href='"+publicationDetailLink+"' class='publication-list-item-img'>" +
-					"<img src='" + resultImgUrl + "'>" +
-					"</a>" +
-					"</div>" +
-					"<div class='col-lg-5'>" +
-					"<div class='publication-list-content'>" +
-					"<p class='publication-category'>" + eachPublication.PublicationType1 + "</p>" +
-					"<a href='"+publicationDetailLink+"'>" +
-					"<h2>" + eachPublication.Title + "</h2>" +
-					"</a>" +
-					"<p>" + PublicationDesc + "</p>" +
-					"</div>" +
-					"</div>" +
-					"<div class='col-5 col-lg-2'>" +
-					"<div class='publication-item-date'>" +
-					"<div class='publication-item-date-fromto'>" +
-					"<div class='publication-item-date-day'>" + publicationStartDateArr[0] + "</div>" +
-					"<div class='publication-item-date-month'>" + publicationStartDateArr[1] + "</div>" +
-					"</div>" +
-					"<span>-</span>" +
-					"<div class='publication-item-date-fromto'>" +
-					"<div class='publication-item-date-day'>" + publicationEndDateArr[0] + "</div>" +
-					"<div class='publication-item-date-month'>" + publicationEndDateArr[1] + "</div>" +
-					"</div>" +
-					"</div>" +
-					"</div>" +
-					"<div class='col-7 col-lg-2'>" +
-					"<a href='"+publicationDetailLink+"' class='btn btn-primary go-button'>Register</a>" +
-					"</div>" +
-					"</div>" +
-					"</div>";
-				$("#publicationContent").append(eachPublicationContent);
-
-				if (_allTypeFilter.indexOf(eachPublication.PublicationType1) == -1)
-					_allTypeFilter.push(eachPublication.PublicationType1);
-
-				if (publicationCounter == upcomingCollection.length)
-					FillPastCollection(pastCollection, onComplete);
-			}, function (err) {
-				console.error(err);
-			});
-		}
-	}
 }
+function fillPublicationsFilterValues(){
+	let newCtx = SP.ClientContext.get_current();
 
-function FillPastCollection(pastCollection, onComplete) {
-	_pastPublicationCounter = 0;
-	if (pastCollection.length == 0)
-		onComplete();
-	else {
-		for (var i = 0; i < pastCollection.length; i++) {
-			getImageUrl(pastCollection[i], i, function (resultImgUrl, eachPublication) {
-				_pastPublicationCounter++;
-				let publicationStartDateArr = getFormattedDate(eachPublication.PublicationStartDate).split(" ");
-				let publicationEndDateArr = getFormattedDate(eachPublication.PublicationEndDate).split(" ");
-				let PublicationDesc = formatRichTextValue(eachPublication.PublicationDesc);
-				let publicationDetailLink=_siteUrl+"/Pages/PublicationDetails.aspx?ItemID="+eachPublication.ID;
-				var eachPublicationContent = "<div class='publication-list-item past-publication'>" +
-					"<div class='row'>" +
-					"<div class='col-lg-3'>" +
-					"<div class='publication-img'>" +
-					"<a href='"+publicationDetailLink+"' class='publication-list-item-img'>" +
-					"<img src='" + resultImgUrl + "'>" +
-					"<span>Past Publication</span>" +
-					"</a>" +
-					"</div>" +
-					"</div>" +
-					"<div class='col-lg-5'>" +
-					"<div class='publication-list-content'>" +
-					"<p class='publication-category'>" + eachPublication.PublicationType1 + "</p>" +
-					"<a href='"+publicationDetailLink+"'>" +
-					"<h2>" + eachPublication.Title + "</h2>" +
-					"</a>" +
-					"<p>" + PublicationDesc + "</p>" +
-					"</div>" +
-					"</div>" +
-					"<div class='col-5 col-lg-2'>" +
-					"<div class='publication-item-date'>" +
-					"<div class='publication-item-date-fromto'>" +
-					"<div class='publication-item-date-day'>" + publicationStartDateArr[0] + "</div>" +
-					"<div class='publication-item-date-month'>" + publicationStartDateArr[1] + "</div>" +
-					"</div>" +
-					"<span>-</span>" +
-					"<div class='publication-item-date-fromto'>" +
-					"<div class='publication-item-date-day'>" + publicationEndDateArr[0] + "</div>" +
-					"<div class='publication-item-date-month'>" + publicationEndDateArr[1] + "</div>" +
-					"</div>" +
-					"</div>" +
-					"</div>" +
-					"<div class='col-7 col-lg-2'>" +
-					"<a href='"+publicationDetailLink+"' class='go-link'>VIEW DETAILS</a>" +
-					"</div>" +
-					"</div>" +
-					"</div>";
-				$("#publicationContent").append(eachPublicationContent);
+	let newPubList = newCtx.get_web().get_lists().getByTitle(_listTitlePublication);
+	let newPubCamlQuery = new SP.CamlQuery();
+	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False' /><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
+	query += "</Query><RowLimit>1000</RowLimit></View>";
+	newPubCamlQuery.set_viewXml(query);
+	let newListItems = newPubList.getItems(newPubCamlQuery);
 
-				if (_allTypeFilter.indexOf(eachPublication.PublicationType1) == -1)
-					_allTypeFilter.push(eachPublication.PublicationType1);
+	let newPubTopicList = newCtx.get_web().get_lists().getByTitle(_listTitlePublicationTopics);
+	let newPubTopicListItems=newPubTopicList.getItems(SP.CamlQuery.createAllItemsQuery());
 
-				if (_pastPublicationCounter == pastCollection.length) {
-					onComplete();
+	let newPubAuthorList = newCtx.get_web().get_lists().getByTitle(_listTitleCommunity);
+	let newPubAuthorListItems=newPubAuthorList.getItems(SP.CamlQuery.createAllItemsQuery());
+	
+	newCtx.load(newListItems);
+	newCtx.load(newPubTopicListItems);
+	newCtx.load(newPubAuthorListItems);
+	
+	newCtx.executeQueryAsync(function(){
+		let newPubTopics = [];
+		for (let i = 0; i < newPubTopicListItems.get_count(); i++) {
+			let eachItem = newPubTopicListItems.getItemAtIndex(i);
+			let temp = {};
+			temp.ID = eachItem.get_item('ID');
+			temp.Title = eachItem.get_item('Title');
+			temp.PublicationTopicArabic = eachItem.get_item('PublicationTopicArabic');
+			newPubTopics.push(temp);
+		}
+		let newPubAuthors = [];
+		for (let i = 0; i < newPubAuthorListItems.get_count(); i++) {
+			let eachItem = newPubAuthorListItems.getItemAtIndex(i);
+			let temp = {};
+			temp.ID = eachItem.get_item('ID');
+			temp.Title = eachItem.get_item('Title');
+			temp.StaffArabicTitle = eachItem.get_item('StaffArabicTitle');
+			temp.ImageUrl = eachItem.get_item('ImageUrl');
+			newPubAuthors.push(temp);
+		}
+		for(let i=0;i<newListItems.get_count();i++){
+			let eachPublication = newListItems.getItemAtIndex(i);
+
+			let pubDateStr=eachPublication.get_item('PublicationDate');
+			if(pubDateStr){
+				let year=getFormattedDate(pubDateStr).split(" ")[2];
+				if($("#ddlPublicationYear option:contains('"+year+"')").length==0)
+					$("#ddlPublicationYear").append("<option>" + year + "</option>");
+			}
+
+			let newPubTopic = eachPublication.get_item("PublicationTopicIDs");
+			if (newPubTopic){
+				let pubTopicID=newPubTopic.get_lookupId();
+				let itemPubTopics=newPubTopics.find(x=>x.ID==pubTopicID);
+				if(itemPubTopics){
+					let finalValue=isArabic?itemPubTopics.PublicationTopicArabic:itemPubTopics.Title;
+					let topicID=itemPubTopics.ID;
+					if($("#publicationTypeFilter button:contains('"+finalValue+"')").length==0)
+						$("#publicationTypeFilter").append("<button data-topicId='"+topicID+"' class='btn btn-light' type='button'>"+finalValue+"</button>");
 				}
-			}, function (err) {
-				console.error(err);
-			});
+			}
+			let newPubAuthor = eachPublication.get_item("PublicationAuthorIDs");
+			if (newPubAuthor){
+				let newPubAuthorID=newPubAuthor[0].get_lookupId();
+				let itemPubAuthors=newPubAuthors.find(x=>x.ID==newPubAuthorID);
+				if(itemPubAuthors){
+					let authorTitle =isArabic?"بواسطة "+itemPubAuthors.StaffArabicTitle:"By "+itemPubAuthors.Title;
+					let authorId=itemPubAuthors.ID;
+					if($("#ddlPublicationAuthors option:contains('"+authorTitle+"')").length==0)
+						$("#ddlPublicationAuthors").append("<option value='"+authorId+"'>" + authorTitle + "</option>");
+				}
+			}
 		}
-	}
+		$("#ddlPublicationYear,#ddlPublicationAuthors").selectpicker({
+			style: "btn-light",
+			width: "100%",
+		});
+		bindFilterEvents();
+	},failure);
 }
-
-function filterContent() {
-	let finalResult = {};
-	finalResult.newFutureCollection = _allPublications;
-	finalResult.newPastCollection = _publicationPastCollection;
-
-	let selectedTypeValues = [];
-	$("#publicationTypeFilter button.btn-primary").each(function (index, item) {
-		selectedTypeValues.push($(item).text());
-	});
-	if (selectedTypeValues.indexOf("All") == -1) {
-		filterByType(selectedTypeValues, finalResult);
-	}
-
-	var ddlFilterStatus = document.getElementById("filterStatusContent");
-	var statusValue = ddlFilterStatus.options[ddlFilterStatus.selectedIndex].value;
-	if (statusValue && statusValue != _publicationStatusValues.AllPublications) {
-		let tempArr = [];
-		tempArr.push(statusValue);
-		filterByStatus(tempArr, finalResult);
-	}
-
-	let fromDateStr = $("#filterFromDate").val();
-	if (fromDateStr) {
-		let fromDate = new Date(fromDateStr);
-		finalResult.newFutureCollection = $.grep(finalResult.newFutureCollection, function (v) {
-			let thisStartDate = new Date(v.PublicationStartDate);
-			return thisStartDate >= fromDate;
-		});
-		finalResult.newPastCollection = $.grep(finalResult.newPastCollection, function (v) {
-			let thisStartDate = new Date(v.PublicationStartDate);
-			return thisStartDate >= fromDate;
-		});
-	}
-	let endDateStr = $("#filterEndDate").val();
-	if (endDateStr) {
-		let endDate = new Date(endDateStr);
-		finalResult.newFutureCollection = $.grep(finalResult.newFutureCollection, function (v) {
-			let thisEndDate = new Date(v.PublicationEndDate);
-			return thisEndDate <= endDate;
-		});
-		finalResult.newPastCollection = $.grep(finalResult.newPastCollection, function (v) {
-			let thisEndDate = new Date(v.PublicationEndDate);
-			return thisEndDate <= endDate;
-		});
-	}
-
-	bindAllPublications(finalResult.newFutureCollection, finalResult.newPastCollection, function () {
-		console.log("After Publication");
-	});
-}
-
-function bindPublicationTypeFilter() {
+function bindFilterEvents() {
 	$("#publicationTypeFilter button").on("click", function () {
-
+		isRefreshData=true;
 		$("#publicationTypeFilter button.all").removeClass("btn-primary btn-light").addClass("btn-light");
 		$(this).toggleClass("btn btn-light btn btn-primary");
 
@@ -326,205 +344,196 @@ function bindPublicationTypeFilter() {
 		if (allSelectedValues.length == 0)
 			$("#publicationTypeFilter button.all").removeClass("btn-primary btn-light").addClass("btn-primary");
 
-		if (allSelectedValues.indexOf("All") > -1) {
+		if (allSelectedValues.indexOf(_allTopicFilterValue) > -1) {
 			$("#publicationTypeFilter button").removeClass("btn-primary btn-light").addClass("btn-light");
 			$("#publicationTypeFilter button.all").removeClass("btn-primary btn-light").addClass("btn-primary");
 		}
 		filterContent();
 	});
-}
 
-function bindPublicationStatusFilter() {
-	$("#filterStatusContent").selectpicker({
-		style: "btn-light",
-		width: "100%",
-	});
-	$('#filterStatusContent').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
-		filterContent();
-	});
-}
-
-function filterByStatus(filterValue, finalResult) {
-	let today = new Date();
-	if (filterValue == _publicationStatusValues.Upcoming) {
-		finalResult.newFutureCollection = $.grep(finalResult.newFutureCollection, function (v) {
-			let thisStartDate = new Date(v.PublicationStartDate);
-			return thisStartDate > today;
-		});
-		finalResult.newPastCollection = $.grep(finalResult.newPastCollection, function (v) {
-			let thisStartDate = new Date(v.PublicationStartDate);
-			return thisStartDate > today;
-		});
-	}
-
-	if (filterValue == _publicationStatusValues.Current) {
-		finalResult.newFutureCollection = $.grep(finalResult.newFutureCollection, function (v) {
-			let thisStartDate = new Date(v.PublicationStartDate);
-			let thisEndDate = new Date(v.PublicationEndDate);
-			return (today == thisStartDate || (today > thisStartDate && today < thisEndDate));
-		});
-		finalResult.newPastCollection = $.grep(finalResult.newPastCollection, function (v) {
-			let thisStartDate = new Date(v.PublicationStartDate);
-			let thisEndDate = new Date(v.PublicationEndDate);
-			return (today == thisStartDate || (today > thisStartDate && today < thisEndDate));
-		});
-	}
-
-	if (filterValue == _publicationStatusValues.Completed) {
-		finalResult.newFutureCollection = $.grep(finalResult.newFutureCollection, function (v) {
-			let thisEndDate = new Date(v.PublicationEndDate);
-			return thisEndDate < today;
-		});
-		finalResult.newPastCollection = $.grep(finalResult.newPastCollection, function (v) {
-			let thisEndDate = new Date(v.PublicationEndDate);
-			return thisEndDate < today;
-		});
-	}
-}
-
-function filterByType(filterValue, finalResult) {
-	finalResult.newFutureCollection = $.grep(finalResult.newFutureCollection, function (v) {
-		return filterValue.indexOf(v.PublicationType1) != -1;
-	});
-	finalResult.newPastCollection = $.grep(finalResult.newPastCollection, function (v) {
-		return filterValue.indexOf(v.PublicationType1) != -1;
-	});
-}
-
-function bindTimeRangePublications() {
-	$("#anchorToday").on("click", function () {
-		let today = getFormattedDate(new Date());
-		$("#filterFromDate").val(getFormattedDate(today));
-		$("#filterEndDate").val(getFormattedDate(today));
+	$('#ddlPublicationAuthors,#ddlPublicationYear').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+		isRefreshData=true;
 		filterContent();
 	});
 
-	$("#anchorWeek").on("click", function () {
-		let date = new Date();
-		getWeekRange(date, function (weekStartDate, weekEndDate) {
-			$("#filterFromDate").val(weekStartDate);
-			$("#filterEndDate").val(weekEndDate);
-			filterContent();
-		});
-	});
-
-	$("#anchorMonth").on("click", function () {
-		let date = new Date();
-		getMonthRange(date, function (monthStartDate, monthEndDate) {
-			$("#filterFromDate").val(monthStartDate);
-			$("#filterEndDate").val(monthEndDate);
-			filterContent();
-		});
-	});
-
-	$('#filterFromDate,#filterEndDate').datepicker().on('changeDate', function (ev) {
-		filterContent();
-	});
-}
-
-function bindResetFilter() {
-	$("#anchorResetFilter").on("click", function () {
+	$("#resetFilter").on("click",function(){
 		$("#publicationTypeFilter button").removeClass("btn-primary btn-light").addClass("btn-light");
 		$("#publicationTypeFilter button.all").removeClass("btn-primary btn-light").addClass("btn-primary");
-
-		$("#filterFromDate").val("");
-		$("#filterEndDate").val("");
-
-		//Below will trigger publication and call filter, so no need to call filter
-		$('#filterStatusContent').selectpicker('val', _publicationStatusValues.AllPublications);
+		//Below changes fire event automatically.
+		$('#ddlPublicationYear').selectpicker('val', _allYearFilterValue);
+		setTimeout(function() { $('#ddlPublicationAuthors').selectpicker('val', _allAuthorFilterValue); }, 2000);
 	});
 }
+function filterContent(){
 
-function prepareDesign(eachPublication,index,authorIDsArr){
+	let finalQuery=[];
 
-	if(authorIDsArr.length>0){
-		let tempObj={};
-		tempObj.Index=index;
-		tempObj.AuthorID=authorIDsArr[0];
-		tempObj.eachPublication=eachPublication;
-		getImageUrl(eachPublication,tempObj,function(pubImgUrl,eachPublication,tempObj){
-			tempObj.PubImgUrl=pubImgUrl;
-			getStaffByCommaSaperateIDs(tempObj.AuthorID,tempObj,function(staffCollectionResult,tempObj){
-				let eachPublication=tempObj.eachPublication;
-				let staffDetail=staffCollectionResult[0];
-				let pubDetails=eachPublication.PublicationDetails;
-				let pubDetailUrl=_siteUrl+"/Pages/PublicationDetails.aspx?ItemID="+eachPublication.ID;
+	let pubTypeFilterValues = [];
+	$("#publicationTypeFilter button.btn-primary").each(function (index, item) {
+		let topicId=$(item).attr("data-topicId");
+		let topicText=$(item).text();
+		if(topicId && topicText !=_allTopicFilterValue){
+			let tempQuery="";
+			tempQuery = "<Eq><FieldRef Name='PublicationTopicIDs' LookupId='TRUE'/>";
+			tempQuery += "<Value Type='Lookup'>"+topicId+"</Value>";
+			tempQuery += "</Eq>";
+			pubTypeFilterValues.push(tempQuery);
+		}
+	});
+	let pubTypeFilterStr=generateCamlQuery(pubTypeFilterValues,"or");
+	if(pubTypeFilterStr)
+		finalQuery.push(pubTypeFilterStr);
 
-				let featuredPublication="<a href='"+pubDetailUrl+"'>"+
+	let authorFilterValues=[];
+	var authorValue = $("#ddlPublicationAuthors").val();
+	if (authorValue && authorValue != _allAuthorFilterValue) {
+		let tempQuery="";
+		tempQuery = "<Contains><FieldRef Name='PublicationAuthorIDs' LookupId='TRUE'/>";
+		tempQuery += "<Value Type='LookupMulti'>"+authorValue+"</Value>";
+		tempQuery += "</Contains>";
+		authorFilterValues.push(tempQuery);
+	}
+	let authorFilterStr=generateCamlQuery(authorFilterValues,"or");
+	if(authorFilterStr)
+		finalQuery.push(authorFilterStr);
+
+
+	let yearFilterValues=[];
+	var filterYear = $("#ddlPublicationYear").val();
+	if (filterYear && filterYear != _allYearFilterValue) {
+		let fromDate = filterYear+"-01-01";
+		let toDate  = filterYear+"-12-31"
+
+		let tempQuery1="";
+		tempQuery1 = "<Geq><FieldRef Name='PublicationDate' />";
+		tempQuery1 += "<Value IncludeTimeValue='FALSE' Type='DateTime'>"+fromDate+"</Value>";
+		tempQuery1 += "</Geq>";
+		yearFilterValues.push(tempQuery1);
+
+		let tempQuery2="";
+		tempQuery2 = "<Leq><FieldRef Name='PublicationDate' />";
+		tempQuery2 += "<Value IncludeTimeValue='FALSE' Type='DateTime'>"+toDate+"</Value>";
+		tempQuery2 += "</Leq>";
+		yearFilterValues.push(tempQuery2);
+	}
+	let yearFilterStr=generateCamlQuery(yearFilterValues,"and");
+	if(yearFilterStr)
+		finalQuery.push(yearFilterStr);
+	
+		let whereQuery = "<Where>";
+	whereQuery += generateCamlQuery(finalQuery,"and");;
+	whereQuery += "</Where>";
+	bindPublicationData(whereQuery);
+}
+
+function setupLanguage(){
+	$("#sectionTitleAuthor").text(isArabic?"أبرز المؤلفين":"Featured Authors");
+	$("#btnApplyFilter,#applyFilter2").text(isArabic?"تطبيق الفلاتر":"Apply Filters");
+
+	$("#titleYearFilter").text(isArabic?"التصفية حسب السنة":"Filter By Year");
+	$("#titleAuthorFilter").text(isArabic?"تصفية حسب المؤلف":"Filter By Author");
+	$("#titleTopicFilter").text(isArabic?"تصفية حسب الموضوع":"Filter By Topic");
+
+	$("#resetFilter").text(isArabic?"إعادة تعيين الفلاتر":"Reset Filters");
+	$("#backText").text(isArabic?"عودة":"Back");
+}
+
+function htmlDesignResult(eachPublication){
+	let htmlDesign={};
+	let publicationDetailUrl =  _siteUrl +(isArabic?"/Pages/Ar/":"/Pages/") + "PublicationDetails.aspx?ItemID=" + eachPublication.ID;
+	let pubDetails = eachPublication.PublicationDetails;
+	let pubTitle = eachPublication.Title;
+	let pubCategory = eachPublication.PublicationTopicIDs.Title;
+	let pubImageUrl = eachPublication.ImageUrl;
+	let pubDate=eachPublication.PublicationDate;
+
+	let staffCollection = eachPublication.staffCollection;
+	let authorName = "";
+	let authImgUrl = "";
+	if (staffCollection.length > 0) {
+		authorName = staffCollection[0].Title;
+		authImgUrl = staffCollection[0].ImageUrl;
+	}
+	htmlDesign.featuredElement="<div class='row'>"+
+									"<div class='col-lg-12'>"+
+										"<a href='"+publicationDetailUrl+"'>"+
 											"<div class='publication publication-big'>"+
 												"<div class='publication-content'>"+
-													"<p class='publication-category'>"+eachPublication.PublicationTopicIDs.Title+"</p>"+
-													"<h3 class='publication-title'>"+eachPublication.Title+"</h3>"+
-													"<p class='publication-text'>"+SlicingDesc($(pubDetails).text())+"</p>"+
+													"<p class='publication-category'>"+pubCategory+"</p>"+
+													"<h3 class='publication-title'>"+pubTitle+"</h3>"+
+													"<p class='publication-text'>"+pubDetails.slice(0, smallContentLimit)+"</p>"+
 													"<div class='publication-author'>"+
-														"<img src='"+staffDetail.ProfileImageUrl+"' alt='...'>"+
-														"<span>by "+staffDetail.Title+"</span>"+
+														"<img src='"+authImgUrl+"' alt='...'>"+
+														"<span>"+authorName+"</span>"+
 													"</div>"+
 												"</div>"+
 												"<div class='publication-img'>"+
-													"<img src='"+tempObj.PubImgUrl+"' alt='...'>"+
+													"<img src='"+pubImageUrl+"' alt='...'>"+
 												"</div>"+
 											"</div>"+
-										"</a>";
-				let noImageSmall="<a href='"+pubDetailUrl+"'>"+
-									"<div class='publication'>"+
-										"<div class='publication-content'>"+
-											"<p class='publication-category'>"+eachPublication.PublicationTopicIDs.Title+"</p>"+
-											"<h3 class='publication-title'>"+eachPublication.Title+"</h3>"+
-											"<p class='publication-text'>"+SlicingDesc($(pubDetails).text())+"</p>"+
-											"<div class='publication-author'>"+
-												"<img src='"+staffDetail.ProfileImageUrl+"' alt='...'>"+
-												"<span>by "+staffDetail.Title+"</span>"+
-											"</div>"+
-										"</div>"+
+										"</a>"+
 									"</div>"+
-								"</a>";
-				let noImageWide="<a href='"+pubDetailUrl+"'>"+
-									"<div class='publication'>"+
-										"<div class='publication-content'>"+
-											"<p class='publication-category'>"+eachPublication.PublicationTopicIDs.Title+"</p>"+
-											"<h3 class='publication-title'>"+eachPublication.Title+"</h3>"+
-											"<p class='publication-text'>"+SlicingDesc($(pubDetails).text())+"</p>"+
-											"<div class='publication-author'>"+
-												"<img src='"+staffDetail.ProfileImageUrl+"' alt='...'>"+
-												"<span>by "+staffDetail.Title+"</span>"+
-											"</div>"+
-										"</div>"+
-									"</div>"+
-								"</a>";
-				let withImageVertical="<a href='"+pubDetailUrl+"'>"+
-											"<div class='publication' style='height: 95%;'>"+
-												"<div class='publication-content'>"+
-													"<div class='publication-card-img'>"+
-														"<img src='"+tempObj.PubImgUrl+"' alt='...'>"+
-													"</div>"+
-													"<p class='publication-category'>"+eachPublication.PublicationTopicIDs.Title+"</p>"+
-													"<h3 class='publication-title'>"+eachPublication.Title+"</h3>"+
-													"<p class='publication-text'>"+SlicingDesc($(pubDetails).text())+"</p>"+
-													"<div class='publication-author'>"+
-														"<img src='"+staffDetail.ProfileImageUrl+"' alt='...'>"+
-														"<span>by "+staffDetail.Title+"</span>"+
-													"</div>"+
-												"</div>"+
-											"</div>"+
-										"</a>";
-				let outerStartHtml="<div class='row'>";
-				let outerEndHtml="</div>";
-				let startHtml="";
-				let endHtml="";
-				contentHtml="";
-				if(tempObj.Index==1){
-					startHtml="<div class='row'>"+
-								"<div class='col-lg-12'>";
-					endHtml="</div>"+
 								"</div>";
-					contentHtml=startHtml+featuredPublication+endHtml;
-				}
-
-				$("#publicationContent").append();
-			});
-		},function(err){
-			console.error(err);
-		});
-	}
+	htmlDesign.verticalElement="<div class='col-lg-4'>"+
+									"<a href='"+publicationDetailUrl+"'>"+
+										"<div class='publication' style='height: 96%;'>"+
+											"<div class='publication-content'>"+
+												"<div class='publication-card-img'>"+
+													"<img src='"+pubImageUrl+"' alt='...'>"+
+												"</div>"+
+												"<p class='publication-category'>"+pubCategory+"</p>"+
+												"<h3 class='publication-title'>"+pubTitle+"</h3>"+
+												"<p class='publication-text'>"+pubDetails.slice(0, MediumContentLimit)+"</p>"+
+												"<div class='publication-author'>"+
+													"<img src='"+authImgUrl+"' alt='...'>"+
+													"<span>"+authorName+"</span>"+
+												"</div>"+
+											"</div>"+
+										"</div>"+
+									"</a>"+
+								"</div>";
+	htmlDesign.smallFour="<div class='col-lg-4'>"+
+							"<a href='"+publicationDetailUrl+"'>"+
+								"<div class='publication' style='height: 95%;'>"+
+									"<div class='publication-content'>"+
+										"<p class='publication-category'>"+pubCategory+"</p>"+
+										"<h3 class='publication-title'>"+pubTitle+"</h3>"+
+										"<p class='publication-text'>"+pubDetails.slice(0, smallContentLimit)+"</p>"+
+										"<div class='publication-author'>"+
+											"<img src='"+authImgUrl+"' alt='...'>"+
+											"<span>By "+authorName+"</span>"+
+										"</div>"+
+									"</div>"+
+								"</div>"+
+							"</a>"+
+						"</div>";
+	htmlDesign.topSmallSix="<div class='col-lg-6'>"+
+								"<a href='"+publicationDetailUrl+"'>"+
+									"<div class='publication'>"+
+										"<div class='publication-content'>"+
+											"<p class='publication-category'>"+pubCategory+"</p>"+
+											"<h3 class='publication-title'>"+pubTitle+"</h3>"+
+											"<p class='publication-text'>"+pubDetails.slice(0, smallContentLimit)+"</p>"+
+											"<div class='publication-author'>"+
+												"<img src='"+authImgUrl+"' alt='...'>"+
+												"<span>"+authorName+"</span>"+
+											"</div>"+
+										"</div>"+
+									"</div>"+
+								"</a>"+
+							"</div>";
+	htmlDesign.horizontalDiv="<a href='"+publicationDetailUrl+"'>"+
+							"<div class='publication'>"+
+								"<div class='publication-content'>"+
+									"<p class='publication-category'>"+pubCategory+"</p>"+
+									"<h3 class='publication-title'>"+pubTitle+"</h3>"+
+									"<p class='publication-text'>"+pubDetails.slice(0, largeContentLimit)+"</p>"+
+									"<div class='publication-author'>"+
+										"<img src='"+authImgUrl+"' alt='...'>"+
+										"<span>"+authorName+"</span>"+
+									"</div>"+
+								"</div>"+
+							"</div>"+
+						"</a>";
+	return htmlDesign;
 }
