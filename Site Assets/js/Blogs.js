@@ -24,7 +24,7 @@ function blogsStart() {
 	fillLanguageData();
 	
 	var urlForBlogs = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleBlogs + "')/items?" +
-		"$select=ID,Title,BlogArabicTitle,ContentDate,BlogContent,BlogContentArabic,IsFeatured1,IsVideo,NoOfViews,Tag,VideoUrl,FieldValuesAsHtml," +
+		"$select=ID,Title,BlogArabicTitle,ContentDate,BlogContent,BlogContentArabic,IsFeatured1,IsVideo,VideoUrl,FieldValuesAsHtml," +
 		"ContentWriterName/Title,ContentWriterName/ID,ContentWriterName/StaffArabicTitle,BlogTypeLookup/ID,BlogTypeLookup/Title,BlogTypeLookup/BlogTypeArabic"+
 		"&$expand=ContentWriterName,BlogTypeLookup" +
 		"&$top=1000&$orderby=IsVideo desc,Modified desc";

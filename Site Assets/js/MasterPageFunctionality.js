@@ -1,36 +1,13 @@
 "use strict";
 var _siteUrl = "";
+var commonUrl="";
 
 $(document).ready(function () {
 	_siteUrl = _spPageContextInfo.siteAbsoluteUrl;
-	let browserUrl = window.location.href.toLowerCase();
-	let isArabic = browserUrl.indexOf("/ar/") > -1;
-	if(isArabic){
-		$("#languageAnchor,#languageAnchor2").text("English");
-		let englishUrl=browserUrl.replace("/ar/pages/","/pages/");
-		$("#languageAnchor,#languageAnchor2").attr("href",englishUrl);
+	commonUrl=_siteUrl+(isArabic?"/Ar/Pages/":"/Pages/");
 
-		$("#txtHeaderFooter").text("مركز دراسات الصراع والانسانية");
-		$("#txtRelatedWebsite").text("مواقع ذات صلة");
-		$("#txtArabCenter").text("المركز العربي في:"); 
-		$("#txtSubscribeUpdate").text("اشترك للحصول على التحديثات");
-		$("#txtfooter").text("© مركز الدراسات الإنسانية والصراعات");
-		$("html").attr("lang","ar");
-	}
-	else{
-		$("#languageAnchor,#languageAnchor2").text("عربي");
-		let arabicUrl = browserUrl.replace("/pages/","/ar/pages/");
-		$("#languageAnchor,#languageAnchor2").attr("href",arabicUrl);
-
-		$("#txtHeaderFooter").text("Center for Conflict and Humanitarian Studies");
-		$("#txtRelatedWebsite").text("Related Websites");
-		$("#txtArabCenter").text("Arab Center in:");
-		$("#txtSubscribeUpdate").text("Subscribe for updates");
-		$("#txtfooter").text("© Center for Conflict and Humanitarian Studies");
-		$("html").attr("lang","en-US");
-	}	
-	CreateNavbars();
-
+	$("html").attr("lang",isArabic?"ar":"en-US");
+	setupMasterLanguage();
 	commonForAllPages();
 });
 
@@ -91,59 +68,41 @@ function SetBorderColor(elemendId, isErrored) {
 	$("#" + elemendId).css("border-color", border_color);
 }
 
-function CreateNavbars(){
-	let navigation_list_title = "Navigation";
-	var urlForNavigations = _siteUrl + "/_api/web/lists/GetByTitle('" + navigation_list_title + "')/items?" + "$orderby=ID asc";
-		
-	SPRestCommon.GetItemAjaxCall(urlForNavigations)
-	.then(function(respNavs){
-		let page_url = _siteUrl + (isArabic ? "/ar/pages/" : "/pages/");
-		$(".navbar-brand").attr("href", (page_url + "Home.aspx"));
-		$(".lnkContactUs").attr("href", (page_url + "ContactUs.aspx"));
-		$("#lnkTermsOfUse").attr("href", (page_url + "TermOfUse.aspx"));
+function setupMasterLanguage(){
+	$("#languageAnchor,#languageAnchor2").text(isArabic?"English":"عربي");
+	let browserUrl = window.location.href.toLowerCase();
+	$("#languageAnchor,#languageAnchor2").attr("href",isArabic?browserUrl.replace("/ar/pages/","/pages/"):browserUrl.replace("/pages/","/ar/pages/"));
 
-		let nav_coll = respNavs.d.results;
+	$("#lnkAboutUs,#lnkAboutUs2,#lnkAboutUs3").text(isArabic?"من نحن":"About Us");
+	$("#lnkCommunity,#lnkCommunity2,#lnkCommunity3").text(isArabic?"مجتمع":"CHS Community");
+	$("#lnkResearchTheme,#lnkResearchTheme2,#lnkResearchTheme3").text(isArabic?"موضوعات البحث":"Research Themes");
+	$("#lnkPublicaation,#lnkPublicaation2,#lnkPublicaation3").text(isArabic?"المنشورات":"Publications");
+	$("#lnkEvent,#lnkEvent2,#lnkEvent3").text(isArabic?"الأحداث":"Events");
+	$("#lnkPublicEngagement,#lnkPublicEngagement2,#lnkPublicEngagement3").text(isArabic?"الإدارة العامة":"Public Management");
+	$("#lnkBlogs,#lnkBlogs2,#lnkBlogs3").text(isArabic?"المدونة":"Blogs");
+	$("#lnkNews,#lnkNews2,#lnkNews3").text(isArabic?"أخبار":"News");
+	$("#lnkContactUs,#lnkContactUs2,#lnkContactUs3").text(isArabic?"اتصل بنا":"Contact Us");
+	$("#lnkTermsOfUse").text(isArabic?"شروط الاستخدام":"Terms of Use");
 
-		CreateHeaderNavs(page_url, nav_coll);
-		CreateMobileNavs(page_url, nav_coll);
-		CreateFooterNavs(page_url, nav_coll);
+	$("#lnkAboutUs,#lnkAboutUs2,#lnkAboutUs3").attr("href",commonUrl+"About.aspx");
+	$("#lnkCommunity,#lnkCommunity2,#lnkCommunity3").attr("href",commonUrl+"CHSCommunity.aspx");
+	$("#lnkResearchTheme,#lnkResearchTheme2,#lnkResearchTheme3").attr("href",commonUrl+"ResearchTheme.aspx");
+	$("#lnkPublicaation,#lnkPublicaation2,#lnkPublicaation3").attr("href",commonUrl+"Publication.aspx");
+	$("#lnkEvent,#lnkEvent2,#lnkEvent3").attr("href",commonUrl+"Events.aspx");
+	$("#lnkPublicEngagement,#lnkPublicEngagement2,#lnkPublicEngagement3").attr("href",commonUrl+"Home.aspx");
+	$("#lnkBlogs,#lnkBlogs2,#lnkBlogs3").attr("href",commonUrl+"Blogs.aspx");
+	$("#lnkNews,#lnkNews2,#lnkNews3").attr("href",commonUrl+"News.aspx");
+	$("#lnkContactUs,#lnkContactUs2,#lnkContactUs3").attr("href",commonUrl+"ContactUs.aspx");
+	$("#lnkTermsOfUse").attr("href",commonUrl+"TermOfUse.aspx");
 
-	})
-	.fail(function(err){
-		console.error(err)
-	})
-}
 
-function CreateHeaderNavs(pageUrl, navColl){
-	let tmpl = "<li class='nav-item'><a class='nav-link' href='#pageUrl#'>#pageTitle#</a></li>";
-	$("#ulHeaderNavbar").empty();
-	for(let i = 0; i < navColl.length; i++){
-		let nav_item = navColl[i];
-		$("#ulHeaderNavbar").append(tmpl.replace("#pageUrl#", (pageUrl + nav_item.PageName)).replace("#pageTitle#", (isArabic ? nav_item.TitleArabic : nav_item.Title)))
-	}
-}
-
-function CreateMobileNavs(pageUrl, navColl){
-	let tmpl = "<li class='nav-item'><a class='nav-link' href='#pageUrl#'>#pageTitle#</a></li>";
-	$("#ulMobileNavbar").empty();
-	for(let i = 0; i < navColl.length; i++){
-		let nav_item = navColl[i];
-		$("#ulMobileNavbar").append(tmpl.replace("#pageUrl#", (pageUrl + nav_item.PageName)).replace("#pageTitle#", (isArabic ? nav_item.TitleArabic : nav_item.Title)))
-	}
-}
-
-function CreateFooterNavs(pageUrl, navColl){
-	let tmpl = "<li><a href='#pageUrl#'>#pageTitle#</a></li>";
-	$("#ulFooterNavbar_1").empty();
-	let i = 0;
-	for(i; i < navColl.length / 2; i++){
-		let nav_item = navColl[i];
-		$("#ulFooterNavbar_1").append(tmpl.replace("#pageUrl#", (pageUrl + nav_item.PageName)).replace("#pageTitle#", (isArabic ? nav_item.TitleArabic : nav_item.Title)))
-	}
-
-	$("#ulFooterNavbar_2").empty();
-	for(i; i < navColl.length; i++){
-		let nav_item = navColl[i];
-		$("#ulFooterNavbar_2").append(tmpl.replace("#pageUrl#", (pageUrl + nav_item.PageName)).replace("#pageTitle#", (isArabic ? nav_item.TitleArabic : nav_item.Title)))
-	}
+	$("#textConflictCentre").text(isArabic?"مركز دراسات الصراع والإنسانية":"Center for Conflict and Humanitarian Studies");
+	$("#textConflictCentreCopyright").text(isArabic?"مركز دراسات الصراع والإنسانية ©":"© Center for Conflict and Humanitarian Studies");
+	$("#textRelatedWebsites").text(isArabic?"مواقع ذات صلة":"Related Websites");
+	$("#textArabCentre").text(isArabic?"المركز العربي في:":"Arab Center in:");
+	$("#textParis").text(isArabic?"باريس":"Paris");
+	$("#textWashington").text(isArabic?"واشنطن":"Washington");
+	$("#textTunis").text(isArabic?"تونس":"Tunis");
+	$("#textSubscribe").text(isArabic?"اشترك للحصول على التحديثات":"Subscribe for updates");
+	$("#SubscribeEmail").attr("placeholder",isArabic?"عنوان البريد الالكترونى":"Email address");
 }

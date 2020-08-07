@@ -26,14 +26,14 @@ function blogStart() {
 		var get_Current_Blog_Attch = SPRestCommon.GetItemAjaxCall(urlForCurrentBlogAtt);
 
 		var urlForNextBlog = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleBlogs + "')/items?"+
-							"$select=ID,Title,BlogArabicTitle,ContentDate,BlogContent,BlogContentArabic,IsFeatured1,IsVideo,NoOfViews,Tag,VideoUrl,FieldValuesAsHtml," +
+							"$select=ID,Title,BlogArabicTitle,ContentDate,BlogContent,BlogContentArabic,IsFeatured1,IsVideo,VideoUrl,FieldValuesAsHtml," +
 							"ContentWriterName/Title,ContentWriterName/ID,ContentWriterName/StaffArabicTitle,BlogTypeLookup/ID,BlogTypeLookup/Title,BlogTypeLookup/BlogTypeArabic"+
 							"&$expand=ContentWriterName,BlogTypeLookup" +
 							"&$filter=(ID gt " + itemID + " and BlogTypeLookup/Title eq 'Blog')&$top=1&$orderby=ID asc";
 		var get_NextBlog = SPRestCommon.GetItemAjaxCall(urlForNextBlog);
 
 		var urlForLatestBlog = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleBlogs + "')/items?"+
-								"$select=ID,Title,BlogArabicTitle,ContentDate,BlogContent,BlogContentArabic,IsFeatured1,IsVideo,NoOfViews,Tag,VideoUrl,FieldValuesAsHtml," +
+								"$select=ID,Title,BlogArabicTitle,ContentDate,BlogContent,BlogContentArabic,IsFeatured1,IsVideo,VideoUrl,FieldValuesAsHtml," +
 								"ContentWriterName/Title,ContentWriterName/ID,ContentWriterName/StaffArabicTitle,BlogTypeLookup/ID,BlogTypeLookup/Title,BlogTypeLookup/BlogTypeArabic"+
 								"&$expand=ContentWriterName,BlogTypeLookup" +
 								"&$filter=(BlogTypeLookup/Title eq 'Blog')&$top=3&$orderby=ContentDate desc";
