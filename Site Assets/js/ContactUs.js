@@ -11,8 +11,8 @@ $(document).ready(function () {
 	}, 20 * 60000);
 	SP.SOD.executeFunc('sp.js', 'SP.ClientContext', contactUsStart);
 });
-
 function contactUsStart() {
+	
 	try {
 		getListDetails(_listContact,function(resultTitle,resultDesc){
 			$("#contentListTitle").text(resultTitle);
@@ -21,14 +21,60 @@ function contactUsStart() {
 	} catch (error) {
 		console.error(error);
 	}
-
 	try {
 		bindContactData();
 	
 	} catch (error) {
 		console.error(error);
 	}
+	try{
+		$("#email").keyup(function(){
+
+			var email = $("#email").val();
+	
+			if(email != 0)
+			{
+				if(isValidEmailAddress(email))
+				{
+					SetBorderColor("email", false);
+				} 
+				else {
+					SetBorderColor("email", true);
+				}
+			} 
+			else 
+			{
+				SetBorderColor("email", false);
+			}
+	
+		});
+		
+		$(".txtOnly").keypress(function(e) {
+			var key = e.keyCode;
+			if (key >= 48 && key <= 57) {
+				e.preventDefault();
+			}
+		});
+	}
+	catch (error) {
+		console.error(error);
+	}
+
+	$("#contactForm").on('hide.bs.modal', function () {
+		//location.reload(true);
+		ClearAllFields();
+
+	});
+	$("#contactFormLabel").text(!isArabic?"Send us your message":"أرسل لنا رسالتك");
+	$("#lblfirstname").text(!isArabic?"First Name":"الاسم الاول");
+	$("#lbllastname").text(!isArabic?"Last Name":"الكنية");
+	$("#lblemail").text(!isArabic?"Email Address":"عنوان البريد الالكترونى");
+	$("#lblsubject").text(!isArabic?"Subject":"موضوع");
+	$("#lblMessage").text(!isArabic?"Message":"رسالة");
+	$("#SaveContact").text(!isArabic?"SaveContact":"حفظ جهة الاتصال");
+	
 }
+
 
 function submitform() {
 	if (!HasFormValidateErr()) {
@@ -51,7 +97,7 @@ function SaveContactData(){
 		"ContactUsMessage": $("#message").val()
 	};
 
-	var allItemsUrl= _spPageContextInfo.webAbsoluteUrl + "/_api/Web/Lists/GetByTitle('"+_listContact+"')/Items";
+	var allItemsUrl= _siteUrl + "/_api/Web/Lists/GetByTitle('"+_listContact+"')/Items";
 	SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listContact, listItemData)
 	.then(function(iar){
 		alert("Contact Form Save succefully");
@@ -80,7 +126,7 @@ function HasFormValidateErr() {
 	var is_errored = false;
 
 	var email = $("#email").val();
-	is_errored = (IsNullOrEmpty(email));
+	is_errored = !isValidEmailAddress(email);
 	SetBorderColor("email", is_errored);
 	has_error = (is_errored || has_error);
 
@@ -96,6 +142,10 @@ function IsNullOrEmpty(obj) {
 function SetBorderColor(elemendId, isErrored) {
 	var border_color = isErrored ? "red" : "#ccc";
 	$("#" + elemendId).css("border-color", border_color);
+}
+function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    return pattern.test(emailAddress);
 }
 
 
