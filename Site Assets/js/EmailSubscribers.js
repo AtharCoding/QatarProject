@@ -9,9 +9,10 @@ $(document).ready(function () {
 	SP.SOD.executeFunc('sp.js', 'SP.ClientContext');
 });
 function Subscribe() {
+	
 	if (!HasEmailValidateErr()) {
 		var email = $("#SubscribeEmail").val();
-		var urlForEmailSubscribersList = _siteUrl + "/_api/web/lists/getbytitle('" + _listEmailSubscribers + "')/items?$filter=Title eq '"+email+"'";
+		var urlForEmailSubscribersList = _siteUrl + "/_api/web/lists/getbytitle('" + _listEmailSubscribers + "')/items?$filter=(Title eq '"+email+"')";
 		var get_EmailSubscribersList = SPRestCommon.GetItemAjaxCall(urlForEmailSubscribersList);
 
 		$.when(get_EmailSubscribersList)
