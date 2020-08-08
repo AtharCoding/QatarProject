@@ -9,8 +9,24 @@ $(document).ready(function () {
 	$("html").attr("lang",isArabic?"ar":"en-US");
 	setupMasterLanguage();
 	commonForAllPages();
+	$("#SubscribeEmail").keyup(function(){
+		var email = $("#SubscribeEmail").val();
+		if(email != 0)
+		{
+			if(isValidEmailAddress(email))
+			{
+				SetBorderColor("email", false);
+			} 
+			else {
+				SetBorderColor("email", true);
+			}
+		} 
+		else 
+		{
+			SetBorderColor("email", false);
+		}
+	});
 });
-
 function Subscribe() {
 	if (!HasEmailValidateErr()) {
 		var email = $("#SubscribeEmail").val();
@@ -47,12 +63,13 @@ function Subscribe() {
 	}	
 }
 
+
 function HasEmailValidateErr() {
 	var has_error = false;
 	var is_errored = false;
 
 	var SubscribeEmail = $("#SubscribeEmail").val();
-	is_errored = (IsNullOrEmpty(SubscribeEmail));
+	is_errored = !isValidEmailAddress(SubscribeEmail);
 	SetBorderColor("SubscribeEmail", is_errored);
 	has_error = (is_errored || has_error);
 

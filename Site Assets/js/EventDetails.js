@@ -108,6 +108,52 @@ function eventDetailStart() {
 			}
 		}).fail(CommonUtil.OnRESTError);
 	}
+
+	try{
+		$("#email").keyup(function(){
+
+			var email = $("#email").val();
+	
+			if(email != 0)
+			{
+				if(isValidEmailAddress(email))
+				{
+					SetBorderColor("email", false);
+				} 
+				else {
+					SetBorderColor("email", true);
+				}
+			} 
+			else 
+			{
+				SetBorderColor("email", false);
+			}
+	
+		});
+		
+		$(".txtOnly").keypress(function(e) {
+			var key = e.keyCode;
+			if (key >= 48 && key <= 57) {
+				e.preventDefault();
+			}
+		});
+	}
+	catch (error) {
+		console.error(error);
+	}
+
+	$("#RegisterEventForm").on('hide.bs.modal', function () {
+		//location.reload(true);
+		ClearAllFields();
+
+	});
+	$("#contactFormLabel").text(!isArabic?"Register Event":"تسجيل الحدث");
+	$("#lblfirstname").text(!isArabic?"First Name":"الاسم الاول");
+	$("#lbllastname").text(!isArabic?"Last Name":"الكنية");
+	$("#lblemail").text(!isArabic?"Email Address":"عنوان البريد الالكترونى");
+	$("#lblMessage").text(!isArabic?"Message":"رسالة");
+	$("#SaveEvent").text(!isArabic?"Submit":"إرسال");
+	
 }
 
 function bindSpeakerAndPartner(eachEvent){
@@ -173,7 +219,8 @@ function submitRegisterEventform() {
 	}
 }
 function SaveEventregisterData(){
-	const itemID = urlParams.get('ItemID');
+	const urlParams = new URLSearchParams(window.location.search);
+	const itemID = urlParams.get('ItemID')?urlParams.get('ItemID'):urlParams.get('itemid');
 	var listItemData = "";
 	listItemData = {
 		__metadata: { "type": "SP.Data.EventRegisterListItem" },
@@ -184,7 +231,7 @@ function SaveEventregisterData(){
 		"EventRegisterComment": $("#message").val()
 	};
 
-	var allItemsUrl=_spPageContextInfo.siteAbsoluteUrl + "/_api/Web/Lists/GetByTitle('EventRegister')/Items";
+	var allItemsUrl=_siteUrl + "/_api/Web/Lists/GetByTitle('EventRegister')/Items";
 	SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listContact, listItemData)
 	.then(function(iar){
 		alert("Event Register succefully");
@@ -207,12 +254,17 @@ function ClearAllFields() {
 	
 	
 }
+function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    return pattern.test(emailAddress);
+}
+
 function HasFormValidateErr() {
 	var has_error = false;
 	var is_errored = false;
 
 	var email = $("#email").val();
-	is_errored = (IsNullOrEmpty(email));
+	is_errored = !isValidEmailAddress(email);
 	SetBorderColor("email", is_errored);
 	has_error = (is_errored || has_error);
 
