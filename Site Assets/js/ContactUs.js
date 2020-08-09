@@ -71,7 +71,7 @@ function contactUsStart() {
 	$("#lblemail").text(!isArabic?"Email Address":"عنوان البريد الالكترونى");
 	$("#lblsubject").text(!isArabic?"Subject":"موضوع");
 	$("#lblMessage").text(!isArabic?"Message":"رسالة");
-	$("#SaveContact").text(!isArabic?"SaveContact":"حفظ جهة الاتصال");
+	$("#SaveContact").text(!isArabic?"Save Contact":"حفظ جهة الاتصال");
 	
 }
 
