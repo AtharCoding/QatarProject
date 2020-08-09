@@ -234,7 +234,7 @@ function SaveEventregisterData(){
 	var allItemsUrl=_siteUrl + "/_api/Web/Lists/GetByTitle('EventRegister')/Items";
 	SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listContact, listItemData)
 	.then(function(iar){
-		alert("Event Register succefully");
+		isArabic ? alert("سجل الحدث بنجاح") : alert("Event Register succefully");
 		$("#RegisterEventForm").modal("hide");
 		ClearAllFields();
 	})

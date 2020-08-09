@@ -100,7 +100,7 @@ function SaveContactData(){
 	var allItemsUrl= _siteUrl + "/_api/Web/Lists/GetByTitle('"+_listContact+"')/Items";
 	SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listContact, listItemData)
 	.then(function(iar){
-		alert("Contact Form Save succefully");
+		isArabic ? alert("نموذج الاتصال حفظ بنجاح") : alert("Contact Form Save succefully");
 		$("#contactForm").modal("hide");
 		ClearAllFields();
 	})
