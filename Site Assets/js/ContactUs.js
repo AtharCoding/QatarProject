@@ -168,18 +168,47 @@ function bindContactData(){
 				
 				var currentItem = WebSiteConnectenum.get_current();
 				var ID = currentItem.get_item("ID");
-				var Title = currentItem.get_item("Title")==undefined?"":currentItem.get_item("Title");
-				var ContactUsVenue = currentItem.get_item("ContactUsVenue")==undefined?"":currentItem.get_item("ContactUsVenue");
-				var ContactUsPhone = currentItem.get_item("ContactUsPhone")==undefined?"":currentItem.get_item("ContactUsPhone");
-				var ContactUsEmail = currentItem.get_item("ContactUsEmail")==undefined?"":currentItem.get_item("ContactUsEmail");
-				var ContactUsMapHtml = currentItem.get_item("ContactUsMapHtml")==undefined?"":currentItem.get_item("ContactUsMapHtml");
-			
+				var Title="";
+				var ContactUsVenue="";
+				var ContactUsPhone="";
+				var ContactUsEmail="";
+				var ContactUsMapHtml="";
+
+				if(currentItem.get_item("Title")!=undefined){
+					Title= isArabic ? SlicingTitle(currentItem.get_item("WebsiteContactArabicTitle")): SlicingTitle( currentItem.get_item("Title"));
+				}
+				if(currentItem.get_item("ContactUsVenue")!=undefined){
+					ContactUsVenue= isArabic ? SlicingDesc(currentItem.get_item("WebsiteContactArabicVenue")): SlicingDesc( currentItem.get_item("ContactUsVenue"));
+				}
+				if(currentItem.get_item("ContactUsPhone")!=undefined){
+					ContactUsPhone= isArabic ? SlicingTitle(currentItem.get_item("WebsiteContactArabicPhone")): SlicingTitle( currentItem.get_item("ContactUsPhone"));
+				}
+				if(currentItem.get_item("ContactUsEmail")!=undefined){
+					ContactUsEmail= isArabic ? SlicingTitle(currentItem.get_item("WebsiteContactArabicEmail")): SlicingTitle( currentItem.get_item("ContactUsEmail"));
+				}
+				ContactUsMapHtml = currentItem.get_item("ContactUsMapHtml")==undefined?"":currentItem.get_item("ContactUsMapHtml");
+				
 				$("#ContactHeading").text(Title);
 				$("#ContactAddress").text(ContactUsVenue);
-				$("#ContactNo").text(ContactUsPhone);
-				$("#ContactEmail").text(ContactUsEmail);
-
+				if(ContactUsVenue){
+					$("#ContactAddress").text(ContactUsVenue);
+					let googleMapPointerUrl="https://www.google.com/maps/search/?api=1&query='"+ContactUsVenue+"'";
+					$("#ContactAddress").attr("href",googleMapPointerUrl);
+				}
+				
+				if(ContactUsPhone){
+					$("#ContactNo").text(ContactUsPhone);
+					let openDialer = "tel:"+ContactUsPhone+"";
+					$("#ContactNo").attr("href",openDialer);
+				}
+				
+				if(ContactUsEmail){
+					$("#ContactEmail").text(ContactUsEmail);
+					let mailTo = "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to='"+ContactUsEmail+"'";
+					$("#ContactEmail").attr("href",mailTo);
+				}
 				$("#contactmap").append(ContactUsMapHtml);
+				$("#btnContactForm").text(!isArabic?"CONTACT US":"اتصل بنا");
 			
 			}
 			
