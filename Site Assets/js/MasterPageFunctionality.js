@@ -16,15 +16,15 @@ $(document).ready(function () {
 		{
 			if(isValidEmailAddress(email))
 			{
-				SetBorderColor("email", false);
+				SetBorderColor("SubscribeEmail", false);
 			} 
 			else {
-				SetBorderColor("email", true);
+				SetBorderColor("SubscribeEmail", true);
 			}
 		} 
 		else 
 		{
-			SetBorderColor("email", false);
+			SetBorderColor("SubscribeEmail", false);
 		}
 	});
 });
@@ -37,7 +37,7 @@ function Subscribe() {
 		$.when(get_EmailSubscribersList)
 		.then(function (respEmailSubscribersList) {
 			if(respEmailSubscribersList.d.results.length>0){
-				alert("You Are already subscribed");
+				isArabic ? alert("انت مشترك اصلا") : alert("You Are already subscribed");
 				$('#SubscribeEmail').val("");
 				$('#SubscribeEmail').css("border-color", '#ccc');
 			}
@@ -53,8 +53,7 @@ function Subscribe() {
 				var allItemsUrl= _siteUrl + "/_api/Web/Lists/GetByTitle('" + _listEmailSubscribers + "')/Items";
 				SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listEmailSubscribers, listItemData)
 				.then(function(iar){
-					alert("Subscribtio has been succefully submitted");
-					//$("#contactForm").modal("hide");
+					isArabic ? alert("تم إرسال الاشتراك بنجاح") : alert("Subscribtion has been succefully submitted");
 					$('#SubscribeEmail').val("");
 					$('#SubscribeEmail').css("border-color", '#ccc');
 				})

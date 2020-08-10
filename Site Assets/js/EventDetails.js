@@ -221,24 +221,39 @@ function submitRegisterEventform() {
 function SaveEventregisterData(){
 	const urlParams = new URLSearchParams(window.location.search);
 	const itemID = urlParams.get('ItemID')?urlParams.get('ItemID'):urlParams.get('itemid');
-	var listItemData = "";
-	listItemData = {
-		__metadata: { "type": "SP.Data.EventRegisterListItem" },
-		"EventRegisterID":itemID,
-		"Title": $("#firstname").val(),
-		"EventRegisterFirstName": $("#lastname").val(),
-		"EventRegisterEmail": $("#email").val(),
-		"EventRegisterComment": $("#message").val()
-	};
+	var email = $("#email").val();
+	var urlForEventRegisterList = _siteUrl + "/_api/web/lists/GetByTitle('" + _listEventRegister + "')/items?$filter=EventRegisterEmail eq '"+email+"'";
+	var get_EventRegisterList = SPRestCommon.GetItemAjaxCall(urlForEventRegisterList);
 
-	var allItemsUrl=_siteUrl + "/_api/Web/Lists/GetByTitle('EventRegister')/Items";
-	SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listContact, listItemData)
-	.then(function(iar){
-		alert("Event Register succefully");
-		$("#RegisterEventForm").modal("hide");
-		ClearAllFields();
-	})
-	.fail(CommonUtil.OnRESTError);
+	$.when(get_EventRegisterList)
+	.then(function (respEventRegisterList) {
+		if(respEventRegisterList.d.results.length>0){
+			isArabic ? alert("انت مسجل مسبقا") : alert("You Are already registered");
+			ClearAllFields();
+		}
+		else{
+			
+			var listItemData = "";
+			listItemData = {
+				__metadata: { "type": "SP.Data.EventRegisterListItem" },
+				"EventRegisterID":itemID,
+				"Title": $("#firstname").val(),
+				"EventRegisterFirstName": $("#lastname").val(),
+				"EventRegisterEmail": $("#email").val(),
+				"EventRegisterComment": $("#message").val()
+			};
+		
+			var allItemsUrl=_siteUrl + "/_api/Web/Lists/GetByTitle('" + _listEventRegister + "')/Items";
+			SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listContact, listItemData)
+			.then(function(iar){
+				isArabic ? alert("سجل الحدث بنجاح") : alert("Event Register succefully");
+				$("#RegisterEventForm").modal("hide");
+				ClearAllFields();
+			})
+			.fail(CommonUtil.OnRESTError);
+		}
+	}).fail(CommonUtil.OnRESTError);
+	
 }
 function ClearAllFields() {
 	$('#firstname').val("");

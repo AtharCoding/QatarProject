@@ -20,7 +20,7 @@ var _listTitlePublicationTopics="PublicationTopics";
 var _listTitleEventTypes="EventTypes";
 var _listTitleHomeSmallBanner="HomeSmallBaner";
 var _listTitleHomeExtraContent="HomeExtraContent";
-
+var _listEventRegister = "EventRegister";
 var isArabic=false;
 if (window.location.href.toLowerCase().indexOf("/ar/") > -1)
 	isArabic=true;
