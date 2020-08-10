@@ -730,15 +730,12 @@ function bindSmallbanner(){
 					Title= isArabic ? SlicingTitle(currentItem.get_item("HomeBanerArabicTitle")): SlicingTitle( currentItem.get_item("Title"));
 				}
 				var ImageUrl = currentItem.get_item("ImageUrl")==undefined?"":getImageSrcValue(currentItem.get_item("ImageUrl"));
-				innerData = innerData+"<div class='col-lg-6'>"+
+				innerData = innerData+"<div>"+
 											"<div class='headeline'>"+
 											"<img src='"+ImageUrl+"' />"+
 											"<h4>"+Title+"</h4>"+
 											"</div>"+
 									   "</div>";
-		
-
-			
 			}
 			$("#SmallBannerHeading").append(innerData);
 			

@@ -62,11 +62,7 @@ function fillCommunityItems() {
 		tempObj.StaffPositionLookup = eachCommunity.StaffPositionLookup;
 		tempObj.StaffBiography = $("<div></div>").append(eachCommunity.StaffBiography).text().slice(0, descCharLimit);
 		tempObj.CommunityType = eachCommunity.CommunityType;
-		tempObj.FacebookUrl = eachCommunity.FacebookUrl;
-		tempObj.LinkedInUrl = eachCommunity.LinkedInUrl;
-		tempObj.PersonalWebsiteUrl = eachCommunity.PersonalWebsiteUrl;
-		tempObj.TwitterLink = eachCommunity.TwitterLink;
-		tempObj.UserEmail = eachCommunity.UserEmail;
+		tempObj.LinkedInUrl = eachCommunity.LinkedInUrl.Url;
 		tempObj.ImageUrl = eachCommunity.ImageUrl;
 		tempObj.ProfileDetailPageURL=eachCommunity.ProfileDetailPageURL;
 
@@ -134,35 +130,30 @@ function fillCommunityHtml(resultSet, startIndex, endIndex) {
 		let StaffBiography = eachCommunity.StaffBiography;
 		let staffTitle = eachCommunity.Title;
 		let staffImageUrl = eachCommunity.ImageUrl;
-		let FacebookUrl = eachCommunity.FacebookUrl;
-		let LinkedInUrl = eachCommunity.LinkedInUrl;
-		let PersonalWebsiteUrl = eachCommunity.PersonalWebsiteUrl;
-		let TwitterLink = eachCommunity.TwitterLink;
-		let UserEmail = eachCommunity.UserEmail;
+		let LinkedInUrl = eachCommunity.LinkedInUrl?eachCommunity.LinkedInUrl:"";
 		let communityTypeID = eachCommunity.CommunityType ? eachCommunity.CommunityType.ID : "";
 		let staffPosition = eachCommunity.StaffPositionLookup ? eachCommunity.StaffPositionLookup.Title : "";
 		let contentHtml = "<div class='col'>" +
-			"<div class='team'>" +
-			"<div class='team-img'>" +
-			"<a href='" + staffDetailUrl + "'>" +
-			"<img src='" + staffImageUrl + "' />" +
-			"</a>" +
-			"</div>" +
-			"<div class='team-content'>" +
-			"<a href='" + staffDetailUrl + "'>" +
-			"<h3>" + staffTitle + "</h3>" +
-			"</a>" +
-			"<h4>" + staffPosition + "<a href='" + LinkedInUrl + "' target='_blank' class='linkedin'>" +
-			"<i class='fab fa-linkedin-in'></i></a></h4>" +
-			"<p>" + StaffBiography + "</p>" +
-			"</div>" +
-			"</div>" +
-			"</div>";
+							"<div class='team'>" +
+								"<div class='team-img'>" +
+									"<a href='" + staffDetailUrl + "'>" +
+										"<img src='" + staffImageUrl + "' />" +
+									"</a>" +
+								"</div>" +
+								"<div class='team-content'>" +
+									"<a href='" + staffDetailUrl + "'>" +
+										"<h3>" + staffTitle + "</h3>" +
+									"</a>" +
+									"<h4>" + staffPosition + 
+										"<a href='" + LinkedInUrl + "' target='_blank' class='linkedin'>" +
+											"<i class='fab fa-linkedin-in'></i>"+
+										"</a>"+
+									"</h4>" +
+									"<p>" + StaffBiography + "</p>" +
+								"</div>" +
+							"</div>" +
+						"</div>";
 		$("#tabContent" + communityTypeID).append(contentHtml);
 	}
-}
-
-function failure(err) {
-	console.log(err);
 }
 

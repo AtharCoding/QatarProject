@@ -21,6 +21,8 @@ var _listTitleEventTypes="EventTypes";
 var _listTitleHomeSmallBanner="HomeSmallBaner";
 var _listTitleHomeExtraContent="HomeExtraContent";
 var _listEventRegister = "EventRegister";
+var _listTitleSocialDetails = "SocialDetails";
+
 var isArabic=false;
 if (window.location.href.toLowerCase().indexOf("/ar/") > -1)
 	isArabic=true;

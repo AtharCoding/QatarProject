@@ -7,3 +7,18 @@
 #TurnOnAccessibility{
     display: none;
 }
+
+div.article, div.welcome{
+    padding: 0px;
+}
+.article-content, .welcome-content{
+    margin: 0px;
+}
+
+.homeSmallBanner{
+    display: flex;
+    justify-content: center;
+}
+.homeSmallBanner>div{
+    margin: 0px 5px 0px 5px;
+}

@@ -10,6 +10,7 @@ $(document).ready(function () {
 	setupMasterLanguage();
 	commonForAllPages();
 	setUpOtherData();
+	SP.SOD.executeFunc('sp.js', 'SP.ClientContext', fillSocialDetails);
 	$("#SubscribeEmail").keyup(function(){
 		var email = $("#SubscribeEmail").val();
 		if(email != 0)
@@ -62,7 +63,6 @@ function Subscribe() {
 		}).fail(CommonUtil.OnRESTError);
 	}	
 }
-
 
 function HasEmailValidateErr() {
 	var has_error = false;
@@ -126,4 +126,33 @@ function setupMasterLanguage(){
 
 function setUpOtherData(){
 	$("#siteLogo1,#siteLogo2,#siteLogo3").attr("src",_spPageContextInfo.webLogoUrl+"?width=300&height=130");
+}
+
+function fillSocialDetails() {
+	let ctx = SP.ClientContext.get_current();
+	let listCollection = ctx.get_site().get_rootWeb().get_lists();
+	let socialList = listCollection.getByTitle(_listTitleSocialDetails);
+	var allItemsQuery = SP.CamlQuery.createAllItemsQuery();
+	let socialItems = socialList.getItems(allItemsQuery);
+	ctx.load(socialItems);
+	ctx.executeQueryAsync(function () {
+			for (let i = 0; i < socialItems.get_count(); i++) {
+
+				let eachItem = socialItems.getItemAtIndex(i);
+				let socialTitle=eachItem.get_item('Title');
+				let socialUrl=eachItem.get_item('SocialSiteUrl');
+
+				if(socialTitle=="Facebook"){
+					$("#fbAnchor,#fbAnchor2,#fbAnchor3,#fbAnchor4,#fbAnchor5").attr("href",socialUrl);
+				}
+
+				if(socialTitle=="Twitter"){
+					$("#twitterAnchor,#twitterAnchor2,#twitterAnchor3,#twitterAnchor4,#twitterAnchor5").attr("href",socialUrl);
+				}
+
+				if(socialTitle=="LinkedIn"){
+					$("#linkedInAnchor,#linkedInAnchor2,#linkedInAnchor3,#linkedInAnchor4,#linkedInAnchor5").attr("href",socialUrl);
+				}
+			}
+	}, failure);
 }
