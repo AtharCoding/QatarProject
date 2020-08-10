@@ -61,7 +61,7 @@ function blogStart() {
 											"</div>";
 					else
 					 	eachBlogContent = "<div class='carousel-item active'>" +
-												"<img src='" + resultImgUrl + "' class='d-block w-100' alt='...'>" +
+												"<img src='" + resultImgUrl + "?width=780&height=510' class='d-block w-100' alt='...'>" +
 											"</div>";
 					$("#carouselInner").append(eachBlogContent);
 					if(_currentAttCollection.length>0)
@@ -75,7 +75,7 @@ function blogStart() {
 						let sliderPointer = "<li data-target='#post-slider' data-slide-to='" + (i + 1) + "'></li>";
 						let eachAttachment = _currentAttCollection[i];
 						var eachBlogContent = "<div class='carousel-item'>" +
-							"<img src='" + eachAttachment.ServerRelativeUrl + "' class='d-block w-100' alt='...'>" +
+							"<img src='" + eachAttachment.ServerRelativeUrl + "?width=780&height=510' class='d-block w-100' alt='...'>" +
 							"</div>";
 						$("#carouselIndicator").append(sliderPointer);
 						$("#carouselInner").append(eachBlogContent);

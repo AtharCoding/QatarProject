@@ -34,7 +34,7 @@ function eventDetailStart() {
 				_currentAttCollection = respCurrentAttchments[0].d.results;
 
 				getImageUrl(_currentEvent, 0, function (resultImgUrl, eachEvent) {
-					$("#eventImg").attr("src",resultImgUrl);
+					$("#eventImg").attr("src",resultImgUrl+"?width=780&height=510");
 				}, function (err) {
 					console.error(err);
 				});

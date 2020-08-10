@@ -9,6 +9,7 @@ $(document).ready(function () {
 	$("html").attr("lang",isArabic?"ar":"en-US");
 	setupMasterLanguage();
 	commonForAllPages();
+	setUpOtherData();
 	$("#SubscribeEmail").keyup(function(){
 		var email = $("#SubscribeEmail").val();
 		if(email != 0)
@@ -122,4 +123,8 @@ function setupMasterLanguage(){
 	$("#textTunis").text(isArabic?"تونس":"Tunis");
 	$("#textSubscribe").text(isArabic?"اشترك للحصول على التحديثات":"Subscribe for updates");
 	$("#SubscribeEmail").attr("placeholder",isArabic?"عنوان البريد الالكترونى":"Email address");
+}
+
+function setUpOtherData(){
+	$("#siteLogo1,#siteLogo2,#siteLogo3").attr("src",_spPageContextInfo.webLogoUrl+"?width=300&height=130");
 }

@@ -249,12 +249,14 @@ function fillBlogDetails(){
 	
 		let pubImageUrl=getImageSrcValue(eachBlog.get_fieldValues()['ImageUrl']);
 		
+		$("#content" + index  + "Anchor").hide();
 		$("#content" + index  + "Img").attr("src", pubImageUrl);
 		$("#content" + index  + "Date").text(blogDate);
 		$("#content" + index  + "Title").text(blogTitle);
 		$("#content" + index  + "Desc").text(SlicingDesc(blogDesc));
 		$("#content" + index  + "Anchor").attr("href", blogDetailUrl);
 		$("#content" + index  + "WriterName").text(writerName);
+		$("#content" + index  + "Anchor").show();
 	}
 }
 

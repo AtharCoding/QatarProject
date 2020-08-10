@@ -95,9 +95,7 @@ function getListDetails(listTitle){
 			$("#contentListTitle,.breadcrumb .breadcrumb-item.active").text(resultTitle);
 			$("#contentListDesc").text(resultDesc);
 		}
-	},function(err){
-		console.error(err);
-	});
+	},failure);
 }
 
 function getFormattedTime(dateStr) {
