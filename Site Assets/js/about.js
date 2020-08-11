@@ -13,60 +13,37 @@ $(document).ready(function () {
 	SP.SOD.executeFunc('sp.js', 'SP.ClientContext', aboutStart);
 });
 
-function aboutStart() {
-	
-	
-	var urlForAboutUs =  _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleAboutUs + "')/items?" +
-	"$select=ID,Title,AboutArabicTitle,AboutDesc,AboutArabicDesc,AboutPhoto" +
-	"&$top=1000";
-	var get_AboutUs = SPRestCommon.GetItemAjaxCall(urlForAboutUs);
-	
-	var urlGuideLinePrinciple = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleGuidingPrinciple + "')/items?" +
-	"$select=ID,Title,GuideLineArabicTitle,GuideLineDesc,GuideLineArabicDesc,GuideLineLinkToPage,GuideLinePhoto" +
-	"&$top=1000";
-	var get_GuideLinePrinciple = SPRestCommon.GetItemAjaxCall(urlGuideLinePrinciple);
-
-	var urlAboutExplore = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleAboutExplore + "')/items?" +
-	"$select=ID,Title,AboutExploreArabicTitle,AboutExplorePhoto,AboutExploreLinkToPage,AboutExploreArabicCLinkToPage" +
-	"&$top=1000";
-	var get_AboutExplore = SPRestCommon.GetItemAjaxCall(urlAboutExplore);
-	
-	
-	$.when(get_AboutUs, get_GuideLinePrinciple,get_AboutExplore)
+function aboutStart() {	
+	$.when(getData(_listTitleAboutUs),getData(_listTitleGuidingPrinciple),getData(_listTitleAboutExplore))
     .then(function(respAboutUs, respGuideLinePrinciple,respAboutExplore){
 		try {
 			getListDetails(_listTitleAboutUs,function(resultTitle,resultDesc){
 				$("#contentListTitle").text(resultTitle);
 				$("#contentListDesc").text(resultDesc);
 			});
+
 		} catch (error) {
 			console.error(error);
 		}
-
 		
-		_aboutItemColl = respAboutUs[0].d.results;
-		_guideLineItemColl = respGuideLinePrinciple[0].d.results;
-		_AboutExploreItemColl = respAboutExplore[0].d.results;
-
+		var OverviewTitle = isArabic ? SlicingTitle(respAboutUs.getItemAtIndex(0).get_item("AboutArabicTitle")): SlicingTitle(respAboutUs.getItemAtIndex(0).get_item("Title"));
+		let OverViewDesc = isArabic ? SlicingDesc(respAboutUs.getItemAtIndex(0).get_item("AboutArabicDesc")): SlicingDesc(respAboutUs.getItemAtIndex(0).get_item("AboutDesc"));
+		var PhotoOverView=respAboutUs.getItemAtIndex(0).get_fieldValues()['ImageUrl']!=null? getImageSrcValue(respAboutUs.getItemAtIndex(0).get_fieldValues()['ImageUrl']):"";
+	
+		var MissionTitle = isArabic ? SlicingTitle(respAboutUs.getItemAtIndex(1).get_item("AboutArabicTitle")): SlicingTitle(respAboutUs.getItemAtIndex(1).get_item("Title"));
+		var MissionDesc = isArabic ? SlicingDesc(respAboutUs.getItemAtIndex(1).get_item("AboutArabicDesc")): SlicingDesc(respAboutUs.getItemAtIndex(1).get_item("AboutDesc"));
+	
+		var VisionTitle = isArabic ? SlicingTitle(respAboutUs.getItemAtIndex(2).get_item("AboutArabicTitle")): SlicingTitle(respAboutUs.getItemAtIndex(2).get_item("Title"));
+		var VisionDesc = isArabic ? SlicingDesc(respAboutUs.getItemAtIndex(2).get_item("AboutArabicDesc")): SlicingDesc(respAboutUs.getItemAtIndex(2).get_item("AboutDesc"));
+	
+		var generalResearchFrameworkTitle = isArabic ? SlicingTitle(respAboutUs.getItemAtIndex(3).get_item("AboutArabicTitle")): SlicingTitle(respAboutUs.getItemAtIndex(3).get_item("Title"));
+		var generalResearchFrameworkDesc = isArabic ? SlicingDesc(respAboutUs.getItemAtIndex(3).get_item("AboutArabicDesc")): SlicingDesc(respAboutUs.getItemAtIndex(3).get_item("AboutDesc"));
+		var PhotoGeneralURL=respAboutUs.getItemAtIndex(3).get_fieldValues()['ImageUrl']!=null? getImageSrcValue(respAboutUs.getItemAtIndex(3).get_fieldValues()['ImageUrl']):"";
 		
-		let OverviewTitle = isArabic ? SlicingTitle(_aboutItemColl[0].AboutArabicTitle): SlicingTitle(_aboutItemColl[0].Title);
-		let OverViewDesc = isArabic ? SlicingDesc(_aboutItemColl[0].AboutArabicDesc): SlicingDesc(_aboutItemColl[0].AboutDesc);
-
-		let MissionTitle = isArabic ? SlicingTitle(_aboutItemColl[1].AboutArabicTitle): SlicingTitle(_aboutItemColl[1].Title);
-		let MissionDesc = isArabic ? SlicingDesc(_aboutItemColl[1].AboutArabicDesc): SlicingDesc(_aboutItemColl[1].AboutDesc);
-
-		let VisionTitle = isArabic ? SlicingTitle(_aboutItemColl[2].AboutArabicTitle): SlicingTitle(_aboutItemColl[2].Title);
-		let VisionDesc = isArabic ? SlicingDesc(_aboutItemColl[2].AboutArabicDesc): SlicingDesc(_aboutItemColl[2].AboutDesc);
-
-		let generalResearchFrameworkTitle = isArabic ? SlicingTitle(_aboutItemColl[3].AboutArabicTitle): SlicingTitle(_aboutItemColl[3].Title);
-		let generalResearchFrameworkDesc = isArabic ? SlicingDesc(_aboutItemColl[3].AboutArabicDesc): SlicingDesc(_aboutItemColl[3].AboutDesc);
-
-		let GuidingPrincipleTitle = isArabic ? SlicingTitle(_aboutItemColl[4].AboutArabicTitle): SlicingTitle(_aboutItemColl[4].Title);
-		let AboutExploreTitle = isArabic ? SlicingTitle(_aboutItemColl[5].AboutArabicTitle): SlicingTitle(_aboutItemColl[5].Title);
 		
-		var aboutUpperSection = "";
-		var PhotoOverView=_aboutItemColl[0].AboutPhoto!=null?_aboutItemColl[0].AboutPhoto.Url:"";
-		var PhotoGeneralURL=_aboutItemColl[3].AboutPhoto!=null?_aboutItemColl[3].AboutPhoto.Url:"";
+		var GuidingPrincipleTitle = isArabic ? SlicingTitle(respAboutUs.getItemAtIndex(4).get_item("AboutArabicTitle")): SlicingTitle(respAboutUs.getItemAtIndex(4).get_item("Title"));
+		var AboutExploreTitle = isArabic ? SlicingTitle(respAboutUs.getItemAtIndex(5).get_item("AboutArabicTitle")): SlicingTitle(respAboutUs.getItemAtIndex(5).get_item("Title"));
+		
 
 		$("#OverViewTitle").text(OverviewTitle);
 		$("#OverViewDescription").text(OverViewDesc);
@@ -78,7 +55,6 @@ function aboutStart() {
 
 		$("#OurVisionTitle").text(VisionTitle);
 		$("#OurVisionDesc").text(VisionDesc);
-
 	
 		
 		var aboutMidSection ="";
@@ -86,15 +62,15 @@ function aboutStart() {
 							"<div class='container'>"+
 							"<h2 class='section-title'>"+GuidingPrincipleTitle+"</h2>";
 		aboutMidSection+= "<div class='row'>";												
-		for (var i = 0; i < _guideLineItemColl.length; i++) {
+		for (var i = 0; i < respGuideLinePrinciple.get_count(); i++) {
 			if(i==4){
 				break;
 			}
 			
-			let GuideLineLinkToPageURL=_guideLineItemColl[i].GuideLineLinkToPage!=null?_guideLineItemColl[i].GuideLineLinkToPage.Url:"";
-			let GuidePhotoURL = _guideLineItemColl[i].GuideLinePhoto!=null?_guideLineItemColl[i].GuideLinePhoto.Url:"";
-			let GuideLineTitle = isArabic ? SlicingTitle(_guideLineItemColl[i].GuideLineArabicTitle): SlicingTitle(_guideLineItemColl[i].Title);
-			let GuideLineDesc = isArabic ? SlicingDesc(_guideLineItemColl[i].GuideLineArabicDesc): SlicingDesc(_guideLineItemColl[i].GuideLineDesc);
+			let GuideLineLinkToPageURL=respGuideLinePrinciple.getItemAtIndex(i).get_item("GuideLineLinkToPage")!=null?respGuideLinePrinciple.getItemAtIndex(i).get_item("GuideLineLinkToPage").get_url():"";
+			var GuidePhotoURL=respGuideLinePrinciple.getItemAtIndex(i).get_item("ImageUrl")!=null? getImageSrcValue(respGuideLinePrinciple.getItemAtIndex(i).get_item("ImageUrl")):"";
+			let GuideLineTitle = isArabic ? SlicingTitle(respGuideLinePrinciple.getItemAtIndex(i).get_item("GuideLineArabicTitle")): SlicingTitle(respGuideLinePrinciple.getItemAtIndex(i).get_item("Title"));
+			let GuideLineDesc = isArabic ? SlicingTitle(respGuideLinePrinciple.getItemAtIndex(i).get_item("GuideLineArabicDesc")): SlicingTitle(respGuideLinePrinciple.getItemAtIndex(i).get_item("GuideLineDesc"));
 			aboutMidSection+="<div class='col-lg-3'>"+
 										"<div class='card'>"+
 											"<a href='"+GuideLineLinkToPageURL+"'>"+
@@ -112,7 +88,6 @@ function aboutStart() {
 		aboutMidSection+="</div></div></section>";
 		$("#aboutMidSection").append(aboutMidSection);
 		
-
 		var aboutgeneralSection="";
 		
 		aboutgeneralSection = "<section id='general-research-framework'>"+
@@ -132,6 +107,7 @@ function aboutStart() {
 				"</section>";	
 		$("#aboutgeneralSection").append(aboutgeneralSection);	
 
+		
 		var aboutMoreSection ="";
 		aboutMoreSection ="<section id='more-about'>"+
 							"<div class='container'>"+
@@ -141,16 +117,17 @@ function aboutStart() {
 									"</div>"+
 								"</div>";
 		aboutMoreSection+= "<div class='row'>";					
-		for (var i = 0; i < _AboutExploreItemColl.length; i++) {
+		for (var i = 0; i < respAboutExplore.get_count(); i++) {
 			if(i==3){
 				break;
 			}
-			let AboutExplorePhoto=_AboutExploreItemColl[i].AboutExplorePhoto!=null?_AboutExploreItemColl[i].AboutExplorePhoto.Url:"";
-			let AboutExploreTitle = isArabic ? SlicingTitle(_AboutExploreItemColl[i].AboutExploreArabicTitle): SlicingTitle(_AboutExploreItemColl[i].Title);
-			var LinkToPageMoreURL="";
-			if(_AboutExploreItemColl[i].AboutExploreLinkToPage!=null){
-				LinkToPageMoreURL = isArabic ? _AboutExploreItemColl[i].AboutExploreArabicCLinkToPage.Url: _AboutExploreItemColl[i].AboutExploreLinkToPage.Url;
+			var LinkToPageMoreURL = "";
+			if(respAboutExplore.getItemAtIndex(i).get_item("AboutExploreArabicCLinkToPage")!=null){
+				LinkToPageMoreURL=isArabic?respAboutExplore.getItemAtIndex(i).get_item("AboutExploreArabicCLinkToPage").get_url():respAboutExplore.getItemAtIndex(i).get_item("AboutExploreLinkToPage").get_url();
 			}
+			var AboutExplorePhoto=respAboutExplore.getItemAtIndex(i).get_item("ImageUrl")!=null? getImageSrcValue(respAboutExplore.getItemAtIndex(i).get_item("ImageUrl")):"";
+			let AboutExploreTitle = isArabic ? SlicingTitle(respAboutExplore.getItemAtIndex(i).get_item("AboutExploreArabicTitle")): SlicingTitle(respAboutExplore.getItemAtIndex(i).get_item("Title"));
+			
 			aboutMoreSection+="<div class='col-lg-4'>";
 			aboutMoreSection+="<div class='more-about'>";
 			aboutMoreSection+="<a href="+LinkToPageMoreURL+" ><img src='"+AboutExplorePhoto+"' alt='...''><h4>"+AboutExploreTitle+"</h4></a>";
@@ -164,4 +141,27 @@ function aboutStart() {
     .fail(CommonUtil.OnRESTError);
 }
 
+function getData(listName) {
+	var dfd = $.Deferred(function(){
+	var context = new SP.ClientContext.get_current();
+	var web = context.get_site().get_rootWeb();
+	var ListName = web.get_lists().getByTitle(listName);
+	var camlQuery = new SP.CamlQuery();
+	camlQuery.set_viewXml(
+		"<View><Query><OrderBy><FieldRef Name='ID' Ascending='True'/></OrderBy></Query></View>"
+	);
+	var ListNameItems = ListName.getItems(camlQuery);
+	
+	context.load(ListNameItems);
+		context.executeQueryAsync(
+			function(){
+				dfd.resolve(ListNameItems);
+			},
+			function(sender,args){
+				dfd.reject(args.get_message());
+			}
+		);
+	});
+	return dfd.promise();
+}
 
