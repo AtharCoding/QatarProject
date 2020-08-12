@@ -2451,3 +2451,50 @@ a:hover .video-card-img img {
     top: 0;
     display: none;
 }
+
+/* 404 */
+
+.error-404 {
+    font-weight: 500;
+    font-size: 200px;
+    line-height: 115%;
+}
+.error-404-message {
+    font-weight: normal;
+    font-size: 72px;
+    line-height: 115%;
+    color: #BDBDBD;
+    margin-top: 45px;
+}
+
+#search-form-404 {
+    margin-top: 76px;
+    background: #f2f2f2;
+    opacity: 0.98;
+    padding: 30px 24px;
+    width: 100%;
+}
+#search-form-404 .bootstrap-select > .dropdown-toggle {
+    padding: 10px;
+}
+
+#search-form-404 input::-webkit-input-placeholder {
+    /* Edge */
+    color: #bdbdbd;
+}
+
+#search-form-404 input:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #bdbdbd;
+}
+
+#search-form-404 input::placeholder {
+    color: #bdbdbd;
+}
+#search-form-404 label{
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 120%;
+    color: #575756;
+    margin-bottom: 16px;
+}

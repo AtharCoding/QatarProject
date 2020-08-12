@@ -66,9 +66,7 @@ function blogStart() {
 					$("#carouselInner").append(eachBlogContent);
 					if(_currentAttCollection.length>0)
 						$("#carouselIndicator").append(sliderPointer);
-				}, function (err) {
-					console.error(err);
-				});
+				}, failure);
 
 				if (_currentAttCollection.length > 0) {
 					for (let i = 0; i < _currentAttCollection.length; i++) {

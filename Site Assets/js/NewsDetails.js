@@ -62,9 +62,7 @@ function newsStart() {
 					$("#carouselInner").append(eachNewsContent);
 					if(_currentAttCollection.length>0)
 						$("#carouselIndicator").append(sliderPointer);
-				}, function (err) {
-					console.error(err);
-				});
+				}, failure);
 
 				_latestNewscollection = respLatestNews[0].d.results;
 				for (let i = 0; i < _latestNewscollection.length; i++) {

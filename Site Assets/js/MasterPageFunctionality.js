@@ -101,6 +101,7 @@ function setupMasterLanguage(){
 	$("#lnkContactUs,#lnkContactUs2,#lnkContactUs3").text(isArabic?"اتصل بنا":"Contact Us");
 	$("#lnkTermsOfUse").text(isArabic?"شروط الاستخدام":"Terms of Use");
 
+	$("#HomeAnchor").attr("href",commonUrl+"Home.aspx");
 	$("#lnkAboutUs,#lnkAboutUs2,#lnkAboutUs3").attr("href",commonUrl+"About.aspx");
 	$("#lnkCommunity,#lnkCommunity2,#lnkCommunity3").attr("href",commonUrl+"CHSCommunity.aspx");
 	$("#lnkResearchTheme,#lnkResearchTheme2,#lnkResearchTheme3").attr("href",commonUrl+"ResearchTheme.aspx");

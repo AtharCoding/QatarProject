@@ -141,9 +141,7 @@ function bindAllEvents(upcomingCollection, pastCollection,startIndex,endIndex, o
 
 				if (eventCounter == upcomingCollection.length)
 					FillPastCollection(pastCollection,startIndex,endIndex, onComplete);
-			}, function (err) {
-				console.error(err);
-			});
+			}, failure);
 		}
 	}
 }
@@ -211,9 +209,7 @@ function FillPastCollection(pastCollection,startIndex,endIndex, onComplete) {
 				if (_pastEventCounter == pastCollection.length) {
 					onComplete();
 				}
-			}, function (err) {
-				console.error(err);
-			});
+			}, failure);
 		}
 	}
 }

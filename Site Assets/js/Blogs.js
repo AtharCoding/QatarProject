@@ -59,9 +59,7 @@ function blogsStart() {
 						getImageUrl(_interviewCollection[i], i, function (resultImgUrl, eachInterview) {
 							var eachInterviewContent = getInterviewHtml(resultImgUrl, eachInterview);
 							$("#tvInterviewContent").append(eachInterviewContent);
-						}, function (err) {
-							console.error(err);
-						});
+						}, failure);
 					}
 				}
 			} catch (error) {
@@ -77,9 +75,7 @@ function blogsStart() {
 						getImageUrl(_articleCollection[i], i, function (resultImgUrl, eachArticle) {
 							var eachArticleContent = getArticleHtml(resultImgUrl, eachArticle);
 							$("#articleContent").append(eachArticleContent);
-						}, function (err) {
-							console.error(err);
-						});
+						}, failure);
 					}
 				}
 			} catch (error) {
@@ -151,9 +147,7 @@ function bindLoadMoreEvents(){
 				getImageUrl(_interviewCollection[i], i, function(resultImgUrl,eachInterview){
 					let eachInterviewContent = getInterviewHtml(resultImgUrl,eachInterview);
 					$("#tvInterviewContent").append(eachInterviewContent);
-				},function(err){
-					console.error(err);
-				});
+				},failure);
 			}
 		}
 		
@@ -171,9 +165,7 @@ function bindLoadMoreEvents(){
 				getImageUrl(_articleCollection[i],i,function(resultImgUrl,eachArticle){
 					let eachArticleContent=getArticleHtml(resultImgUrl,eachArticle);
 					$("#articleContent").append(eachArticleContent);
-				},function(err){
-					console.error(err);
-				});
+				},failure);
 			}
 		}
 		
@@ -220,14 +212,10 @@ function bindBlogs(){
 					}
 					if(_blogCounter==_totalBlogCount)
 						fillBlogDetails();
-				},function(err){
-					console.error(err);
-				});
+				},failure);
 			}
 		}
-	},function(err){
-		console.error(err);
-	});
+	},failure);
 }
 
 function fillBlogDetails(){
@@ -258,10 +246,6 @@ function fillBlogDetails(){
 		$("#content" + index  + "WriterName").text(writerName);
 		$("#content" + index  + "Anchor").show();
 	}
-}
-
-function handleError(err){
-	console.error(err);
 }
 
 function fillLanguageData(){

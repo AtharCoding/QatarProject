@@ -35,9 +35,7 @@ function eventDetailStart() {
 
 				getImageUrl(_currentEvent, 0, function (resultImgUrl, eachEvent) {
 					$("#eventImg").attr("src",resultImgUrl+"?width=780&height=510");
-				}, function (err) {
-					console.error(err);
-				});
+				}, failure);
 
 				if (_currentAttCollection.length > 0) {
 					for (let i = 0; i < _currentAttCollection.length; i++) {

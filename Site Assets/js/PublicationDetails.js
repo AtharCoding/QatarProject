@@ -62,18 +62,24 @@ function pubDetailStart() {
 				}
 				else
 					$("#pubNextRead").hide();
-			}, function (err) {
-				console.error(err);
-			});
+			}, failure);
 	}
 }
 
 function bindPublication(itemID) {
 	
 	let ctx = SP.ClientContext.get_current();
-	let list = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublication);
-	let publicationItem = list.getItemById(itemID);
+	let listCollection =ctx.get_site().get_rootWeb().get_lists();
+
+	let publicationList = listCollection.getByTitle(_listTitlePublication);
+	let publicationItem = publicationList.getItemById(itemID);
+
+	let dictionaryList=listCollection.getByTitle(_listTitleSiteDictionary);
+	var allItemsQuery = SP.CamlQuery.createAllItemsQuery();
+	let dictionaryItems = dictionaryList.getItems(allItemsQuery);
+
 	ctx.load(publicationItem);
+	ctx.load(dictionaryItems);
 	ctx.executeQueryAsync(function () {
 		var pubAuthorIDs = publicationItem.get_item('PublicationAuthorIDs');
 		for (let j = 0; j < pubAuthorIDs.length; j++) {
@@ -83,27 +89,42 @@ function bindPublication(itemID) {
 			let tempObj = {};
 			tempObj.Index = 0;
 			tempObj.publicationItem = publicationItem;
+			tempObj.dictionaryItems=dictionaryItems;
 			getStaffDetailsByQuery(createCamlQueryByIDArr(pubAuthIDsArr), tempObj, function (staffCollection, tempObj) {
 				if (staffCollection.length > 0) {
 					tempObj.staffCollection = staffCollection;
 					fillPublicationDetails(tempObj);
 				}
-			}, function (err) {
-				console.error(err);
-			});
+			}, failure);
 
 			bindAuthorPublications();
 		}
-	}, function (err) {
-		console.error(err);
-	});
+	}, failure);
 }
 
 function fillPublicationDetails(tempObj) {
+	let dictionaryItems=tempObj.dictionaryItems;
+	let dictionaryCollection = [];
+	for (let i = 0; i < dictionaryItems.get_count(); i++) {
+		let eachItem = dictionaryItems.getItemAtIndex(i);
+		let temp = {};
+		temp.ID = eachItem.get_item('ID');
+		temp.Title = eachItem.get_item('Title');
+		temp.WordDefination =isArabic?eachItem.get_item('WordDefinationArabic'):eachItem.get_item('WordDefination');
+		dictionaryCollection.push(temp);
+	}
 
 	let publicationItem = tempObj.publicationItem;
 
 	let pubDetails = $("<div></div>").append(isArabic?publicationItem.get_item('PublicationArabicDetails'):publicationItem.get_item('PublicationDetails')).html();
+	for(let i=0;i<dictionaryCollection.length;i++){
+		let eachWord=dictionaryCollection[i];
+		let wordTitle=eachWord.Title;
+		let wordDefination= eachWord.WordDefination;
+		let wordDefHtml=wordTitle+" <button type='button' class='post-popover' data-container='body' data-toggle='popover' data-placement='bottom'"+
+		 				" data-content='"+wordDefination+"' data-original-title='' title=''>"+(i+1)+"</button>";
+		pubDetails=pubDetails.replace(new RegExp("##"+wordTitle+"##", 'gi' ), wordDefHtml);
+	}
 	let pubTitle = SlicingTitle(isArabic?publicationItem.get_item('PublicationArabicTitle'):publicationItem.get_item('Title'));
 	let pubPreTitle = SlicingTitle(isArabic?publicationItem.get_item('PublicationArabicPreTitle'):publicationItem.get_item('PublicationPreTitle'));
 	let pubPostTitle = SlicingTitle(isArabic?publicationItem.get_item('PublicationArabicPostTitle'):publicationItem.get_item('PublicationPostTitle'));
@@ -131,6 +152,10 @@ function fillPublicationDetails(tempObj) {
 			"</div>";
 		$("#authorDetails").append(authorContent);
 	}
+
+	$('[data-toggle="popover"]').popover({
+        trigger: "focus",
+    });
 }
 
 function bindAuthorPublications() {
@@ -158,9 +183,7 @@ function bindAuthorPublications() {
 			fillAuthorPubDetails(tempObj);
 		}
 		bindAuthorPubHtml();
-	}, function (err) {
-		console.error(err);
-	});
+	}, failure);
 }
 
 function fillAuthorPubDetails(tempObj) {

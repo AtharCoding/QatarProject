@@ -43,14 +43,8 @@ function indexStart() {
 	var urlForLatestEvents = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleEvents + "')/items?$top=3&$filter=EventStartDate ge '" + today.toISOString() + "'&$orderby=Created desc";
 	var get_LatestEvents = SPRestCommon.GetItemAjaxCall(urlForLatestEvents);
 
-	
-	var urlAboutExplore = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleAboutExplore + "')/items?" +
-	"$select=ID,Title,AboutExploreArabicTitle,AboutExplorePhoto,AboutExploreLinkToPage,AboutExploreArabicCLinkToPage" +
-	"&$top=1000";
-	var get_AboutExplore = SPRestCommon.GetItemAjaxCall(urlAboutExplore);
-
-	$.when(get_LatestEvents,get_AboutExplore,getDataforSlider(_listTitleNews),getDataforSlider(_listTitlePublication),getDataforSlider(_listTitleBlogs),getDataforSlider(_listTitleResearch))
-    .then(function (respLatestEvents,respAboutExplore,respNewsSlider,respPublicationSlider,respBlogsSlider,respResearchThemeSlider) {
+	$.when(get_LatestEvents,getDataforSlider(_listTitleNews),getDataforSlider(_listTitlePublication),getDataforSlider(_listTitleBlogs),getDataforSlider(_listTitleResearch))
+    .then(function (respLatestEvents,respNewsSlider,respPublicationSlider,respBlogsSlider,respResearchThemeSlider) {
 		
 		try {
 			ProcessNewsSlider(respNewsSlider);
@@ -61,16 +55,10 @@ function indexStart() {
 			if(SliderCollections.length>0){
 				BindSlider();
 			}
-			
 			if(respLatestEvents[0].d.results.length>0){
 				BindEvents(respLatestEvents[0].d.results);
 			}
-			if(respAboutExplore[0].d.results.length>0)
-			{
-				BindAboutMoreSection(respAboutExplore[0].d.results)
-			}
 			try {
-			
 				bindPartnerData();
 			}
 			catch (error) {
@@ -88,29 +76,10 @@ function indexStart() {
 	bindPublication();
 	bindBlog();
 	bindNews();
-	
+	bindHomeExplore();
+	setupLanguage();
 }
-function BindAboutMoreSection(AboutExploreItemColl){
-	_AboutExploreItemColl = AboutExploreItemColl;
-		var aboutMoreSection="";
-		for (var i = 0; i < _AboutExploreItemColl.length; i++) {
-			if(i==3){
-				break;
-			}
-			let AboutExplorePhoto=_AboutExploreItemColl[i].AboutExplorePhoto!=null?_AboutExploreItemColl[i].AboutExplorePhoto.Url:"";
-			let AboutExploreTitle = isArabic ? SlicingTitle(_AboutExploreItemColl[i].AboutExploreArabicTitle): SlicingTitle(_AboutExploreItemColl[i].Title);
-			var LinkToPageMoreURL="";
-			if(_AboutExploreItemColl[i].AboutExploreLinkToPage!=null){
-				LinkToPageMoreURL = isArabic ? _AboutExploreItemColl[i].AboutExploreArabicCLinkToPage.Url: _AboutExploreItemColl[i].AboutExploreLinkToPage.Url;
-			}
-			aboutMoreSection+="<div class='col-lg-4'>";
-			aboutMoreSection+="<div class='more-about'>";
-			aboutMoreSection+="<a href="+LinkToPageMoreURL+" ><img src='"+AboutExplorePhoto+"?Width=380&Height=250' alt='...''><h4>"+AboutExploreTitle+"</h4></a>";
-			aboutMoreSection+="</div></div>";
-		}
-		$("#ExploremoreAbout").text(isArabic?"اكتشف المزيد حول":"Explore more about CHS");
-		$("#aboutMoreSection").append(aboutMoreSection);
-}
+
 function BindSlider()
 {
 	var OuterSlider="";
@@ -702,6 +671,60 @@ function bindNewsHtml(){
 			$("#newsReadMore").hide();
 }
 
+let _aboutExploreData=[];
+function bindHomeExplore(){
+	let ctx = SP.ClientContext.get_current();
+	let list = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleAboutExplore);
+	let camlQuery = new SP.CamlQuery();
+	let query = "<View><Query><OrderBy><FieldRef Name='IsFeatured1' Ascending='False'/><FieldRef Name='Modified' Ascending='False'/></OrderBy>";
+	query += "</Query><RowLimit>3</RowLimit></View>";
+	camlQuery.set_viewXml(query);
+	let items = list.getItems(camlQuery);
+	ctx.load(items);
+	ctx.executeQueryAsync(function(){
+		let itemsCount=items.get_count();
+		for(let i=0;i<itemsCount;i++){
+			let eachItem = items.getItemAtIndex(i);
+			let tempObj={};
+			tempObj.eachItem=eachItem;
+			tempObj.Index=i;
+			fillAboutExploreDetails(tempObj);
+		}
+		bindAboutExploreHtml();
+	},failure);
+}
+
+function fillAboutExploreDetails(tempObj){
+	let eachItem=tempObj.eachItem;
+
+	let title=isArabic?eachItem.get_item("AboutExploreArabicTitle"):eachItem.get_item("Title");
+	let exploreUrl=isArabic?eachItem.get_item("AboutExploreArabicCLinkToPage"):eachItem.get_item("AboutExploreLinkToPage");
+	if(exploreUrl)
+		exploreUrl=exploreUrl.get_url();
+	let itemImgUrl=getImageSrcValue(eachItem.get_fieldValues()['ImageUrl']);
+	let contentHtml="<div class='col-lg-4'>"+
+						"<div class='more-about'>"+
+							"<a href="+exploreUrl+" >"+
+								"<img src='"+itemImgUrl+"?Width=380&Height=250' alt='...''>"+
+								"<h4>"+title+"</h4>"+
+							"</a>"+
+						"</div>"+
+					"</div>";
+	let contentObj={};
+	contentObj.Index=tempObj.Index;
+	contentObj.Content=contentHtml;
+	_aboutExploreData.push(contentObj);
+}
+
+function bindAboutExploreHtml(){
+	let sortByIndex=_aboutExploreData.sort(function(a,b) {
+						return a.Index - b.Index;
+						});
+	for(let i=0;i<sortByIndex.length;i++){
+		$("#aboutMoreSection").append(sortByIndex[i].Content);
+	}
+}
+
 function bindSmallbanner(){
 	var context = new SP.ClientContext.get_current();
 	var web = context.get_site().get_rootWeb();
@@ -724,7 +747,6 @@ function bindSmallbanner(){
 			while(smallBannerenum.moveNext()){
 				
 				var currentItem = smallBannerenum.get_current();
-				var ID = currentItem.get_item("ID");
 				var Title="";
 				if(currentItem.get_item("Title")!=undefined){
 					Title= isArabic ? SlicingTitle(currentItem.get_item("HomeBanerArabicTitle")): SlicingTitle( currentItem.get_item("Title"));
@@ -852,4 +874,8 @@ function bindHeadertext()
 		
 		
 	}	
+}
+
+function setupLanguage(){
+	$("#ExploremoreAbout").text(isArabic?"اكتشف المزيد حول CHS":"Explore more about CHS");
 }

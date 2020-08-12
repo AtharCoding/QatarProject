@@ -29,10 +29,6 @@ $(document).ready(function () {
             "active"
         );
     });
-    $(".selectpicker").selectpicker({
-        style: "btn-primary",
-        width: "100%",
-    });
     $(".select-publucations-year").selectpicker({
         style: "btn-light",
         width: "100%",
@@ -74,9 +70,4 @@ $(document).mouseup(function (e) {
         $("#search-button i").addClass("fas").addClass("fa-search");
         $("#search-button").removeClass("opend");
     }
-});
-$(function () {
-    $('[data-toggle="popover"]').popover({
-        trigger: "focus",
-    });
 });
