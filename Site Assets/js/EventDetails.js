@@ -227,7 +227,6 @@ function SaveEventregisterData(){
 	.then(function (respEventRegisterList) {
 		if(respEventRegisterList.d.results.length>0){
 			isArabic ? alert("انت مسجل مسبقا") : alert("You Are already registered");
-			ClearAllFields();
 		}
 		else{
 			
@@ -244,9 +243,9 @@ function SaveEventregisterData(){
 			var allItemsUrl=_siteUrl + "/_api/Web/Lists/GetByTitle('" + _listEventRegister + "')/Items";
 			SPRestCommon.GetAddListItemAjaxCall(allItemsUrl, _listContact, listItemData)
 			.then(function(iar){
-				isArabic ? alert("سجل الحدث بنجاح") : alert("Event Register succefully");
 				$("#RegisterEventForm").modal("hide");
 				ClearAllFields();
+				window.location.replace("EventThankYou.aspx");
 			})
 			.fail(CommonUtil.OnRESTError);
 		}
@@ -284,6 +283,16 @@ function HasFormValidateErr() {
 	var firstname = $("#firstname").val();
 	is_errored = (IsNullOrEmpty(firstname));
 	SetBorderColor("firstname", is_errored);
+	has_error = (is_errored || has_error);
+
+	var response = grecaptcha.getResponse();
+	if(response.length == 0){
+		is_errored=true;
+		$("#captchaDiv").css("border", "1px solid red");
+	}
+	else
+		$("#captchaDiv").css("border", "");
+
 	has_error = (is_errored || has_error);
 	return has_error;
 }

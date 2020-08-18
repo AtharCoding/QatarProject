@@ -70,11 +70,11 @@ function fillCommunityItems() {
     currentItemDetails.Title = isArabic ? listItem.get_item('StaffArabicTitle') : listItem.get_item('Title');
     currentItemDetails.StaffBiography = isArabic ? formatRichTextValue(listItem.get_item("StaffArabicBioGraphy")) : formatRichTextValue(listItem.get_item("StaffBiography"));
     currentItemDetails.ImageUrl = getImageSrcValue(listItem.get_fieldValues()['ImageUrl']);
-    currentItemDetails.LinkedInUrl = listItem.get_item('LinkedInUrl')?listItem.get_item('LinkedInUrl').get_url():"javascript:void(0);";
-    currentItemDetails.FacebookUrl = listItem.get_item('FacebookUrl')?listItem.get_item('FacebookUrl').get_url():"javascript:void(0);";
-    currentItemDetails.TwitterLink = listItem.get_item('TwitterLink')?listItem.get_item('TwitterLink').get_url():"javascript:void(0);";
+    currentItemDetails.LinkedInUrl = listItem.get_item('LinkedInUrl')?listItem.get_item('LinkedInUrl').get_url():"";
+    currentItemDetails.FacebookUrl = listItem.get_item('FacebookUrl')?listItem.get_item('FacebookUrl').get_url():"";
+    currentItemDetails.TwitterLink = listItem.get_item('TwitterLink')?listItem.get_item('TwitterLink').get_url():"";
     currentItemDetails.UserEmail = listItem.get_item('UserEmail');
-    currentItemDetails.PersonalWebsiteUrl = listItem.get_item('PersonalWebsiteUrl')?listItem.get_item('PersonalWebsiteUrl').get_url():"javascript:void(0);";
+    currentItemDetails.PersonalWebsiteUrl = listItem.get_item('PersonalWebsiteUrl')?listItem.get_item('PersonalWebsiteUrl').get_url():"";
     currentItemDetails.StaffOtherPublications = isArabic ? formatRichTextValue(listItem.get_item("StaffOtherPublicationsAr")) : formatRichTextValue(listItem.get_item("StaffOtherPublications"));
     let staffPositionObj = listItem.get_item('StaffPositionLookup');
     if (staffPositionObj) {
@@ -108,11 +108,32 @@ function fillCommunityHtml() {
     else
         $("#team-other-publications").hide();
 
-    $("#ItemImage").attr("src", currentItemDetails.ImageUrl);
-    $("#TwitterLink").attr("href", currentItemDetails.TwitterLink);
-    $("#FacebookUrl").attr("href", currentItemDetails.FacebookUrl);
-    $("#LinkedInUrl").attr("href", currentItemDetails.LinkedInUrl);
-    $("#UserEmail").attr("href", "mailto:" + currentItemDetails.UserEmail);
+    if(currentItemDetails.ImageUrl)
+        $("#ItemImage").attr("src", currentItemDetails.ImageUrl);
+    else
+        $("#ItemImage").hide();
+
+    if(currentItemDetails.TwitterLink)
+        $("#TwitterLink").attr("href", currentItemDetails.TwitterLink);
+    else
+        $("#TwitterLink").hide();
+
+    if(currentItemDetails.LinkedInUrl)
+        $("#LinkedInUrl").attr("href", currentItemDetails.LinkedInUrl);
+    else
+        $("#LinkedInUrl").hide();
+    
+    if(currentItemDetails.FacebookUrl)
+        $("#FacebookUrl").attr("href", currentItemDetails.FacebookUrl);
+    else
+        $("#FacebookUrl").hide();
+
+    if(currentItemDetails.UserEmail){
+        $("#UserEmail").attr("href", "mailto:" + currentItemDetails.UserEmail);
+        $("#UserEmail").text(currentItemDetails.UserEmail);
+    }
+    else
+        $("#UserEmail").hide();
 
     $("#pubSectionTitle").text(currentItemDetails.PublicationHeading);
     $("#otherPubSectionTitle").text(currentItemDetails.OtherPublicationHeading);

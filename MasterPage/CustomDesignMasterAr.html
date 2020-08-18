@@ -36,6 +36,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         <!--SPM:<SharePoint:ScriptLink language="javascript" name="callout.js" OnDemand="true" runat="server" Localizable="false"/>-->
         <!--SPM:<SharePoint:ScriptLink language="javascript" name="sharing.js" OnDemand="true" runat="server" Localizable="false"/>-->
         <!--SPM:<SharePoint:ScriptLink language="javascript" name="suitelinks.js" OnDemand="true" runat="server" Localizable="false"/>-->
+        <!--SPM:<SharePoint:ScriptLink language="javascript" name="SP.Search.js" OnDemand="true" runat="server" Localizable="false"/>-->
         <!--SPM:<SharePoint:CustomJSUrl runat="server"/>-->
         <!--MS:<SharePoint:SoapDiscoveryLink runat="server">-->
             <!--PS: Start Preview--><link href="https://soutya.sharepoint.com/_vti_bin/spsdisco.aspx" rel="alternate" type="text/xml" /><!--PE: End Preview-->
@@ -236,19 +237,16 @@ To build the master page directly from this HTML file, simply edit the page as y
                                 <div id="search-form">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <select class="selectpicker">
-                                                <option>All Categories</option>
-                                                <option>Posts</option>
-                                                <option>Events</option>
+                                            <select id="ddlContentType" class="selectpicker">
                                             </select>
                                         </div>
                                         <div class="input-group-prepend">
-                                            <button class="search-submit" type="button">
+                                            <button id="btnSearchMobile" class="search-submit" type="button">
                                                 <i class="fas fa-search">
                                                 </i>
                                             </button>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="Search for..." />
+                                        <input id="txtSearchBox" type="text" class="form-control" placeholder="Search for..." />
                                     </div>
                                 </div>
                             </nav>
@@ -387,19 +385,19 @@ To build the master page directly from this HTML file, simply edit the page as y
                         </button>
                         <ul>
                             <li>
-                                <a id="fbAnchor5" href="#">
+                                <a id="shareFB" href="#" target="_blank">
                                     <i class="fab fa-facebook-square">
                                     </i>
                                 </a>
                             </li>
                             <li>
-                                <a id="twitterAnchor5" href="#">
+                                <a id="shareTwitter" href="#" target="_blank">
                                     <i class="fab fa-twitter">
                                     </i>
                                 </a>
                             </li>
                             <li>
-                                <a id="linkedInAnchor5" href="#">
+                                <a id="shareLinkedIn" href="#" target="_blank">
                                     <i class="fab fa-linkedin-in">
                                     </i>
                                 </a>

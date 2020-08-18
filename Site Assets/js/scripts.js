@@ -29,14 +29,14 @@ $(document).ready(function () {
             "active"
         );
     });
-    $(".select-publucations-year").selectpicker({
-        style: "btn-light",
-        width: "100%",
-    });
-    $(".select-publucations-author").selectpicker({
-        style: "btn-light",
-        width: "100%",
-    });
+    // $(".select-publucations-year").selectpicker({
+    //     style: "btn-light",
+    //     width: "100%",
+    // });
+    // $(".select-publucations-author").selectpicker({
+    //     style: "btn-light",
+    //     width: "100%",
+    // });
     $("#share-open").click(function () {
         $("#socail-share ul").slideToggle();
     });

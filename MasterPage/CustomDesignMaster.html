@@ -40,6 +40,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         <!--SPM:<SharePoint:ScriptLink language="javascript" name="callout.js" OnDemand="true" runat="server" Localizable="false"/>-->
         <!--SPM:<SharePoint:ScriptLink language="javascript" name="sharing.js" OnDemand="true" runat="server" Localizable="false"/>-->
         <!--SPM:<SharePoint:ScriptLink language="javascript" name="suitelinks.js" OnDemand="true" runat="server" Localizable="false"/>-->
+        <!--SPM:<SharePoint:ScriptLink language="javascript" name="SP.Search.js" OnDemand="true" runat="server" Localizable="false"/>-->
         <!--SPM:<SharePoint:CustomJSUrl runat="server"/>-->
         <!--MS:<SharePoint:SoapDiscoveryLink runat="server">-->
             <!--PS: Start Preview-->
@@ -242,19 +243,16 @@ To build the master page directly from this HTML file, simply edit the page as y
                                 <div id="search-form">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <select class="selectpicker">
-                                                <option>All Categories</option>
-                                                <option>Posts</option>
-                                                <option>Events</option>
+                                            <select id="ddlContentType" class="selectpicker">
                                             </select>
                                         </div>
                                         <div class="input-group-prepend">
-                                            <button class="search-submit" type="button">
+                                            <button id="btnSearchMobile" class="search-submit" type="button">
                                                 <i class="fas fa-search">
                                                 </i>
                                             </button>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="Search for..." />
+                                        <input id="txtSearchBox" type="text" class="form-control" placeholder="Search for..." />
                                     </div>
                                 </div>
                             </nav>
@@ -393,21 +391,28 @@ To build the master page directly from this HTML file, simply edit the page as y
                         </button>
                         <ul>
                             <li>
-                                <a id="fbAnchor5" href="#">
+                                <a id="shareFB" href="#" target="_blank">
                                     <i class="fab fa-facebook-square">
                                     </i>
                                 </a>
                             </li>
                             <li>
-                                <a id="twitterAnchor5" href="#">
+                                <a id="shareTwitter" href="#" target="_blank">
                                     <i class="fab fa-twitter">
                                     </i>
                                 </a>
                             </li>
                             <li>
-                                <a id="linkedInAnchor5" href="#">
+                                <a id="shareLinkedIn" href="#" target="_blank">
                                     <i class="fab fa-linkedin-in">
                                     </i>
+                                </a>
+                            </li>
+                            <li>
+                                <a id="shareLinkedIn" href="#" target="_blank">
+                                    <svg class="bi bi-envelope-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                                    </svg>
                                 </a>
                             </li>
                         </ul>

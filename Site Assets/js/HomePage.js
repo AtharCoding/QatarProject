@@ -196,7 +196,7 @@ function ProcessNewsSlider(respNewsSlider){
 		SliderCollections.push(
 			{
 			 'ImageUrl': ImageUrl,
-			 'Category': isArabic?'أخبار':'News',
+			 'Category': isArabic?'الأخبار':'News',
 			 'Title'   :Title,
 			 'MoreLink':MoreLink
 			}
@@ -848,13 +848,13 @@ function ToggleVideo()
 function bindHeadertext()
 {
 	if(isArabic){
-		$("#txtLatestNews").text("أحدث الأخبار");
-		$("#txtEvents").text("الأحداث");
+		$("#txtLatestNews").text("آخر الأخبار");
+		$("#txtEvents").text("مناسبات");
 		$("#txtPublication").text("منشورات مختارة");
-		$("#txtrecentBlogPosts").text("أحدث التدوينات");
+		$("#txtrecentBlogPosts").text("آخر مقالات المدونة");
 		$("#allBlogAnchor").text("جميع مشاركات المدونة");
 		$("#allNewsAnchor").text("جميع الأخبار");
-		$("#linkAllEvents").text("كل الأحداث");
+		$("#linkAllEvents").text("الجميع");
 		$("#allPublicationAnchor").text("جميع المنشورات");
 		$("#txtOurPartners").text("شركاؤنا");
 		$("#ViewAllPartner").text("عرض الكل");

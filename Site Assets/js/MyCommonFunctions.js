@@ -23,6 +23,7 @@ var _listTitleHomeExtraContent="HomeExtraContent";
 var _listEventRegister = "EventRegister";
 var _listTitleSocialDetails = "SocialDetails";
 var _listTitleSiteDictionary = "SiteDictionary";
+var _listTitlePublicManagement = "PublicManagement";
 
 var isArabic=false;
 if (window.location.href.toLowerCase().indexOf("/ar/") > -1)
@@ -53,6 +54,8 @@ function commonForAllPages(){
 				$(item).text("أخبار");
 			if(itemText=="Events")
 				$(item).text("الأحداث");
+			if(itemText=="Public Management")
+				$(item).text("الإدارة العامة");
 		});
 	}
 	else{

@@ -97,7 +97,7 @@ function fillResearchHtml(resultSet,startIndex,endIndex){
 	for (let i = startIndex; i < endIndex; i++) {
 		let eachResearch = resultSet[i];
 
-		let researchDetailUrl = _siteUrl + "/Pages/ResearchDetails.aspx?ItemID=" + eachResearch.ID;
+		let researchDetailUrl = _siteUrl +(isArabic?"/Ar/Pages/":"/Pages/")+ "ResearchDetails.aspx?ItemID=" + eachResearch.ID;
 		let researchDetails = eachResearch.ResearchDetails;
 		let researchTitle = eachResearch.Title;
 		let researchImageUrl = eachResearch.ImageUrl;

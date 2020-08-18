@@ -34,7 +34,7 @@ function newsStart() {
 		var get_LatestNews = SPRestCommon.GetItemAjaxCall(urlForLatestNews);
 
 		var urlForLatestBlog = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleBlogs + "')/items?"+
-								"$select=ID,Title,BlogArabicTitle,ContentDate,BlogContent,BlogContentArabic,IsFeatured1,IsVideo,Tag,VideoUrl,FieldValuesAsHtml," +
+								"$select=ID,Title,BlogArabicTitle,ContentDate,BlogContent,BlogContentArabic,IsFeatured1,IsVideo,VideoUrl,FieldValuesAsHtml," +
 								"ContentWriterName/Title,ContentWriterName/ID,ContentWriterName/StaffArabicTitle,BlogTypeLookup/ID,BlogTypeLookup/Title,BlogTypeLookup/BlogTypeArabic"+
 								"&$expand=ContentWriterName,BlogTypeLookup" +
 								"&$filter=(BlogTypeLookup/Title eq 'Blog')&$top=3&$orderby=ContentDate desc";

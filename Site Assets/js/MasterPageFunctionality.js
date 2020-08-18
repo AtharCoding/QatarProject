@@ -10,23 +10,19 @@ $(document).ready(function () {
 	setupMasterLanguage();
 	commonForAllPages();
 	setUpOtherData();
+	setupSearch();
 	SP.SOD.executeFunc('sp.js', 'SP.ClientContext', fillSocialDetails);
 	$("#SubscribeEmail").keyup(function(){
 		var email = $("#SubscribeEmail").val();
 		if(email != 0)
 		{
 			if(isValidEmailAddress(email))
-			{
 				SetBorderColor("SubscribeEmail", false);
-			} 
-			else {
+			else 
 				SetBorderColor("SubscribeEmail", true);
-			}
 		} 
 		else 
-		{
 			SetBorderColor("SubscribeEmail", false);
-		}
 	});
 });
 function Subscribe() {
@@ -91,13 +87,13 @@ function setupMasterLanguage(){
 	$("#languageAnchor,#languageAnchor2").attr("href",isArabic?browserUrl.replace("/ar/pages/","/pages/"):browserUrl.replace("/pages/","/ar/pages/"));
 
 	$("#lnkAboutUs,#lnkAboutUs2,#lnkAboutUs3").text(isArabic?"من نحن":"About Us");
-	$("#lnkCommunity,#lnkCommunity2,#lnkCommunity3").text(isArabic?"مجتمع":"CHS Community");
-	$("#lnkResearchTheme,#lnkResearchTheme2,#lnkResearchTheme3").text(isArabic?"موضوعات البحث":"Research Themes");
-	$("#lnkPublicaation,#lnkPublicaation2,#lnkPublicaation3").text(isArabic?"المنشورات":"Publications");
-	$("#lnkEvent,#lnkEvent2,#lnkEvent3").text(isArabic?"الأحداث":"Events");
-	$("#lnkPublicEngagement,#lnkPublicEngagement2,#lnkPublicEngagement3").text(isArabic?"الإدارة العامة":"Public Management");
+	$("#lnkCommunity,#lnkCommunity2,#lnkCommunity3").text(isArabic?"مجتمع CHS":"CHS Community");
+	$("#lnkResearchTheme,#lnkResearchTheme2,#lnkResearchTheme3").text(isArabic?"مواضيع البحث":"Research Themes");
+	$("#lnkPublicaation,#lnkPublicaation2,#lnkPublicaation3").text(isArabic?"النشر":"Publications");
+	$("#lnkEvent,#lnkEvent2,#lnkEvent3").text(isArabic?"المناسبات":"Events");
+	$("#lnkPublicEngagement,#lnkPublicEngagement2,#lnkPublicEngagement3").text(isArabic?"المشاركة العامة":"Public Management");
 	$("#lnkBlogs,#lnkBlogs2,#lnkBlogs3").text(isArabic?"المدونة":"Blogs");
-	$("#lnkNews,#lnkNews2,#lnkNews3").text(isArabic?"أخبار":"News");
+	$("#lnkNews,#lnkNews2,#lnkNews3").text(isArabic?"الأخبار":"News");
 	$("#lnkContactUs,#lnkContactUs2,#lnkContactUs3").text(isArabic?"اتصل بنا":"Contact Us");
 	$("#lnkTermsOfUse").text(isArabic?"شروط الاستخدام":"Terms of Use");
 
@@ -107,22 +103,22 @@ function setupMasterLanguage(){
 	$("#lnkResearchTheme,#lnkResearchTheme2,#lnkResearchTheme3").attr("href",commonUrl+"ResearchTheme.aspx");
 	$("#lnkPublicaation,#lnkPublicaation2,#lnkPublicaation3").attr("href",commonUrl+"Publication.aspx");
 	$("#lnkEvent,#lnkEvent2,#lnkEvent3").attr("href",commonUrl+"Events.aspx");
-	$("#lnkPublicEngagement,#lnkPublicEngagement2,#lnkPublicEngagement3").attr("href",commonUrl+"Home.aspx");
+	$("#lnkPublicEngagement,#lnkPublicEngagement2,#lnkPublicEngagement3").attr("href",commonUrl+"PublicManagement.aspx");
 	$("#lnkBlogs,#lnkBlogs2,#lnkBlogs3").attr("href",commonUrl+"Blogs.aspx");
 	$("#lnkNews,#lnkNews2,#lnkNews3").attr("href",commonUrl+"News.aspx");
 	$("#lnkContactUs,#lnkContactUs2,#lnkContactUs3").attr("href",commonUrl+"ContactUs.aspx");
 	$("#lnkTermsOfUse").attr("href",commonUrl+"TermOfUse.aspx");
 
 
-	$("#textConflictCentre").text(isArabic?"مركز دراسات الصراع والإنسانية":"Center for Conflict and Humanitarian Studies");
-	$("#textConflictCentreCopyright").text(isArabic?"مركز دراسات الصراع والإنسانية ©":"© Center for Conflict and Humanitarian Studies");
+	$("#textConflictCentre").text(isArabic?"مركز دراسات النزاع والعمل الإنساني":"Center for Conflict and Humanitarian Studies");
+	$("#textConflictCentreCopyright").text(isArabic?"جميع الحقوق محفوظة©":"© Center for Conflict and Humanitarian Studies");
 	$("#textRelatedWebsites").text(isArabic?"مواقع ذات صلة":"Related Websites");
-	$("#textArabCentre").text(isArabic?"المركز العربي في:":"Arab Center in:");
+	$("#textArabCentre").text(isArabic?"مراكز عربية في:":"Arab Center in:");
 	$("#textParis").text(isArabic?"باريس":"Paris");
 	$("#textWashington").text(isArabic?"واشنطن":"Washington");
 	$("#textTunis").text(isArabic?"تونس":"Tunis");
-	$("#textSubscribe").text(isArabic?"اشترك للحصول على التحديثات":"Subscribe for updates");
-	$("#SubscribeEmail").attr("placeholder",isArabic?"عنوان البريد الالكترونى":"Email address");
+	$("#textSubscribe").text(isArabic?"اشترك لتلقي التحديثات":"Subscribe for updates");
+	$("#SubscribeEmail").attr("placeholder",isArabic?"البريد الإلكتروني":"Email address");
 }
 
 function setUpOtherData(){
@@ -144,16 +140,44 @@ function fillSocialDetails() {
 				let socialUrl=eachItem.get_item('SocialSiteUrl');
 
 				if(socialTitle=="Facebook"){
-					$("#fbAnchor,#fbAnchor2,#fbAnchor3,#fbAnchor4,#fbAnchor5").attr("href",socialUrl);
+					$("#fbAnchor,#fbAnchor2,#fbAnchor3,#fbAnchor4").attr("href",socialUrl);
 				}
 
 				if(socialTitle=="Twitter"){
-					$("#twitterAnchor,#twitterAnchor2,#twitterAnchor3,#twitterAnchor4,#twitterAnchor5").attr("href",socialUrl);
+					$("#twitterAnchor,#twitterAnchor2,#twitterAnchor3,#twitterAnchor4").attr("href",socialUrl);
 				}
 
 				if(socialTitle=="LinkedIn"){
-					$("#linkedInAnchor,#linkedInAnchor2,#linkedInAnchor3,#linkedInAnchor4,#linkedInAnchor5").attr("href",socialUrl);
+					$("#linkedInAnchor,#linkedInAnchor2,#linkedInAnchor3,#linkedInAnchor4").attr("href",socialUrl);
 				}
 			}
 	}, failure);
+
+	let currentUrl=window.location.href;
+	$("#shareFB").attr("href","https://www.facebook.com/sharer/sharer.php?u="+currentUrl);
+	$("#shareTwitter").attr("href","https://twitter.com/intent/tweet?url="+currentUrl);
+	$("#shareLinkedIn").attr("href","https://www.linkedin.com/sharing/share-offsite/?url="+currentUrl);
+}
+
+function setupSearch(){
+
+	$("#ddlContentType").append(isArabic?"<option value='0'>All Categories</option>":"<option value='0'>All Categories</option>");
+	$("#ddlContentType").append(isArabic?"<option value='PublicationCType'>Publications</option>":"<option value='PublicationCType'>Publications</option>");
+	$("#ddlContentType").append(isArabic?"<option value='BlogContentType'>Blogs</option>":"<option value='BlogContentType'>Blogs</option>");
+	$("#ddlContentType").append(isArabic?"<option value='NewsCType'>News</option>":"<option value='NewsCType'>News</option>");
+
+	$("#txtSearchBox").keyup(function(e){
+		var code = e.key; // recommended to use e.key, it's normalized across devices and languages
+		if(code==="Enter"){
+			let searchText=$("#txtSearchBox").val();
+			let contentType=$("#ddlContentType").val();
+			window.location.replace("Search.aspx?searchText="+encodeURI(searchText)+"&CType="+encodeURI(contentType));
+		}
+	});
+
+	$("#btnSearchMobile").on("click",function(){
+			let searchText=$("#txtSearchBox").val();
+			let contentType=$("#ddlContentType").val();
+			window.location.replace("Search.aspx?searchText="+encodeURI(searchText)+"&CType='"+encodeURI(contentType));
+	});
 }
