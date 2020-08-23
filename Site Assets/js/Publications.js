@@ -42,6 +42,15 @@ function publicationStart() {
 	setDefaultFilterValues();
 	fillPublicationsFilterValues();
 	setupLanguage();
+
+	//For sharing site
+	let metaTitle="Publication";
+	let metaDesc="Motife Publication";
+	let metaImageUrl=_spPageContextInfo.webLogoUrl;
+	$("head").append("<meta property='og:title' content='"+metaTitle+"'>");
+	$("head").append("<meta property='og:description' content='"+metaDesc+"'>");
+	$("head").append("<meta property='og:image' content='"+metaImageUrl+"'>");
+	$("head").append("<meta name='twitter:card' content='"+metaDesc+"'>");
 }
 
 function bindPublicationData(whereQuery){
@@ -300,10 +309,6 @@ function loadMoreHideShow(){
 		$("#publicationLoadMore").show();
 }
 
-function failure(err){
-console.log(err);
-}
-
 function setDefaultFilterValues(){
 	$("#ddlPublicationYear,#ddlPublicationAuthors").selectpicker("destroy");
 	$("#ddlPublicationYear option,#ddlPublicationAuthors option,#publicationTypeFilter button").remove();
@@ -327,7 +332,7 @@ function fillPublicationsFilterValues(){
 	let newPubTopicList = newCtx.get_site().get_rootWeb().get_lists().getByTitle(_listTitlePublicationTopics);
 	let newPubTopicListItems=newPubTopicList.getItems(SP.CamlQuery.createAllItemsQuery());
 
-	let newPubAuthorList = newCtx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleCommunity);
+	let newPubAuthorList = newCtx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleCHSCommunity);
 	let newPubAuthorListItems=newPubAuthorList.getItems(SP.CamlQuery.createAllItemsQuery());
 	
 	newCtx.load(newListItems);

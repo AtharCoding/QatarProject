@@ -67,7 +67,7 @@ function bindResearchData() {
 	let researchList = listCollection.getByTitle(_listTitleResearch);
 	publicationList = listCollection.getByTitle(_listTitlePublication);
 	let pubTopicList = listCollection.getByTitle(_listTitlePublicationTopics);
-	let pubAuthorList = listCollection.getByTitle(_listTitleCommunity);
+	let pubAuthorList = listCollection.getByTitle(_listTitleCHSCommunity);
 	eventList = listCollection.getByTitle(_listTitleEvents);
 	let eventTypeList = listCollection.getByTitle(_listTitleEventTypes);
 
@@ -156,6 +156,14 @@ function fillResearchItem() {
 function fillResearchHtml() {
 	$("#currentTitleNav,#currentTitleHeading,#currentTitleBlock").text(currentItemDetails.Title);
 	$("#currentReasearchContent").html(currentItemDetails.ResearchContent);
+
+	let metaTitle=SlicingTitle(currentItemDetails.Title);
+	let metaDesc=SlicingDesc(currentItemDetails.ResearchContent);
+	let metaImageUrl=currentItemDetails.ImageUrl;
+	$("head").append("<meta property='og:title' content='"+metaTitle+"'>");
+	$("head").append("<meta property='og:description' content='"+metaDesc+"'>");
+	$("head").append("<meta property='og:image' content='"+metaImageUrl+"'>");
+	$("head").append("<meta name='twitter:card' content='"+metaDesc+"'>");
 }
 
 function fillResearchAuthorHtml() {
@@ -481,8 +489,4 @@ function bindLoadMore(){
 			}, failure);
 		}
 	});
-}
-
-function failure(err) {
-    console.log(err);
 }

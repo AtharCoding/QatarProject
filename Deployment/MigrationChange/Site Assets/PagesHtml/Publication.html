@@ -1,0 +1,77 @@
+<script src='/SiteAssets/js/Publications.js?V=1' type='text/javascript'></script>
+<div class='page-entry'>
+    <div class='page-header'>
+        <div class='container'>
+            <nav aria-label='breadcrumb'>
+                <ol class='breadcrumb'>
+                    <li class='breadcrumb-item'><a href='Home.aspx'>Home</a></li>
+                    <li class='breadcrumb-item active' aria-current='page'>Publications</li>
+                </ol>
+            </nav>
+            <div class='row'>
+                <div class='col-lg-9'>
+                    <h1 id='contentListTitle' class='page-title'></h1>
+                    <p id='contentListDesc' class='page-desc'></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <a href='javascript:void(0)' class='mobile-filter-button'><i class='fas fa-sliders-h'></i><span id="applyFilter2"></span></a>
+    </div>
+    <section id='filter'>
+        <div class='filter-header'>
+            <div class='container'>
+                <div class='row'>
+                    <div class='col-6 d-lg-none'>
+                        <a href='javascript:void(0)' class='mobile-filter-back'><i
+                                class='far fa-arrow-left'></i><span id="backText"></span></a>
+                    </div>
+                    <div class='col-6 col-lg-12 text-right'>
+                        <a id="resetFilter" href='javascript:void(0)' class='filter-reset'></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='container'>
+            <div class='filter-options Publications'>
+                <div class='row'>
+                    <div class='order-lg-2 col-5 col-lg-2'>
+                        <h6 id="titleYearFilter"></h6>
+                        <select id='ddlPublicationYear' class='select-Publications-year'>
+                        </select>
+                    </div>
+                    <div class='order-lg-3 col-7 pl-xs-0 col-lg-2'>
+                        <h6 id="titleAuthorFilter"></h6>
+                        <select id='ddlPublicationAuthors' class='select-Publications-author'>
+                        </select>
+                    </div>
+                    <div class='order-lg-1 col-lg-8'>
+                        <h6 id="titleTopicFilter"></h6>
+                        <div id="publicationTypeFilter" class='filter-types'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='filter-footer d-lg-none'>
+            <div class='container'>
+                <button id="btnApplyFilter" class='btn btn-primary'></button>
+            </div>
+        </div>
+    </section>
+    <section class='prject-selected-publications'>
+        <div class="container">
+            <div id="publicationContent">
+            </div>
+            <a id="publicationLoadMore" href="javascript:void(0)" class='load-more light'>LOAD MORE</a>
+        </div>
+    </section>
+    <section id='key-researchers'>
+        <div class='container'>
+            <h2 id="sectionTitleAuthor" class='section-title'></h2>
+            <div id="featuredAuthorDiv" class='d-lg-none'></div>
+            <div id="featuredAuthorCarousel" class='owl-carousel owl-theme key-researchers-carousel d-none d-lg-block'></div>
+        </div>
+    </section>
+</div>

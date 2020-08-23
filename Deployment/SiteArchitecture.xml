@@ -1,0 +1,419 @@
+﻿<?xml version='1.0' encoding='ISO-8859-1'?>
+<Web>
+<SiteColumns>
+    <!-- https://docs.microsoft.com/en-us/sharepoint/dev/schema/field-element-field -->
+    <Field Type='Text' Name='EventArabicTitle' DisplayName='EventArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='DateTime' Name='EventStartDate' DisplayName='EventStartDate' Required='false' Group='CHSGroup' Format="DateTime" StorageTZ="UTC"/>
+    <Field Type='DateTime' Name='EventEndDate' DisplayName='EventEndDate' Required='false' Group='CHSGroup' Format="DateTime" StorageTZ="UTC"/>
+    <Field Type='Note' Name='EventDesc' DisplayName='EventDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='EventArabicDesc' DisplayName='EventArabicDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='EventVenue' DisplayName='EventVenue' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='EventArabicVenue' DisplayName='EventArabicVenue' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='EventVenueMapHtml' DisplayName='EventVenueMapHtml' Required='false' Group='CHSGroup' NumLines="6"/>
+
+    <Field Type='Text' Name='PublicationArabicTitle' DisplayName='PublicationArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='PublicationPreTitle' DisplayName='PublicationPreTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='PublicationArabicPreTitle' DisplayName='PublicationArabicPreTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='PublicationPostTitle' DisplayName='PublicationPostTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='PublicationArabicPostTitle' DisplayName='PublicationArabicPostTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='DateTime' Name='PublicationDate' DisplayName='PublicationDate' Required='false' Group='CHSGroup' Format="DateTime" StorageTZ="UTC"/>
+    <Field Type='Note' Name='PublicationDetails' DisplayName='PublicationDetails' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='PublicationArabicDetails' DisplayName='PublicationArabicDetails' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Boolean' Name='IsFeatured1' DisplayName='IsFeatured1' Required='false' Group='CHSGroup'/>
+    <Field Type='Boolean' Name='IsShowOnHome' DisplayName='IsShowOnHome' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='StaffArabicTitle' DisplayName='StaffArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='StaffBiography' DisplayName='StaffBiography' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='StaffArabicBioGraphy' DisplayName='StaffArabicBioGraphy' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='URL' Name='LinkedInUrl' DisplayName='LinkedInUrl' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+    <Field Type='URL' Name='FacebookUrl' DisplayName='FacebookUrl' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+    <Field Type='URL' Name='TwitterLink' DisplayName='TwitterLink' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+    <Field Type='Text' Name='UserEmail' DisplayName='UserEmail' Required='false' Group='CHSGroup'/>
+    <Field Type='URL' Name='PersonalWebsiteUrl' DisplayName='PersonalWebsiteUrl' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+    <Field Type='Note' Name='StaffOtherPublications' DisplayName='StaffOtherPublications' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='StaffOtherPublicationsAr' DisplayName='StaffOtherPublicationsAr' Required='false' Group='CHSGroup' NumLines="6"/>
+
+    <Field Type='Text' Name='ResearchArabicTitle' DisplayName='ResearchArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='ResearchContent' DisplayName='ResearchContent' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='ResearchArabicContent' DisplayName='ResearchArabicContent' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Boolean' Name='IsFeatured1' DisplayName='IsFeatured1' Required='false' Group='CHSGroup'/>
+    <Field Type='Boolean' Name='IsShowOnHome' DisplayName='IsShowOnHome' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='BlogArabicTitle' DisplayName='BlogArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='DateTime' Name='ContentDate' DisplayName='ContentDate' Required='false' Group='CHSGroup' Format="DateTime" StorageTZ="UTC"/>
+    <Field Type='Note' Name='BlogContent' DisplayName='BlogContent' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='BlogContentArabic' DisplayName='BlogContentArabic' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Boolean' Name='IsFeatured1' DisplayName='IsFeatured1' Required='false' Group='CHSGroup'/>
+    <Field Type='Boolean' Name='IsVideo' DisplayName='IsVideo' Required='false' Group='CHSGroup'/>
+    <Field Type='URL' Name='VideoUrl' DisplayName='VideoUrl' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+    <Field Type='Boolean' Name='IsShowOnHome' DisplayName='IsShowOnHome' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='NewsArabicTitle' DisplayName='NewsArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='NewsContent' DisplayName='NewsContent' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='NewsArabicDesc' DisplayName='NewsArabicDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='DateTime' Name='NewsDate' DisplayName='NewsDate' Required='false' Group='CHSGroup'/>
+    <Field Type='Boolean' Name='IsFeatured1' DisplayName='IsFeatured1' Required='false' Group='CHSGroup'/>
+    <Field Type='Boolean' Name='IsShowOnHome' DisplayName='IsShowOnHome' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='ManagementArabicTitle' DisplayName='ManagementArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='ManagementContent' DisplayName='ManagementContent' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='ManagementArabicContent' DisplayName='ManagementArabicContent' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Boolean' Name='IsFeatured1' DisplayName='IsFeatured1' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='AboutArabicTitle' DisplayName='AboutArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='AboutDesc' DisplayName='AboutDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='AboutArabicDesc' DisplayName='AboutArabicDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+
+    <Field Type='Text' Name='GuideLineArabicTitle' DisplayName='GuideLineArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='GuideLineArabicDesc' DisplayName='GuideLineArabicDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='GuideLineDesc' DisplayName='GuideLineDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='URL' Name='GuideLineLinkToPage' DisplayName='GuideLineLinkToPage' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+
+    <Field Type='Text' Name='AboutExploreArabicTitle' DisplayName='AboutExploreArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='URL' Name='AboutExploreLinkToPage' DisplayName='AboutExploreLinkToPage' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+    <Field Type='URL' Name='AboutExploreArabicCLinkToPage' DisplayName='AboutExploreArabicCLinkToPage' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+
+    <Field Type='Text' Name='ListArabicTitle' DisplayName='ListArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='ListArabicDesc' DisplayName='ListArabicDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Text' Name='ListEnglishTitle' DisplayName='ListEnglishTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='ListEnglishDesc' DisplayName='ListEnglishDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+
+    <Field Type='Note' Name='EventRegisterComment' DisplayName='EventRegisterComment' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Text' Name='EventRegisterEmail' DisplayName='EventRegisterEmail' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='EventRegisterID' DisplayName='EventRegisterID' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='EventRegisterLastName' DisplayName='EventRegisterLastName' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='HomeBanerArabicTitle' DisplayName='HomeBanerArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='HomeBannerArabicDesc' DisplayName='HomeBannerArabicDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='HomeSmallBannerDesc' DisplayName='HomeSmallBannerDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Boolean' Name='IsFeatured1' DisplayName='IsFeatured1' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='AboutExploreArabicTitle' DisplayName='AboutExploreArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='URL' Name='AboutExploreArabicCLinkToPage' DisplayName='AboutExploreArabicCLinkToPage' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+    <Field Type='URL' Name='AboutExploreLinkToPage' DisplayName='AboutExploreLinkToPage' Required='false' Group='CHSGroup' Format="Hyperlink"/>
+
+    <Field Type='Text' Name='ContactUsEmail' DisplayName='ContactUsEmail' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='ContactUsPhone' DisplayName='ContactUsPhone' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='ContactUsVenue' DisplayName='ContactUsVenue' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='ContactUsMapHtml' DisplayName='ContactUsMapHtml' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Text' Name='WebsiteContactArabicEmail' DisplayName='WebsiteContactArabicEmail' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='WebsiteContactArabicPhone' DisplayName='WebsiteContactArabicPhone' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='WebsiteContactArabicTitle' DisplayName='WebsiteContactArabicTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='WebsiteContactArabicVenue' DisplayName='WebsiteContactArabicVenue' Required='false' Group='CHSGroup' NumLines="6"/>
+
+    <Field Type='Text' Name='ArabicContactUsEmail' DisplayName='ArabicContactUsEmail' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='ArabicContactUsFName' DisplayName='ArabicContactUsFName' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='ArabicContactUsLName' DisplayName='ArabicContactUsLName' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='ArabicContactUsMessage' DisplayName='ArabicContactUsMessage' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Text' Name='ArabicContactUsSubject' DisplayName='ArabicContactUsSubject' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='ArabicContactUsTitle' DisplayName='ArabicContactUsTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='ContactUsEmail' DisplayName='ContactUsEmail' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='ContactUsFName' DisplayName='ContactUsFName' Required='false' Group='CHSGroup'/>
+    <Field Type='Text' Name='ContactUsLName' DisplayName='ContactUsLName' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='ContactUsMessage' DisplayName='ContactUsMessage' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Text' Name='ContactUsSubject' DisplayName='ContactUsSubject' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='TermConditionDetails' DisplayName='TermConditionDetails' Required='false' Group='CHSGroup'/>
+
+    <Field Type='Text' Name='ArabicBusinessTitle' DisplayName='ArabicBusinessTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='BusinessPartnerDesc' DisplayName='BusinessPartnerDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+    <Field Type='Note' Name='ArabicBusinessDesc' DisplayName='ArabicBusinessDesc' Required='false' Group='CHSGroup' NumLines="6"/>
+
+    <Field Type='Text' Name='ArabicExtraContentTitle' DisplayName='ArabicExtraContentTitle' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='HomeExtraContentArabicDesc' DisplayName='HomeExtraContentArabicDesc' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='HomeExtraContentDesc' DisplayName='HomeExtraContentDesc' Required='false' Group='CHSGroup'/>
+    <Field Type='URL' Name='VideoThumbnail' DisplayName='VideoThumbnail' Required='false' Group='CHSGroup' Format="Image"/>
+
+    <Field Type='Note' Name='WordDefination' DisplayName='WordDefination' Required='false' Group='CHSGroup'/>
+    <Field Type='Note' Name='WordDefinationArabic' DisplayName='WordDefinationArabic' Required='false' Group='CHSGroup'/>
+
+<Field Type='Lookup' Name='BlogTypeLookup' DisplayName='BlogTypeLookup' Required='false' Group='CHSGroup' List="{GUID BlogType List}" ShowField="Title"/>
+<Field Type='LookupMulti' Name='ContentWriterName' DisplayName='ContentWriterName' Required='false' Group='CHSGroup' List="{GUID StaffList}" ShowField="Title"/>
+<Field Type='Text' Name='CommunityTypeID' DisplayName='CommunityTypeID' Required='false' Group='CHSGroup' List="{GUID CommunityType list}" ShowField="Title"/>
+<Field Type='Text' Name='StaffPositionLookup' DisplayName='StaffPositionLookup' Required='false' Group='CHSGroup' List="{GUID StaffPosition list}" ShowField="Title"/>
+<Field Type='Lookup' Name='PublicationTopicIDs' DisplayName='PublicationTopicIDs' Required='false' Group='CHSGroup' List="{GUID PublicationTopics}" ShowField="Title"/>
+<Field Type='LookupMulti' Name='PublicationAuthorIDs' DisplayName='PublicationAuthorIDs' Required='false' Group='CHSGroup' List="{GUID StaffList}" ShowField="Title"/>
+<Field Type='Lookup' Name='EventTypeLookup' DisplayName='EventTypeLookup' Required='false' Group='CHSGroup' List="{GUID}" ShowField="Title"/>
+<Field Type='LookupMulti' Name='EventSpeakerIDs0' DisplayName='EventSpeakerIDs' Required='false' Group='CHSGroup' List="{GUID}" ShowField="Title"/>
+<Field Type='LookupMulti' Name='EventPartnersIDs0' DisplayName='EventPartnersIDs' Required='false' Group='CHSGroup' List="{GUID}" ShowField="Title"/>
+<Field Type='PublishingImage' Name='ImageUrl' DisplayName='ImageUrl' Required='false' Group='CHSGroup'/>
+
+</SiteColumns>
+<ContentTypes> 
+    <ContentType Name='CTypeEvent' Description='Event' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="EventArabicTitle"/>
+        <Field Name="EventTypeLookup"/>
+        <Field Name="EventStartDate"/>
+        <Field Name="EventEndDate"/>
+        <Field Name="EventDesc"/>
+        <Field Name="EventArabicDesc"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="EventVenue"/>
+        <Field Name="EventArabicVenue"/>
+        <Field Name="EventSpeakerIDs0"/>
+        <Field Name="EventPartnersIDs0"/>
+        <Field Name="Attachment"/>
+        <Field Name="EventVenueMapHtml"/>
+    </ContentType> 
+
+    <ContentType Name='CTypePublication' Description='Publication' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="PublicationArabicTitle"/>
+        <Field Name="PublicationPreTitle"/>
+        <Field Name="PublicationArabicPreTitle"/>
+        <Field Name="PublicationPostTitle"/>
+        <Field Name="PublicationArabicPostTitle"/>
+        <Field Name="PublicationDate"/>
+        <Field Name="PublicationDetails"/>
+        <Field Name="PublicationArabicDetails"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="PublicationTopicIDs"/>
+        <Field Name="PublicationAuthorIDs"/>
+        <Field Name="IsFeatured1"/>
+        <Field Name="Attachment"/>
+        <Field Name="IsShowOnHome"/>
+    </ContentType>
+
+    <ContentType Name='CTypeCHSCommunity' Description='CHSCommunity' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="StaffArabicTitle"/>
+        <Field Name="StaffPositionLookup"/>
+        <Field Name="StaffBiography"/>
+        <Field Name="StaffArabicBioGraphy"/>
+        <Field Name="LinkedInUrl"/>
+        <Field Name="FacebookUrl"/>
+        <Field Name="TwitterLink"/>
+        <Field Name="UserEmail"/>
+        <Field Name="PersonalWebsiteUrl"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="CommunityTypeID"/>
+        <Field Name="StaffOtherPublications"/>
+        <Field Name="StaffOtherPublicationsAr"/>
+    </ContentType>
+
+    <ContentType Name='CTypeResearch' Description='Research' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="ResearchArabicTitle"/>
+        <Field Name="ResearchContent"/>
+        <Field Name="ResearchArabicContent"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="ContentWriterName"/>
+        <Field Name="IsFeatured1"/>
+        <Field Name="IsShowOnHome"/>
+    </ContentType>
+
+    <ContentType Name='CTypeBlog' Description='Blog' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="BlogArabicTitle"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="ContentDate"/>
+        <Field Name="BlogContent"/>
+        <Field Name="BlogContentArabic"/>
+        <Field Name="IsFeatured1"/>
+        <Field Name="IsVideo"/>
+        <Field Name="ContentWriterName"/>
+        <Field Name="BlogTypeLookup"/>
+        <Field Name="VideoUrl"/>
+        <Field Name="IsShowOnHome"/>
+    </ContentType>
+
+    <ContentType Name='CTypeNews' Description='News' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="NewsArabicTitle"/>
+        <Field Name="NewsContent"/>
+        <Field Name="NewsArabicDesc"/>
+        <Field Name="NewsDate"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="IsFeatured1"/>
+        <Field Name="IsShowOnHome"/>
+    </ContentType>
+
+    <ContentType Name='CTypePublicManagement' Description='PublicManagement' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="ManagementArabicTitle"/>
+        <Field Name="ManagementContent"/>
+        <Field Name="ManagementArabicContent"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="ContentWriterName"/>
+        <Field Name="IsFeatured1"/>
+    </ContentType>
+
+    <ContentType Name='CTypeAboutUs' Description='AboutUs' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="AboutArabicTitle"/>
+        <Field Name="AboutDesc"/>
+        <Field Name="AboutArabicDesc"/>
+        <Field Name="ImageUrl"/>
+    </ContentType>
+
+    <ContentType Name='CTypeGuideline' Description='Guideline' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="GuideLineArabicDesc"/>
+        <Field Name="GuideLineArabicTitle"/>
+        <Field Name="GuideLineDesc"/>
+        <Field Name="GuideLineLinkToPage"/>
+        <Field Name="ImageUrl"/>
+    </ContentType>
+
+    <ContentType Name='CTypeAboutExplore' Description='AboutExplore' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="AboutExploreArabicTitle"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="AboutExploreLinkToPage"/>
+        <Field Name="AboutExploreArabicCLinkToPage"/>
+    </ContentType>
+
+    <ContentType Name='CTypeWordDefination' Description='WordDefination' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="WordDefination"/>
+        <Field Name="WordDefinationArabic"/>
+    </ContentType>
+
+    <ContentType Name='CTypeWebsiteConnect' Description='WebsiteConnect' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="ContactUsEmail"/>
+        <Field Name="ContactUsPhone"/>
+        <Field Name="ContactUsVenue"/>
+        <Field Name="ContactUsMapHtml"/>
+        <Field Name="WebsiteContactArabicEmail"/>
+        <Field Name="WebsiteContactArabicPhone"/>
+        <Field Name="WebsiteContactArabicTitle"/>
+        <Field Name="WebsiteContactArabicVenue"/>
+    </ContentType>
+
+    <ContentType Name='CTypeHomeExtraContent' Description='HomeExtraContent' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="ArabicExtraContentTitle"/>
+        <Field Name="HomeExtraContentArabicDesc"/>
+        <Field Name="HomeExtraContentDesc"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="VideoThumbnail"/>
+    </ContentType>
+
+    <ContentType Name='CTypePagesDetails' Description='PagesDetails' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="ListArabicDesc"/>
+        <Field Name="ListArabicTitle"/>
+        <Field Name="ListEnglishDesc"/>
+        <Field Name="ListEnglishTitle"/>
+    </ContentType>
+
+    <ContentType Name='CTypeEventRegister' Description='EventRegister' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="EventRegisterComment"/>
+        <Field Name="EventRegisterEmail"/>
+        <Field Name="EventRegisterID"/>
+        <Field Name="EventRegisterLastName"/>
+    </ContentType>
+
+    <ContentType Name='CTypeHomeSmallBanner' Description='HomeSmallBanner' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="HomeBanerArabicTitle"/>
+        <Field Name="HomeBannerArabicDesc"/>
+        <Field Name="HomeSmallBannerDesc"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="IsFeatured1"/>
+    </ContentType>
+
+    <ContentType Name='CTypeTermsAndConditions' Description='TermsAndConditions' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="TermConditionDetails"/>
+    </ContentType>
+
+    <ContentType Name='CTypeBusinessPartner' Description='BusinessPartner' ParentContentTypeName='Item' Group='CHSGroup'>
+        <Field Name="ArabicBusinessTitle"/>
+        <Field Name="ImageUrl"/>
+        <Field Name="BusinessPartnerDesc"/>
+        <Field Name="ArabicBusinessDesc"/>
+    </ContentType>
+
+</ContentTypes>
+<Lists>
+    <NormalList Name='EmailSubscribers' Description='EmailSubscribers' TemplateID='100'>
+    </NormalList>
+    <NormalList Name='SocialDetails' Description='SocialDetails' TemplateID='100'>
+        <Field Type='Text' Name='SocialSiteUrl' DisplayName='SocialSiteUrl' Required='false'/>
+    </NormalList>
+    <NormalList Name='BlogType' Description='BlogType' TemplateID='100'>
+        <Field Type='Text' Name='BlogTypeArabic' DisplayName='BlogTypeArabic' Required='false'/>
+    </NormalList>
+    <NormalList Name='StaffPositions' Description='StaffPositions' TemplateID='100'>
+        <Field Type='Text' Name='StaffPositionArabic' DisplayName='StaffPositionArabic' Required='false'/>
+    </NormalList>
+    <NormalList Name='EventTypes' Description='EventTypes' TemplateID='100'>
+        <Field Type='Text' Name='EventTypeArabic' DisplayName='EventTypeArabic' Required='false'/>
+    </NormalList>
+    <NormalList Name='PublicationTopics' Description='PublicationTopics' TemplateID='100'>
+        <Field Type='Text' Name='PublicationTopicArabic' DisplayName='PublicationTopicArabic' Required='false'/>
+    </NormalList>
+    <NormalList Name='CommunityTypes' Description='CommunityTypes' TemplateID='100'>
+        <Field Type='Text' Name='CommunityTypeArabic' DisplayName='CommunityTypeArabic' Required='false'/>
+    </NormalList>
+
+    <ContentTypeList Name='Events' Description='Events' TemplateID='100'>
+        <ContentType Name='CTypeEvent' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='Publications' Description='Publications' TemplateID='100'>
+        <ContentType Name='CTypePublication' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='CHSCommunity' Description='CHSCommunity' TemplateID='100'>
+        <ContentType Name='CTypeCHSCommunity' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='ResearchThemes' Description='ResearchThemes' TemplateID='100'>
+        <ContentType Name='CTypeResearch' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='Blogs' Description='Blogs' TemplateID='100'>
+        <ContentType Name='CTypeBlog' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='News' Description='News' TemplateID='100'>
+        <ContentType Name='CTypeNews' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='PublicManagements' Description='PublicManagements' TemplateID='100'>
+        <ContentType Name='CTypePublicManagement' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='AboutUs' Description='AboutUs' TemplateID='100'>
+        <ContentType Name='CTypeAboutUs' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='GuideLinePrinciple' Description='GuideLinePrinciple' TemplateID='100'>
+        <ContentType Name='CTypeGuideline' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='AboutExplore' Description='AboutExplore' TemplateID='100'>
+        <ContentType Name='CTypeAboutExplore' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='WordDefinations' Description='WordDefinations' TemplateID='100'>
+        <ContentType Name='CTypeWordDefination' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='WebsiteConnect' Description='WebsiteConnect' TemplateID='100'>
+        <ContentType Name='CTypeWebsiteConnect' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='HomeExtraContents' Description='HomeExtraContents' TemplateID='100'>
+        <ContentType Name='CTypeHomeExtraContent' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='PagesDetails' Description='PagesDetails' TemplateID='100'>
+        <ContentType Name='CTypePagesDetails' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='EventRegisterations' Description='EventRegisterations' TemplateID='100'>
+        <ContentType Name='CTypeEventRegister' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='HomeSmallBannerDetails' Description='HomeSmallBannerDetails' TemplateID='100'>
+        <ContentType Name='CTypeHomeSmallBanner' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='TermsAndConditions' Description='TermsAndConditions' TemplateID='100'>
+        <ContentType Name='CTypeTermsAndConditions' Default='True'/>
+    </ContentTypeList>
+    <ContentTypeList Name='BusinessPartners' Description='BusinessPartners' TemplateID='100'>
+        <ContentType Name='CTypeBusinessPartner' Default='True'/>
+    </ContentTypeList>
+</Lists>
+<PublishingPages PagesLibrary='Pages' LayoutName="TestingLayout.aspx" CheckedInComment="Initial CheckedIn" >
+    <PublishingPage Name='About.aspx' HtmlPath='/SiteAssets/PagesHtml/About.html' />
+    <PublishingPage Name='BlogDetails.aspx' HtmlPath='/SiteAssets/PagesHtml/BlogDetails.html' />
+    <PublishingPage Name='Blogs.aspx' HtmlPath='/SiteAssets/PagesHtml/Blogs.html' />
+    <PublishingPage Name='CHSCommunity.aspx' HtmlPath='/SiteAssets/PagesHtml/CHSCommunity.html' />
+    <PublishingPage Name='CHSCommunityDetails.aspx' HtmlPath='/SiteAssets/PagesHtml/CHSCommunityDetails.html' />
+    <PublishingPage Name='ContactThankYou.aspx' HtmlPath='/SiteAssets/PagesHtml/ContactThankYou.html' />
+    <PublishingPage Name='ContactUs.aspx' HtmlPath='/SiteAssets/PagesHtml/ContactUs.html' />
+    <PublishingPage Name='EventDetails.aspx' HtmlPath='/SiteAssets/PagesHtml/EventDetails.html' />
+    <PublishingPage Name='Events.aspx' HtmlPath='/SiteAssets/PagesHtml/Events.html' />
+    <PublishingPage Name='EventThankYou.aspx' HtmlPath='/SiteAssets/PagesHtml/EventThankYou.html' />
+    <PublishingPage Name='Home.aspx' HtmlPath='/SiteAssets/PagesHtml/Home.html' />
+    <PublishingPage Name='News.aspx' HtmlPath='/SiteAssets/PagesHtml/News.html' />
+    <PublishingPage Name='NewsDetails.aspx' HtmlPath='/SiteAssets/PagesHtml/NewsDetails.html' />
+    <PublishingPage Name='NewsTest.aspx' HtmlPath='/SiteAssets/PagesHtml/NewsTest.html' />
+    <PublishingPage Name='PageNotFoundError.aspx' HtmlPath='/SiteAssets/PagesHtml/PageNotFoundError.html' />
+    <PublishingPage Name='PartnerShips.aspx' HtmlPath='/SiteAssets/PagesHtml/PartnerShips.html' />
+    <PublishingPage Name='Publication.aspx' HtmlPath='/SiteAssets/PagesHtml/Publication.html' />
+    <PublishingPage Name='PublicationDetails.aspx' HtmlPath='/SiteAssets/PagesHtml/PublicationDetails.html' />
+    <PublishingPage Name='PublicManagement.aspx' HtmlPath='/SiteAssets/PagesHtml/PublicManagement.html' />
+    <PublishingPage Name='PublicManagementDetails.aspx' HtmlPath='/SiteAssets/PagesHtml/PublicManagementDetails.html' />
+    <PublishingPage Name='ResearchDetails.aspx' HtmlPath='/SiteAssets/PagesHtml/ResearchDetails.html' />
+    <PublishingPage Name='ResearchTheme.aspx' HtmlPath='/SiteAssets/PagesHtml/ResearchTheme.html' />
+    <PublishingPage Name='Search.aspx' HtmlPath='/SiteAssets/PagesHtml/Search.html' />
+    <PublishingPage Name='TermOfUse.aspx' HtmlPath='/SiteAssets/PagesHtml/TermUse.html' />
+    <PublishingPage Name='TestEvent.aspx' HtmlPath='/SiteAssets/PagesHtml/TestEvent.html' />
+</PublishingPages>
+</Web> 

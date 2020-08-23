@@ -1,0 +1,73 @@
+<script src='/SiteAssets/js/Search.js?v=1' type='text/javascript'></script>
+<div class='page-entry'>
+    <div class='page-header'>
+        <div class='container'>
+            <nav aria-label='breadcrumb'>
+                <ol class='breadcrumb'>
+                    <li class='breadcrumb-item'><a href='Home.aspx'>Home</a></li>
+                    <li id="pageName" class='breadcrumb-item active' aria-current='page'>Search results</li>
+                </ol>
+            </nav>
+            <div class='row'>
+                <div class='col-lg-9'>
+                    <h1 id="searchHeading" class='page-title'></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='container'>
+        <a href='javascript:void(0)' class='mobile-filter-button'><i class='fas fa-sliders-h'></i><span>Filters</span></a>
+    </div>
+
+    <section id='filter'>
+        <div class='filter-header'>
+            <div class='container'>
+                <div class='row'>
+                    <div class='col-6 d-lg-none'>
+                        <a href='javascript:void(0)' class='mobile-filter-back'><i
+                                class='far fa-arrow-left'></i><span>Back</span></a>
+                    </div>
+                    <div class='col-6 col-lg-12 text-right'>
+                        <a id="resetFilter" href='javascript:void(0)' class='filter-reset'>RESET FILTERS</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='container'>
+            <div class='filter-options search'>
+                <div class='row'>
+                    <div class='order-lg-2 col-6 col-lg-3'>
+                        <h6 id="titleYearFilter">Filter by year</h6>
+                        <select id='ddlItemDateFilter' class='select-Publications-year'>
+                        </select>
+                    </div>
+                    <div class='order-lg-2 col-6 col-lg-3'>
+                        <h6 id="filterSortLabel">Sort by</h6>
+                        <select id='ddlSortData' class='select-Publications-author'>
+                        </select>
+                    </div>
+                    <div class='order-lg-1 col-lg-6 filter-by-section'>
+                        <h6 id="filterSectionLabel">Filter by section</h6>
+                        <div id="CTypeFilterValues" class='filter-types'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='filter-footer d-lg-none'>
+            <div class='container'>
+                <button id="btnApplyFilter" class='btn btn-primary'>APPLY FILTERS</button>
+            </div>
+        </div>
+    </section>
+
+    <div class='container'>
+        <div id="searchCountLabel" class='showing-results'></div>
+        <div id="searchResultDiv" class='event-list search-results'>
+        </div>
+
+        <a id='searchLoadMore' href='javascript:void(0)' class='load-more light'>LOAD MORE</a>
+    </div>
+
+</div>

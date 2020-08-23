@@ -1,0 +1,80 @@
+<script src="/SiteAssets/js/ResearchDetails.js?v=1" type="text/javascript"></script>
+<div class='page-entry'>
+    <div class='page-header'>
+        <div class='container'>
+            <nav aria-label='breadcrumb'>
+                <ol class='breadcrumb'>
+                    <li class='breadcrumb-item'><a href='Home.aspx'>Home</a></li>
+                    <li class='breadcrumb-item'><a id="allResearchUrl" href='#'>Research Themes</a></li>
+                    <li id='currentTitleNav' class='breadcrumb-item active' aria-current='page'></li>
+                </ol>
+            </nav>
+            <div class='row d-block d-lg-none'>
+                <div class='col-lg-9'>
+                    <h1 id='currentTitleHeading' class='page-title'></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-8'>
+                <div class='d-none d-lg-block'>
+                    <h1 id='currentTitleBlock' class='page-title'></h1>
+                </div>
+                <div class='post-content'>
+                    <p id='currentReasearchContent'></p>
+                </div>
+            </div>
+            <div class='offset-lg-1 col-lg-3'>
+                <sidebar>
+                    <div class='widget'>
+                        <h3 id="latestResearchTitle" class='widget-title'></h3>
+                        <div id="latestResearch" class='related-list'>
+                        </div>
+                    </div>
+                </sidebar>
+            </div>
+        </div>
+    </div>
+    <section id="selectedPubSection" class='prject-selected-publications'>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-lg-6'>
+                    <h2 id="publicaationTitle" class='section-title'></h2>
+                </div>
+                <div class='col-lg-6 text-lg-right'>
+                    <a id="allPublicationAnchor" href='#' class='go-link d-inline-block'></a>
+                </div>
+            </div>
+            <div id="publicationContent" class='row grid-flex'>
+               
+            </div>
+            <a id="publicationLoadMore" href='javascript:void(0)' class='load-more light'>LOAD MORE</a>
+        </div>
+    </section>
+    <section id='related-events'>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-lg-6'>
+                    <h2 id="eventSectionTitle" class='section-title'></h2>
+                </div>
+                <div class='col-lg-6 text-lg-right'>
+                    <a id="AllEventAnchor" href='javascript:void(0)' class='go-link d-inline-block'></a>
+                </div>
+            </div>
+            <div id="eventDetailContent" class='row'>
+            </div>
+            <a id="eventLoadMore" href='javascript:void(0)' class='load-more light'>LOAD MORE</a>
+        </div>
+    </section>
+    <section id='key-researchers'>
+        <div class='container'>
+            <h2 id="keyResearchSectionTitle" class='section-title'></h2>
+            <div id="staffDetails" class='d-lg-none'>
+            </div>
+            <div id="staffCarouselDetails" class='owl-carousel owl-theme key-researchers-carousel d-none d-lg-block'>
+            </div>
+        </div>
+    </section>
+</div>

@@ -78,6 +78,15 @@ function indexStart() {
 	bindNews();
 	bindHomeExplore();
 	setupLanguage();
+
+	//For sharing site
+	let metaTitle="Motife Home";
+	let metaDesc="Motife Home";
+	let metaImageUrl=_spPageContextInfo.webLogoUrl;
+	$("head").append("<meta property='og:title' content='"+metaTitle+"'>");
+	$("head").append("<meta property='og:description' content='"+metaDesc+"'>");
+	$("head").append("<meta property='og:image' content='"+metaImageUrl+"'>");
+	$("head").append("<meta name='twitter:card' content='"+metaDesc+"'>");
 }
 
 function BindSlider()
@@ -109,11 +118,11 @@ function BindSlider()
 			SliderData=SliderData+"</div>";
 			
 			SliderData=SliderData+"<a class='carousel-control-prev d-none d-lg-flex' href='#slider' role='button' data-slide='prev'>"+
-							"<i class='fal fa-chevron-left'></i>"+
+							"<i class='fas fa-chevron-left'></i>"+
 								"<span class='sr-only'>Previous</span>"+
 							"</a>"+
 							"<a class='carousel-control-next d-none d-lg-flex' href='#slider' role='button' data-slide='next'>"+
-								"<i class='fal fa-chevron-right'></i>"+
+								"<i class='fas fa-chevron-right'></i>"+
 								"<span class='sr-only'>Next</span>"+
 							"</a>";
 			SliderNavigation=SliderNavigation+"<div class='slider-navigation d-none d-lg-block'>"+
@@ -278,7 +287,7 @@ function bindPartnerData(){
 
 	var context = new SP.ClientContext.get_current();
 	var web = context.get_site().get_rootWeb();
-	var PartnerList = web.get_lists().getByTitle("BusinessPartner");
+	var PartnerList = web.get_lists().getByTitle(_listTitleBusinessPartner);
 			
 	var camlQuery = new SP.CamlQuery();
     camlQuery.set_viewXml(

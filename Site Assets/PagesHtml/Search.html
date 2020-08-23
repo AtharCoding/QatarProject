@@ -5,7 +5,7 @@
             <nav aria-label='breadcrumb'>
                 <ol class='breadcrumb'>
                     <li class='breadcrumb-item'><a href='Home.aspx'>Home</a></li>
-                    <li class='breadcrumb-item active' aria-current='page'>Search results</li>
+                    <li id="pageName" class='breadcrumb-item active' aria-current='page'>Search results</li>
                 </ol>
             </nav>
             <div class='row'>
@@ -17,7 +17,7 @@
     </div>
 
     <div class='container'>
-        <a href='javascript:void(0)' class='mobile-filter-button'><i class='fal fa-sliders-h'></i><span>Filters</span></a>
+        <a href='javascript:void(0)' class='mobile-filter-button'><i class='fas fa-sliders-h'></i><span>Filters</span></a>
     </div>
 
     <section id='filter'>
@@ -29,7 +29,7 @@
                                 class='far fa-arrow-left'></i><span>Back</span></a>
                     </div>
                     <div class='col-6 col-lg-12 text-right'>
-                        <a href='javascript:void(0)' class='filter-reset'>RESET FILTERS</a>
+                        <a id="resetFilter" href='javascript:void(0)' class='filter-reset'>RESET FILTERS</a>
                     </div>
                 </div>
             </div>
@@ -38,29 +38,18 @@
             <div class='filter-options search'>
                 <div class='row'>
                     <div class='order-lg-2 col-6 col-lg-3'>
-                        <h6>Filter by year</h6>
-                        <select id='ddlPublicationYear' class='select-Publications-year'>
-                            <option>All Years</option>
-                            <option>2020</option>
-                            <option>2019</option>
-                            <option>2018</option>
+                        <h6 id="titleYearFilter">Filter by year</h6>
+                        <select id='ddlItemDateFilter' class='select-Publications-year'>
                         </select>
                     </div>
                     <div class='order-lg-2 col-6 col-lg-3'>
-                        <h6>Sort by</h6>
-                        <select id='ddlPublicationAuthors' class='select-Publications-author'>
-                            <option>Relevance</option>
-                            <option>Relevance</option>
-                            <option>Relevance</option>
+                        <h6 id="filterSortLabel">Sort by</h6>
+                        <select id='ddlSortData' class='select-Publications-author'>
                         </select>
                     </div>
                     <div class='order-lg-1 col-lg-6 filter-by-section'>
-                        <h6>Filter by section</h6>
-                        <div class='filter-types'>
-                            <button class='btn btn-light all'>All</button>
-                            <button class='btn btn-primary'>Publications</button>
-                            <button class='btn btn-light'>Events</button>
-                            <button class='btn btn-light'>News</button>
+                        <h6 id="filterSectionLabel">Filter by section</h6>
+                        <div id="CTypeFilterValues" class='filter-types'>
                         </div>
                     </div>
                 </div>
@@ -68,7 +57,7 @@
         </div>
         <div class='filter-footer d-lg-none'>
             <div class='container'>
-                <button class='btn btn-primary'>APPLY FILTERS</button>
+                <button id="btnApplyFilter" class='btn btn-primary'>APPLY FILTERS</button>
             </div>
         </div>
     </section>

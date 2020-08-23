@@ -1,0 +1,76 @@
+<script src="/SiteAssets/js/Events.js?V=1" type="text/javascript"></script>
+<div class='page-entry'>
+    <div class='page-header'>
+        <div class='container'>
+            <nav aria-label='breadcrumb'>
+                <ol class='breadcrumb'>
+                    <li class='breadcrumb-item'><a href='Home.aspx'>Home</a></li>
+                    <li class='breadcrumb-item active' aria-current='page'>Events</li>
+                </ol>
+            </nav>
+            <div class='row'>
+                <div class='col-lg-9'>
+                    <h1 id='contentListTitle' class='page-title'></h1>
+                    <p id='contentListDesc' class='page-desc'></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <a href='javascript:void(0)' class='mobile-filter-button'><i
+                class='fas fa-sliders-h'></i><span>Filters</span></a>
+    </div>
+    <section id='filter'>
+        <div class='filter-header'>
+            <div class='container'>
+                <div class='row'>
+                    <div class='col-6 d-lg-none'>
+                        <a href='javascript:void(0)' class='mobile-filter-back'><i
+                                class='far fa-arrow-left'></i><span>Back</span></a>
+                    </div>
+                    <div class='col-6 col-lg-12 text-right'>
+                        <a id="anchorResetFilter" href='javascript:void(0)' class='filter-reset'>RESET FILTERS</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='container'>
+            <div class='filter-options events'>
+                <div class='row'>
+                    <div class='order-lg-2 col-5 col-lg-2'>
+                        <h6>Filter by status</h6>
+                        <select id="filterStatusContent" class='select-event-status'>                                                   
+                        </select>
+                    </div>
+                    <div class='order-lg-3 col-7 pl-xs-0 col-lg-3'>
+                        <h6>Filter by date</h6>
+                        <div class='input-group input-daterange'>
+                            <input id="filterFromDate" type='text' class='form-control'>
+                            <input id="filterEndDate" type='text' class='form-control'>
+                        </div>
+                        <ul class='filter-by-date'>
+                            <li><a id="anchorToday" href='javascript:void(0)'>Today</a></li>
+                            <li><a id="anchorWeek" href='javascript:void(0)'>This week</a></li>
+                            <li><a id="anchorMonth" href='javascript:void(0)'>This month</a></li>
+                        </ul>
+                    </div>
+                    <div class='order-lg-1 col-lg-7'>
+                        <h6>Filter by type</h6>
+                        <div id="eventTypeFilter" class='filter-types'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='filter-footer d-lg-none'>
+            <div class='container'>
+                <button class='btn btn-primary'>APPLY FILTERS</button>
+            </div>
+        </div>
+    </section>
+    <div class='container'>
+        <div id="eventContent" class='event-list'>
+        </div>
+        <a id="eventLoadMore" href="javascript:void(0)" class='load-more light'>LOAD MORE</a>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+Create page layout content type
+Create page layout using that content type
+Change layout to add webpart zone
+upload and publish
+create page using that layout
+add content editor webpart
+set html path
+export that webpart
+
+Create publishing image site column

@@ -37,7 +37,7 @@ function bindCommunityData() {
     communityTypeListItems = communityTypeList.getItems(allItemsQuery);
     staffPositionListItems = staffPositionList.getItems(allItemsQuery);
 
-    listItem = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleCommunity).getItemById(ItemID);
+    listItem = ctx.get_site().get_rootWeb().get_lists().getByTitle(_listTitleCHSCommunity).getItemById(ItemID);
     ctx.load(listItem);
     ctx.load(communityTypeListItems);
     ctx.load(staffPositionListItems);
@@ -138,10 +138,15 @@ function fillCommunityHtml() {
     $("#pubSectionTitle").text(currentItemDetails.PublicationHeading);
     $("#otherPubSectionTitle").text(currentItemDetails.OtherPublicationHeading);
     $("#bioHeading").text(currentItemDetails.BioHeading);
-}
 
-function failure(err) {
-    console.log(err);
+    //For sharing site
+	let metaTitle=SlicingTitle(currentItemDetails.Title);
+	let metaDesc=SlicingDesc($("#StaffBiography").text());
+	let metaImageUrl=currentItemDetails.ImageUrl;
+	$("head").append("<meta property='og:title' content='"+metaTitle+"'>");
+	$("head").append("<meta property='og:description' content='"+metaDesc+"'>");
+	$("head").append("<meta property='og:image' content='"+metaImageUrl+"'>");
+	$("head").append("<meta name='twitter:card' content='"+metaDesc+"'>");
 }
 
 var ctx;

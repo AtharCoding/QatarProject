@@ -1,0 +1,162 @@
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src='/SiteAssets/js/ICSFormatter.js?v=1' type='text/javascript'></script>
+<script src='/SiteAssets/js/EventDetails.js?v=1' type='text/javascript'></script>
+<style>
+    .form-control {
+        padding: 10px 19px 12px;
+        height: 48px;
+        font-size: 14px;
+        border-radius: 0;
+        border: ridge;
+    }
+</style>
+<div class='page-entry'>
+    <div class='page-header'>
+        <div class='container'>
+            <nav aria-label='breadcrumb'>
+                <ol class='breadcrumb'>
+                    <li class='breadcrumb-item'><a href='Home.aspx'>Home</a></li>
+                    <li class='breadcrumb-item'><a href='Events.aspx'>Events</a></li>
+                    <li id='eventTitle' class='breadcrumb-item active' aria-current='page'></li>
+                </ol>
+            </nav>
+            <div class='row d-block d-lg-none'>
+                <div class='col-lg-9'>
+                    <h1 id='contentEventTitle' class='page-title'></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-8'>
+                <div class='d-none d-lg-block'>
+                    <h1 id='otherEventTitle' class='page-title'></h1>
+                </div>
+                <div class='event-single-img'>
+                    <img id='eventImg' src='' alt=''>
+                </div>
+                <div class='event-detail d-block d-lg-none'>
+                    <div class='event-detail-venue'>
+                        <h4><i class='fas fa-map-marker-alt'></i> <span id="eventVenueTitle1"></span></h4>
+                        <a id='eventVenue' href='#' target="_blank"></a>
+                    </div>
+                    <div class='event-detail-date'>
+                        <h4><i class='far fa-calendar-alt'></i> <span id="titleDateTime"></span></h4>
+                        <p class='mb-0'><strong id='eventStartDateOnly1'></strong> - <span id='eventStartTime1'></span>
+                            - <span id='eventEndTime1'></span></p>
+                        <p class='mb-0'><strong id='eventEndDateOnly1'></strong> - <span id='eventStartTime2'></span> -
+                            <span id='eventEndTime2'></span></p>
+                    </div>
+                </div>
+                <div id="eventRegAndCalender2" class='event-register  d-block d-lg-none'>
+
+                    <a id="registerEventTitle" href='#' class='btn btn-primary go-button' data-toggle="modal"
+                        data-target="#RegisterEventForm"></a>
+                    <div class='text-center'>
+                        <a id="addCalenderEvent" href='javascript:void(0)' class='go-link'></a>
+                    </div>
+                </div>
+                <div class='post-content'>
+                    <h3 id="titleEventAbout"></h3>
+                    <p id='eventContent'></p>
+                </div>
+                <div id='eventAttachments' class='attachments'>
+                    <span id="titleAttachments" class='attachments-label'></span>
+                </div>
+                <div class='clearfix'></div>
+                <div class='event-venue'>
+                    <h3 id="eventVenueTitle3" class='mb-4'></h3>
+                    <div id="eventActualMap" class='event-map'>
+                        <a id="mapVenueGetDirection" href='#' target="_blank"
+                            class='btn btn-primary go-button d-block d-lg-none'></a>
+                    </div>
+                    <div class='event-venue-address'>
+                        <span id="mapVenue"></span>
+                        <a id="otherVenueGetDirection" href='#' target="_blank"
+                            class='btn btn-primary go-button d-none d-lg-block'></a>
+                    </div>
+                </div>
+                <div class='event-speakers'>
+                    <h3 id="titleSpeaker" class='mb-4'></h3>
+                    <div id="speakerList" class='row'>
+                    </div>
+                </div>
+                <div class='event-partner'>
+                    <h3 id="titlePartners" class='mb-4'></h3>
+                    <div id="partnerList" class='partners-logos'>
+                    </div>
+                </div>
+            </div>
+            <div class='col-lg-4'>
+                <sidebar>
+                    <div class='widget d-none d-lg-block'>
+                        <div class='event-detail'>
+                            <div class='event-detail-venue'>
+                                <h4><i class='fas fa-map-marker-alt'></i> <span id="eventVenueTitle2"></span></h4>
+                                <a id="mobileVenue" href='#' target="_blank"></a>
+                            </div>
+                            <div class='event-detail-date'>
+                                <h4><i class='far fa-calendar-alt'></i> <span id="titleDateTime2"></span></h4>
+                                <p class='mb-0'><strong id='eventStartDateOnly2'></strong> - <span
+                                        id='eventStartTime3'></span> - <span id='eventEndTime3'></span></p>
+                                <p class='mb-0'><strong id='eventEndDateOnly2'></strong> - <span
+                                        id='eventStartTime4'></span> - <span id='eventEndTime4'></span></p>
+                            </div>
+                        </div>
+                        <div id="eventRegAndCalender" class='event-register'>
+                            <a id="registerEventTitle2" href='#' class='btn btn-primary go-button' data-toggle="modal"
+                                data-target="#RegisterEventForm"></a>
+                            <div class='text-center'>
+                                <a id="addCalenderEvent2" href='javascript:void(0)' class='go-link'></a>
+                            </div>
+                        </div>
+                    </div>
+                </sidebar>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="modal fade" id="RegisterEventForm" data-backdrop="modal" data-keyboard="false" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contactFormLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="firstname" id="lblfirstname"><span>*</span></label>
+                        <input type="text" class="form-control txtOnly" id="firstname" maxlength="30">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="lastname" id="lbllastname"></label>
+                        <input type="text" class="form-control txtOnly" id="lastname" maxlength="30">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" id="lblemail"><span>*</span></label>
+                    <input type="email" class="form-control" id="email" maxlength="30">
+                </div>
+                <div class="form-group">
+                    <label for="message" id="lblMessage"></label>
+                    <textarea class="form-control" id="message" placeholder=""></textarea>
+                </div>
+                <div id="captchaDiv" class="form-group">
+                    <div class="g-recaptcha" data-sitekey="6LdMNMAZAAAAAPvGEvGQXHtMIWh7gZcPPuN2rcon"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="SaveEvent" class="btn btn-primary" onclick="submitRegisterEventform()" value="Submit"
+                    type="button"></button>
+            </div>
+        </div>
+    </div>
+</div>

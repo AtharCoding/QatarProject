@@ -2,13 +2,12 @@ var _listTitleBlogs = "Blogs";
 var _listTitleEvents = "Events";
 var _listTitlePublication = "Publications";
 var _listTitleResearch = "ResearchThemes";
-var _listTitleCommunity = "CHS Community";
-var _listTitleCommunityTypes = "CommunityType";
+var _listTitleCommunityTypes = "CommunityTypes";
 var _listTitleStaffPosition="StaffPositions";
 var _listTitleNews = "News";
-var _listTitleBusinessPartner = "BusinessPartner";
+var _listTitleBusinessPartner = "BusinessPartners";
 var _listTitleAboutUs = "AboutUs";
-var _listTitleCHSCommunity = "CHS Community";
+var _listTitleCHSCommunity = "CHSCommunity";
 var _listTitleGuidingPrinciple = "GuideLinePrinciple";
 var _listTitleAboutExplore = "AboutExplore";
 var _listContact="ContactUs";
@@ -18,12 +17,12 @@ var _listTermsOfUse="TermsOfUse";
 var _listTitlePagesDetails="PagesDetails";
 var _listTitlePublicationTopics="PublicationTopics";
 var _listTitleEventTypes="EventTypes";
-var _listTitleHomeSmallBanner="HomeSmallBaner";
-var _listTitleHomeExtraContent="HomeExtraContent";
-var _listEventRegister = "EventRegister";
+var _listTitleHomeSmallBanner="HomeSmallBannerDetails";
+var _listTitleHomeExtraContent="HomeExtraContents";
+var _listEventRegister = "EventRegisterations";
 var _listTitleSocialDetails = "SocialDetails";
 var _listTitleSiteDictionary = "SiteDictionary";
-var _listTitlePublicManagement = "PublicManagement";
+var _listTitlePublicManagement = "PublicManagements";
 
 var isArabic=false;
 if (window.location.href.toLowerCase().indexOf("/ar/") > -1)
@@ -224,8 +223,8 @@ function createOwlSlider() {
 		nav: true,
 		rtl: false,
 		navText: [
-			'<span class="nav-prev"><i class="fal fa-chevron-left"></i></span>',
-			'<span class="nav-next"><i class="fal fa-chevron-right"></i></span>',
+			'<span class="nav-prev"><i class="fas fa-chevron-left"></i></span>',
+			'<span class="nav-next"><i class="fas fa-chevron-right"></i></span>',
 		],
 		responsive: {
 			0: {
@@ -268,7 +267,7 @@ function getStaffByCommaSaperateIDs(commaSaperateIDs, otherObject, onComplete) {
 		let staffIDs = commaSaperateIDs.split(",").filter(function (i) { return i });
 		let filterStr = "ID eq " + staffIDs.join(" or ID eq ");
 
-		var urlForStaffResearch = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleCommunity + "')/items?$filter=" + filterStr + "&$orderby=Modified desc";
+		var urlForStaffResearch = _siteUrl + "/_api/web/lists/GetByTitle('" + _listTitleCHSCommunity + "')/items?$filter=" + filterStr + "&$orderby=Modified desc";
 		var get_StaffResearch = SPRestCommon.GetItemAjaxCall(urlForStaffResearch);
 
 		$.when(get_StaffResearch)
@@ -330,7 +329,7 @@ function getStaffDetailsByQuery(camlQueryText, otherObject, onComplete, onFailur
 	let ctx = SP.ClientContext.get_current();
 	let listCollection = ctx.get_site().get_rootWeb().get_lists();
 
-	let communityList = listCollection.getByTitle(_listTitleCommunity);
+	let communityList = listCollection.getByTitle(_listTitleCHSCommunity);
 	let staffPositionList = listCollection.getByTitle(_listTitleStaffPosition);
 	let communityTypeList = listCollection.getByTitle(_listTitleCommunityTypes);
 	var allItemsQuery = SP.CamlQuery.createAllItemsQuery();

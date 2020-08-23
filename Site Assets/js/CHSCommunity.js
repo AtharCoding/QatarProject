@@ -25,8 +25,17 @@ $(document).ready(function () {
 });
 
 function communityStart() {
-	getListDetails(_listTitleCommunity);
+	getListDetails(_listTitleCHSCommunity);
 	bindCommunityData("");
+
+	//For sharing site
+	let metaTitle="CHS Community";
+	let metaDesc="Motife CHS Community";
+	let metaImageUrl=_spPageContextInfo.webLogoUrl;
+	$("head").append("<meta property='og:title' content='"+metaTitle+"'>");
+	$("head").append("<meta property='og:description' content='"+metaDesc+"'>");
+	$("head").append("<meta property='og:image' content='"+metaImageUrl+"'>");
+	$("head").append("<meta name='twitter:card' content='"+metaDesc+"'>");
 }
 
 function bindCommunityData(whereQuery) {

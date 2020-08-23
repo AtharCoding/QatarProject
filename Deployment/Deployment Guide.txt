@@ -1,0 +1,10 @@
+Add ImageUrl Publishing column first
+
+Don't change masterpage existing commented section => don't event try
+
+Disable web feature
+Minimal download strategy
+Mobile view
+
+Set regional setting to client location, 
+because jsom always return date column value of regional timezone.

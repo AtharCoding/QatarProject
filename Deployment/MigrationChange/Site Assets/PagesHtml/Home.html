@@ -1,0 +1,144 @@
+<script src='/SiteAssets/js/HomePage.js?v=1' type='text/javascript'></script>
+<div id='slider' class='carousel slide' data-ride='carousel'>
+</div>
+<!-- headlines -->
+<section id='headlines'>
+    <div class='container'>
+        <div class='homeSmallBanner' id="SmallBannerHeading">
+        </div>
+    </div>
+</section>
+<!-- Home Video -->
+<section id='home-video'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-6'>
+                <div class='home-video-title'>
+                    <img id="HomeExtraLogo" src='' />
+                    <h2 id="HomeExtraTitle"></h2>
+                </div>
+                <div class='video-cover d-block d-lg-none'>
+                </div>
+                <p id="HomeExtraContentDesc"></p>
+                <a id="MoreAboutUS" href='' class='go-link'></a>
+            </div>
+            <div class='col-lg-6'>
+                <div class='video-cover' id="ImageSection">
+                    <img id="HomeExtraVideoCover" src='' />
+                    <button class='open-video' type="button" onclick="ToggleVideo();"><i class='fas fa-caret-right'></i></button>
+                </div>
+                <video class='d-block w-100' controls id="VideSection" style="display:none !important;">
+                    <source src='' type='video/mp4' id='VideoPath'>
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- latest -->
+<section id='latest'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-9'>
+                <div class='row'>
+                    <div class='col-7'>
+                        <h2 id="txtLatestNews" class='section-title'></h2>
+                    </div>
+                    <div class='col-5 text-right'>
+                        <a id='allNewsAnchor' href='javascript:void(0)' class='go-link d-inline-block'></a>
+                    </div>
+                </div>
+                <div id="NewsContentsection" class='row'>
+                </div>
+            </div>
+            <div class='col-lg-3'>
+                <div class='section-header'>
+                    <div class='row'>
+                        <div class='col-6'>
+                            <h2 id="txtEvents" class='section-title'></h2>
+                        </div>
+                        <div class='col-6 text-right'>
+                            <a id='linkAllEvents' href='' class='go-link d-inline-block'></a>
+                        </div>
+                    </div>
+                </div>
+                <div id='EventsSection'>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Selected Publications -->
+<section id='selected-publications' class='home-selected-publications'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-6'>
+                <h2 id="txtPublication" class='section-title'></h2>
+            </div>
+            <div class='col-lg-6 text-lg-right'>
+                <a href='javascript:void(0)' id='allPublicationAnchor' class='go-link d-inline-block'></a>
+            </div>
+        </div>
+        <div id='publicationSection' class='row grid-flex'>
+        </div>
+        <a id='publicationReadMore' href='javascript:void(0)' class='load-more'>LOAD MORE</a>
+    </div>
+</section>
+
+<!-- Recent Blog Posts -->
+<section id='recent-posts'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-6'>
+                <h2 id="txtrecentBlogPosts" class='section-title'></h2>
+            </div>
+            <div class='col-lg-6 text-lg-right'>
+                <a id="allBlogAnchor" href='javascript:void(0)' class='go-link d-inline-block'></a>
+            </div>
+        </div>
+        <div id="blogSection" class='row grid-felx'>
+            <div class='col-lg-4'>
+                <a class='twitter-timeline' data-height='450'
+                    href='https://twitter.com/onlineCHS?ref_src=twsrc%5Etfw'>Tweets by onlineCHS</a>
+                <script async src='https://platform.twitter.com/widgets.js' charset='utf-8'></script>
+            </div>
+        </div>
+        <a id='blogReadMore' href='javascript:void(0)' class='load-more light'>LOAD MORE</a>
+    </div>
+</section>
+
+
+<!-- Explore more about CHS -->
+<section id='more-about'>
+    <div class='container'>
+        <div class='section-header'>
+            <div class='row'>
+                <div class='col-lg-6'>
+                    <h2 class='section-title' id="ExploremoreAbout"></h2>
+                </div>
+            </div>
+        </div>
+        <div class='row' id='aboutMoreSection'>
+
+        </div>
+    </div>
+</section>
+<!-- Our Partners  -->
+<section id='our-partners'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-2'>
+                <h5 id="txtOurPartners"></h5>
+                <a id='ViewAllPartner' href='' class='go-link d-inline-block'></a>
+            </div>
+            <div class='col-lg-10'>
+                <div class='partners-logos' id='PartnerSection'>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

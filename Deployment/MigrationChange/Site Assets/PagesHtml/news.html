@@ -1,0 +1,45 @@
+<script src='/SiteAssets/js/News.js?v=1' type='text/javascript'></script>
+    <div class='page-entry'>
+        <div class='page-header'>
+            <div class='container'>
+                <nav aria-label='breadcrumb'>
+                    <ol class='breadcrumb'>
+                        <li class='breadcrumb-item'><a href='Home.aspx'>Home</a></li>
+                        <li class='breadcrumb-item active' aria-current='page'>News</li>
+                    </ol>
+                </nav>
+                <div class='row'>
+                    <div class='col-lg-9'>
+                        <h1 id='contentListTitle' class='page-title'></h1>
+                        <p id='contentListDesc' class='page-desc'></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='container'>
+            <a id='firstNewsDetailLink' href='/'>
+                <div class='first-post'>
+                    <div class='row'>
+                        <div class='col-lg-6'>
+                            <div class='first-post-img'>
+                                <img id='firstNewsImg' src=''>
+                            </div>
+                        </div>
+                        <div class='col-lg-6'>
+                            <div class='firstpost-content'>
+                                <span id='firstNewsDate' class='date'></span>
+                                <h2 id='firstNewsTitle'></h2>
+                                <p id='firstNewsDesc'></p>
+                                <span class='go-link readMore'>Read more</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <div id='newsContent' class='row news-cards'>
+            </div>
+            <div class='text-center'>
+                <a id='newsLoadMore' href='javascript:void(0)' class='load-more light'>LOAD MORE</a>
+            </div>
+        </div>
+    </div>
